@@ -8,8 +8,8 @@ Run `nx build shared-data-entities` to build the library.
 
 ```mermaid
 erDiagram
-    ACCOUNT ||--o{ PRODUCT : "hasMany Products"
-    ACCOUNT ||--o{ ORDER : "hasMany Orders"
+    ACCOUNT ||--o{ PRODUCT : "hasMany (Products)"
+    ACCOUNT ||--o{ ORDER : "hasMany (Orders)"
     ACCOUNT {
         code string PK "notNull"
         name string "notNull"
@@ -18,8 +18,6 @@ erDiagram
         phone string
         address string "notNull"
     }
-    PRODUCT }|..|{ ACCOUNT : "belongsTo Account"
-    PRODUCT ||--o{ ORDER-DETAILS : "hasMany OrderDts."
     PRODUCT {
         code string PK "notNull"
         name string "notNull"
@@ -28,14 +26,11 @@ erDiagram
         color Color
         OwnerCode string FK "notNull"
     }
-    ORDER }|..|{ ACCOUNT : "belongsTo Account"
-    ORDER ||--o{ ORDER-DETAILS : "hasMany OrderDetails"
+    ORDER ||--o{ ORDER-DETAILS : "hasMany (OrderDetails)"
     ORDER {
         code string PK "notNull"
         messageForOwner string
     }
-    ORDER-DETAILS }|..|{ ORDER : "belongsTo Order"
-    ORDER-DETAILS }|..|{ PRODUCT : "belongsTo Product"
     ORDER-DETAILS {
         code string PK "notNull"
         quantity number "notNull"
