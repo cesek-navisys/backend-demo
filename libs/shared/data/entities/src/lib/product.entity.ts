@@ -1,5 +1,5 @@
 import { Optional } from 'sequelize';
-import { Color } from '@org/shared/enums';
+import { Color } from '@shared/enums';
 
 export interface IProductOwnAttributes {
 	code: string;

@@ -16,11 +16,9 @@
 		"esModuleInterop": true,
 		"baseUrl": ".",
 		"paths": {
-			"@org/shared/data/entities": [
-				"libs/shared/data/entities/src/index.ts"
-			],
-			"@org/shared/data/tables": ["libs/shared/data/tables/src/index.ts"],
-			"@org/shared/enums": ["libs/shared/enums/src/index.ts"]
+			"@shared/data/entities": ["libs/shared/data/entities/src/index.ts"],
+			"@shared/data/tables": ["libs/shared/data/tables/src/index.ts"],
+			"@shared/enums": ["libs/shared/enums/src/index.ts"]
 		}
 	},
 	"exclude": ["node_modules", "tmp"]
