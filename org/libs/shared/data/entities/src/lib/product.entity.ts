@@ -1,11 +1,6 @@
 import { Optional } from 'sequelize';
+import { Color } from '@org/shared/enums';
 
-export enum Color {
-	BLUE = 'BLUE',
-	RED = 'RED',
-	YELLOW = 'YELLOW',
-	GREEN = 'GREEN',
-}
 export interface IProductOwnAttributes {
 	code: string;
 	name: string;
