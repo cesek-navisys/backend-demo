@@ -1,11 +1,12 @@
 import { Optional } from 'sequelize';
+import { IOrderDetailsUniqueAttributes } from './order-detail.entity';
 
 export interface IOrderOwnAttributes {
 	code: string;
 	messageForOwner: string;
 }
 export interface IOrderReferenceAttributes {
-	OrderDetails: any[];
+	OrderDetails: IOrderDetailsUniqueAttributes[];
 }
 
 export interface IOrderUniqueAttributes
