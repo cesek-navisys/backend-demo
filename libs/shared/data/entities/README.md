@@ -6,36 +6,47 @@ This library was generated with [Nx](https://nx.dev).
 
 Run `nx build shared-data-entities` to build the library.
 
+## Architecture
+
 ```mermaid
+
+---
+title: ENTITY RELATION DIAGRAM
+---
+
 erDiagram
-    ACCOUNT ||--o{ PRODUCT : "hasMany (Products)"
-    ACCOUNT ||--o{ ORDER : "hasMany (Orders)"
+    ACCOUNT ||--o{ ORDER : places
+    ACCOUNT ||--o{ PRODUCT : has
     ACCOUNT {
-        code string PK "notNull"
-        name string "notNull"
-        surname string "notNull"
-        email string "notNull"
-        phone string
-        address string "notNull"
+        code string PK
+        name string
+        surname string
+        email string UK
+        phone string UK
+        address string
     }
-    PRODUCT {
-        code string PK "notNull"
-        name string "notNull"
-        description string "notNull"
-        price number "notNull"
-        color Color
-        OwnerCode string FK "notNull"
-    }
-    ORDER ||--o{ ORDER-DETAILS : "hasMany (OrderDetails)"
+    ORDER ||--|{ ORDER-DETAIL : contains
     ORDER {
-        code string PK "notNull"
+        code string PK
         messageForOwner string
+        OwnerCode string FK 
     }
-    ORDER-DETAILS {
-        code string PK "notNull"
-        quantity number "notNull"
+    PRODUCT ||--|{ ORDER-DETAIL : in
+    PRODUCT {
+        code string PK
+        name string
+        description string
+        price number
+        color Color
+        OwnerCode string FK 
+    }
+    ORDER-DETAIL {
+        code string PK
+        quantity number
         canBeDeliveredSeparately boolean
-        OrderCode string FK "notNull"
-        ProductCode string FK "notNull"
+        OrderCode string FK
+        ProductCode string FK
     }
+    
+
 ```
