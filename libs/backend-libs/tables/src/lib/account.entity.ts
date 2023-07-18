@@ -1,7 +1,7 @@
 import {
 	IAccountAttributes,
 	IAccountCreationAttributes,
-} from '@shared/data/entities';
+} from '@backend-libs/entities';
 import { Model, Table, Column, DataType, HasMany } from 'sequelize-typescript';
 import { Order } from './order.table';
 import { OrderForeignKey } from '@backend-libs/foreign-keys';

@@ -1,10 +1,10 @@
-# shared-data-entities
+# backend-libs-entities
 
 This library was generated with [Nx](https://nx.dev).
 
 ## Building
 
-Run `nx build shared-data-entities` to build the library.
+Run `nx build backend-libs-entities` to build the library.
 
 ## Architecture
 
@@ -29,7 +29,7 @@ erDiagram
     ORDER {
         code string PK
         messageForOwner string
-        OwnerCode string FK 
+        OwnerCode string FK
     }
     PRODUCT ||--|{ ORDER-DETAIL : in
     PRODUCT {
@@ -38,7 +38,7 @@ erDiagram
         description string
         price number
         color Color
-        OwnerCode string FK 
+        OwnerCode string FK
     }
     ORDER-DETAIL {
         code string PK
@@ -47,6 +47,6 @@ erDiagram
         OrderCode string FK
         ProductCode string FK
     }
-    
+
 
 ```

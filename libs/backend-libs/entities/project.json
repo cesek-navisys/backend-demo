@@ -1,0 +1,26 @@
+{
+	"name": "backend-libs-entities",
+	"$schema": "../../../node_modules/nx/schemas/project-schema.json",
+	"sourceRoot": "libs/backend-libs/entities/src",
+	"projectType": "library",
+	"targets": {
+		"build": {
+			"executor": "@nx/js:tsc",
+			"outputs": ["{options.outputPath}"],
+			"options": {
+				"outputPath": "dist/libs/backend-libs/entities",
+				"main": "libs/backend-libs/entities/src/index.ts",
+				"tsConfig": "libs/backend-libs/entities/tsconfig.lib.json",
+				"assets": ["libs/backend-libs/entities/*.md"]
+			}
+		},
+		"lint": {
+			"executor": "@nx/linter:eslint",
+			"outputs": ["{options.outputFile}"],
+			"options": {
+				"lintFilePatterns": ["libs/backend-libs/entities/**/*.ts"]
+			}
+		}
+	},
+	"tags": []
+}

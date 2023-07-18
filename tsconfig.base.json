@@ -20,23 +20,23 @@
 		"noImplicitThis": true,
 		"baseUrl": ".",
 		"paths": {
+			"@backend-libs/foreign-keys": [
+				"libs/backend-libs/foreign-keys/src/index.ts"
+			],
 			"@shared/constants": [
 				"libs/shared/constants/src/index.ts"
-			],
-			"@shared/data/entities": [
-				"libs/shared/data/entities/src/index.ts"
-			],
-			"@shared/data/tables": [
-				"libs/shared/data/tables/src/index.ts"
 			],
 			"@shared/enums": [
 				"libs/shared/enums/src/index.ts"
 			],
-			"@backend-libs/foreign-keys": [
-				"libs/backend-libs/foreign-keys/src/index.ts"
-			],
 			"@shared/type-helpers": [
 				"libs/shared/type-helpers/src/index.ts"
+			],
+			"@backend-libs/entities": [
+				"libs/backend-libs/entities/src/index.ts"
+			],
+			"@backend-libs/tables": [
+				"libs/backend-libs/tables/src/index.ts"
 			]
 		}
 	},

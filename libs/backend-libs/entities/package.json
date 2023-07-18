@@ -1,5 +1,5 @@
 {
-	"name": "@shared/data/entities",
+	"name": "backend-libs/entities",
 	"version": "0.0.1",
 	"type": "commonjs"
 }
