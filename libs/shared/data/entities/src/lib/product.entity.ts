@@ -1,5 +1,6 @@
 import { Optional } from 'sequelize';
-import { Color } from '@org/shared/enums';
+import { Color } from '@shared/enums';
+import { IAccountAttributes } from './account.entity';
 
 export interface IProductOwnAttributes {
 	code: string;
@@ -12,7 +13,7 @@ export interface IProductOwnAttributes {
 
 // Reference data to other tables
 export interface IProductReferenceAttributes {
-	Owner: any;
+	Owner: IAccountAttributes;
 }
 
 export interface IProductUniqueAttributes
