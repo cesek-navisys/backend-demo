@@ -6,8 +6,8 @@ export interface IOrderDetailsOwnAttributes {
 	code: string;
 	quantity: number;
 	canBeDeliveredSeparately: boolean;
-	OrderCode: string;
-	ProductCode: string;
+	OrderCode?: string;
+	ProductCode?: string;
 }
 
 export interface IOrderDetailsReferenceAttributes {
