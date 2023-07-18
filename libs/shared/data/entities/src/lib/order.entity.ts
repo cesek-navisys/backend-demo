@@ -15,4 +15,4 @@ export interface IOrderCreationAttributes
 	extends Optional<Omit<IOrderOwnAttributes, 'code'>, 'messageForOwner'> {}
 export interface IOrderAttributes
 	extends IOrderOwnAttributes,
-		IOrderReferenceAttributes {}
+		Partial<IOrderReferenceAttributes> {}
