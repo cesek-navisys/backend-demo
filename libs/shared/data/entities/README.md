@@ -15,7 +15,7 @@ title: ENTITY RELATION DIAGRAM
 ---
 
 erDiagram
-    ACCOUNT ||--o{ ORDER : places
+    ACCOUNT ||--o{ ORDER : "belongs to Account (OwnerCode)"
     ACCOUNT ||--o{ PRODUCT : has
     ACCOUNT {
         code string PK

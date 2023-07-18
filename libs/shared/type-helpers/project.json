@@ -1,0 +1,26 @@
+{
+	"name": "shared-type-helpers",
+	"$schema": "../../../node_modules/nx/schemas/project-schema.json",
+	"sourceRoot": "libs/shared/type-helpers/src",
+	"projectType": "library",
+	"targets": {
+		"build": {
+			"executor": "@nx/js:tsc",
+			"outputs": ["{options.outputPath}"],
+			"options": {
+				"outputPath": "dist/libs/shared/type-helpers",
+				"main": "libs/shared/type-helpers/src/index.ts",
+				"tsConfig": "libs/shared/type-helpers/tsconfig.lib.json",
+				"assets": ["libs/shared/type-helpers/*.md"]
+			}
+		},
+		"lint": {
+			"executor": "@nx/linter:eslint",
+			"outputs": ["{options.outputFile}"],
+			"options": {
+				"lintFilePatterns": ["libs/shared/type-helpers/**/*.ts"]
+			}
+		}
+	},
+	"tags": []
+}

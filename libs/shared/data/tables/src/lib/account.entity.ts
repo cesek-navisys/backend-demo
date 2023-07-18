@@ -2,13 +2,14 @@ import {
 	IAccountAttributes,
 	IAccountCreationAttributes,
 } from '@shared/data/entities';
-import { Model, Table, Column, DataType } from 'sequelize-typescript';
+import { Model, Table, Column, DataType, HasMany } from 'sequelize-typescript';
+import { Order } from './order.table';
+import { OrderForeignKey } from '@backend-libs/foreign-keys';
 
 @Table
 export class Account
 	extends Model<IAccountAttributes, IAccountCreationAttributes>
-	implements IAccountAttributes
-{
+	implements IAccountAttributes {
 	@Column({
 		allowNull: true,
 		type: DataType.UUID,
