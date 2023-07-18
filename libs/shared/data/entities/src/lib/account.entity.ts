@@ -12,7 +12,7 @@ export interface IAccountOwnAttributes {
 	surname: string;
 	email: string;
 	phone: string;
-	adress: string;
+	address: string;
 }
 
 export interface IAccountReferenceAttributes {
@@ -28,7 +28,7 @@ export interface IAccountCreationAttributes
 	name: string;
 	surname: string;
 	email: string;
-	adress: string;
+	address: string;
 }
 
 export interface IAccountAttributes
