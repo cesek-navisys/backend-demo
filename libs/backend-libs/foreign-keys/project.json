@@ -1,0 +1,26 @@
+{
+	"name": "backend-libs-foreign-keys",
+	"$schema": "../../../node_modules/nx/schemas/project-schema.json",
+	"sourceRoot": "libs/backend-libs/foreign-keys/src",
+	"projectType": "library",
+	"targets": {
+		"build": {
+			"executor": "@nx/js:tsc",
+			"outputs": ["{options.outputPath}"],
+			"options": {
+				"outputPath": "dist/libs/backend-libs/foreign-keys",
+				"main": "libs/backend-libs/foreign-keys/src/index.ts",
+				"tsConfig": "libs/backend-libs/foreign-keys/tsconfig.lib.json",
+				"assets": ["libs/backend-libs/foreign-keys/*.md"]
+			}
+		},
+		"lint": {
+			"executor": "@nx/linter:eslint",
+			"outputs": ["{options.outputFile}"],
+			"options": {
+				"lintFilePatterns": ["libs/backend-libs/foreign-keys/**/*.ts"]
+			}
+		}
+	},
+	"tags": []
+}

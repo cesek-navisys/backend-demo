@@ -1,0 +1,40 @@
+import {
+	AllowNull,
+	Column,
+	DataType,
+	HasMany,
+	Model,
+	Table,
+} from 'sequelize-typescript';
+import {
+	IOrderAttributes,
+	IOrderCreationAttributes,
+	IOrderDetailsUniqueAttributes,
+} from '@backend-libs/entities';
+import { } from '@backend-libs/tables';
+import { OrderDetails } from './order-details..table';
+import {
+	OrderDetailsForeignKey,
+	OrderForeignKey,
+} from '@backend-libs/foreign-keys';
+
+@Table
+export class Order
+	extends Model<IOrderAttributes, IOrderCreationAttributes>
+	implements IOrderAttributes {
+	@Column({
+		allowNull: true,
+		type: DataType.UUID,
+		primaryKey: true,
+	})
+	code!: string;
+
+	@Column({ type: DataType.STRING })
+	messageForOwner!: string;
+
+	@HasMany(
+		() => OrderDetails,
+		OrderForeignKey.hasMany(OrderDetailsForeignKey)
+	)
+	OrderDetails?: OrderDetails[];
+}
