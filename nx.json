@@ -40,17 +40,13 @@
 		],
 		"sharedGlobals": []
 	},
+	"cli": {
+		"defaultCollection": "@nx/nest"
+	},
 	"generators": {
-		"@nrwl/web:application": {
-			"style": "css",
-			"linter": "eslint",
-			"unitTestRunner": "vitest",
-			"e2eTestRunner": "cypress"
-		},
-		"@nrwl/web:library": {
-			"style": "css",
-			"linter": "eslint",
-			"unitTestRunner": "vitest"
+		"@nx/js:library": {
+			"unitTestRunner": "none",
+			"bundler": "tsc"
 		}
 	},
 	"defaultProject": "eshop"

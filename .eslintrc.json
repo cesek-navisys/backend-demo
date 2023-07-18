@@ -1,0 +1,77 @@
+{
+	"root": true,
+	"ignorePatterns": ["**/*"],
+    "parser": "@typescript-eslint/parser",
+    "extends": [
+        "plugin:@typescript-eslint/recommended",
+        "plugin:prettier/recommended",
+        "plugin:import/typescript"
+    ],
+	"plugins": [
+		"@nx",
+        "@typescript-eslint/eslint-plugin"
+	],
+	"overrides": [
+		{
+			"files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
+			"rules": {
+				"@nx/enforce-module-boundaries": [
+					"error",
+					{
+						"enforceBuildableLibDependency": true,
+						"allow": [],
+						"depConstraints": [
+							{
+								"sourceTag": "*",
+								"onlyDependOnLibsWithTags": ["*"]
+							}
+						]
+					}
+				]
+			}
+		},
+		{
+			"files": ["*.ts", "*.tsx"],
+			"extends": ["plugin:@nx/typescript"],
+			"rules": {
+				"@typescript-eslint/no-empty-interface": [
+					"warn",
+					{
+						"allowSingleExtends": true
+					}
+				],
+                "@typescript-eslint/no-explicit-any": "off"
+			}
+		},
+		{
+			"files": ["*.js", "*.jsx"],
+			"extends": ["plugin:@nx/javascript"],
+			"rules": {}
+		},
+		{
+			"files": ["*.spec.ts", "*.spec.tsx", "*.spec.js", "*.spec.jsx"],
+			"env": {
+				"jest": true
+			},
+			"rules": {}
+		}
+	],
+    "rules": {
+        "quotes": ["warn", "single"],
+        "indent": ["warn", 4, { "SwitchCase": 1 }],
+        "linebreak-style": "off",
+        "import/extensions": "off",
+        "@typescript-eslint/no-explicit-any": "off",
+        "@typescript-eslint/no-non-null-assertion": "off",
+        "@typescript-eslint/no-floating-promises" : ["warn", { "ignoreVoid": true }],
+        "import/no-unresolved": "error",
+        "prettier/prettier" : "warn",
+    },
+    "settings": {
+        "import/resolver": {
+            "typescript": {
+                "project": "tsconfig.base.json"
+            }
+        }
+    }
+}
