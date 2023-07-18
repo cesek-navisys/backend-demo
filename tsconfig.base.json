@@ -14,6 +14,7 @@
 		"skipLibCheck": true,
 		"skipDefaultLibCheck": true,
 		"esModuleInterop": true,
+        "noImplicitThis": true,
 		"baseUrl": ".",
 		"paths": {
 			"@shared/data/entities": ["libs/shared/data/entities/src/index.ts"],

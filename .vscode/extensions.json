@@ -1,11 +1,4 @@
 {
-	"editor.formatOnSave": false,
-	"[feature]": {
-		"editor.formatOnSave": true
-	},
-	"editor.codeActionsOnSave": {
-		"source.fixAll.eslint": true
-	},
 	"recommendations": [
 		"nrwl.angular-console",
 		"esbenp.prettier-vscode",

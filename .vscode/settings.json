@@ -1,0 +1,17 @@
+{
+    "typescript.preferences.quoteStyle": "single",
+    "css.lint.unknownAtRules": "ignore",
+	"editor.formatOnSave": false,
+	"[feature]": {
+		"editor.formatOnSave": true
+	},
+	"editor.codeActionsOnSave": {
+		"source.fixAll.eslint": true
+	},
+    "cSpell.words": [
+        "eshop",
+        "mailer",
+        "nestjs",
+        "workdir"
+    ]
+}

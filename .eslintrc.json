@@ -1,7 +1,16 @@
 {
 	"root": true,
 	"ignorePatterns": ["**/*"],
-	"plugins": ["@nx"],
+    "parser": "@typescript-eslint/parser",
+    "extends": [
+        "plugin:@typescript-eslint/recommended",
+        "plugin:prettier/recommended",
+        "plugin:import/typescript"
+    ],
+	"plugins": [
+		"@nx",
+        "@typescript-eslint/eslint-plugin"
+	],
 	"overrides": [
 		{
 			"files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
@@ -30,7 +39,8 @@
 					{
 						"allowSingleExtends": true
 					}
-				]
+				],
+                "@typescript-eslint/no-explicit-any": "off"
 			}
 		},
 		{
@@ -45,5 +55,23 @@
 			},
 			"rules": {}
 		}
-	]
+	],
+    "rules": {
+        "quotes": ["warn", "single"],
+        "indent": ["warn", 4, { "SwitchCase": 1 }],
+        "linebreak-style": "off",
+        "import/extensions": "off",
+        "@typescript-eslint/no-explicit-any": "off",
+        "@typescript-eslint/no-non-null-assertion": "off",
+        "@typescript-eslint/no-floating-promises" : ["warn", { "ignoreVoid": true }],
+        "import/no-unresolved": "error",
+        "prettier/prettier" : "warn",
+    },
+    "settings": {
+        "import/resolver": {
+            "typescript": {
+                "project": "tsconfig.base.json"
+            }
+        }
+    }
 }
