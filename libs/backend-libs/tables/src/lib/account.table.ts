@@ -2,9 +2,21 @@ import {
 	IAccountAttributes,
 	IAccountCreationAttributes,
 } from '@backend-libs/entities';
-import { Model, Table, Column, DataType, HasMany } from 'sequelize-typescript';
+import { 
+	AccountForeignKey, 
+	OrderForeignKey,
+	ProductForeignKey, 
+} from '@backend-libs/foreign-keys';
+import { 
+	Column, 
+	DataType, 
+	HasMany, 
+	Model, 
+	Table 
+} from 'sequelize-typescript';
+import { Product } from './product.table';
 import { Order } from './order.table';
-import { OrderForeignKey } from '@backend-libs/foreign-keys';
+
 
 @Table
 export class Account
@@ -30,4 +42,16 @@ export class Account
 
 	@Column({ type: DataType.STRING })
 	address!: string;
+
+	@HasMany(
+		() => Order, 
+		AccountForeignKey.hasMany(OrderForeignKey)
+	)
+	Orders?: Order[];
+
+	@HasMany(
+		() => Product,
+		AccountForeignKey.hasMany(ProductForeignKey)
+	)
+	Products?: Product[];
 }

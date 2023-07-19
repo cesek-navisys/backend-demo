@@ -1,22 +1,24 @@
 import {
-	AllowNull,
-	Column,
-	DataType,
-	HasMany,
-	Model,
-	Table,
-} from 'sequelize-typescript';
-import {
 	IOrderAttributes,
-	IOrderCreationAttributes,
-	IOrderDetailsUniqueAttributes,
+	IOrderCreationAttributes
 } from '@backend-libs/entities';
-import { } from '@backend-libs/tables';
-import { OrderDetails } from './order-details..table';
 import {
+	AccountForeignKey,
 	OrderDetailsForeignKey,
 	OrderForeignKey,
 } from '@backend-libs/foreign-keys';
+import { } from '@backend-libs/tables';
+import {
+	Column,
+	DataType,
+	ForeignKey,
+	HasMany,
+	Model,
+	Table,
+	BelongsTo,
+} from 'sequelize-typescript';
+import { OrderDetails } from './order-details.table';
+import { Account } from './account.table';
 
 @Table
 export class Order
@@ -32,9 +34,19 @@ export class Order
 	@Column({ type: DataType.STRING })
 	messageForOwner!: string;
 
+	@ForeignKey(() => Account)
+	@Column({
+		allowNull: false,
+		type: DataType.UUID,
+	})
+	OwnerCode!: string;
+
 	@HasMany(
 		() => OrderDetails,
 		OrderForeignKey.hasMany(OrderDetailsForeignKey)
 	)
 	OrderDetails?: OrderDetails[];
+
+	@BelongsTo(() => Account, OrderForeignKey.belongsTo(AccountForeignKey))
+	Owner?: Account;
 }
