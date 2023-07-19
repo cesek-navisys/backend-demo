@@ -14,6 +14,7 @@ import {
 	BelongsTo,
 	Column,
 	DataType,
+	ForeignKey,
 	HasMany,
 	Model,
 	Table,
@@ -46,6 +47,7 @@ export class Product
 	})
 	color!: Color;
 
+	@ForeignKey(() => Account)
 	@Column({
 		allowNull: false,
 		type: DataType.UUID,

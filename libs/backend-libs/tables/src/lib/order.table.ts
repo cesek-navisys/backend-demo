@@ -4,6 +4,7 @@ import {
 	BelongsTo,
 	Column,
 	DataType,
+	ForeignKey,
 	HasMany,
 	Model,
 	Table,
@@ -33,6 +34,7 @@ export class Order
 	@Column({ type: DataType.STRING })
 	messageForOwner!: string;
 
+	@ForeignKey(() => Account)
 	@Column({
 		allowNull: false,
 		type: DataType.UUID,

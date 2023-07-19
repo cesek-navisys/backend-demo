@@ -47,6 +47,7 @@ export class OrderDetails
 	})
 	OrderCode!: string;
 
+	@ForeignKey(() => Product)
 	@Column({
 		type: DataType.UUID,
 		allowNull: false,
