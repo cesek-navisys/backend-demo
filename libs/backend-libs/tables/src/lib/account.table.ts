@@ -1,15 +1,28 @@
 import {
+	Column,
+	DataType,
+	HasMany,
+	Model,
+	Table
+	} from 'sequelize-typescript';
+import { Order } from './order.table';
+import { Product } from './product.table';
+import {
+	AccountForeignKey,
+	OrderForeignKey,
+	ProductForeignKey,
+} from '@backend-libs/foreign-keys';
+import {
 	IAccountAttributes,
 	IAccountCreationAttributes,
 } from '@backend-libs/entities';
-import { Model, Table, Column, DataType, HasMany } from 'sequelize-typescript';
-import { Order } from './order.table';
-import { OrderForeignKey } from '@backend-libs/foreign-keys';
+
 
 @Table
 export class Account
 	extends Model<IAccountAttributes, IAccountCreationAttributes>
-	implements IAccountAttributes {
+	implements IAccountAttributes
+{
 	@Column({
 		allowNull: true,
 		type: DataType.UUID,
@@ -30,4 +43,10 @@ export class Account
 
 	@Column({ type: DataType.STRING })
 	address!: string;
+
+	@HasMany(() => Order, AccountForeignKey.hasMany(OrderForeignKey))
+	Orders?: Order[];
+
+	@HasMany(() => Product, AccountForeignKey.hasMany(ProductForeignKey))
+	Products?: Product[];
 }

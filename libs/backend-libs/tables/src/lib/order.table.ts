@@ -1,5 +1,7 @@
+import { Account } from './account.table';
+import { OrderDetails } from './order-details.table';
 import {
-	AllowNull,
+	BelongsTo,
 	Column,
 	DataType,
 	HasMany,
@@ -9,19 +11,18 @@ import {
 import {
 	IOrderAttributes,
 	IOrderCreationAttributes,
-	IOrderDetailsUniqueAttributes,
 } from '@backend-libs/entities';
-import { } from '@backend-libs/tables';
-import { OrderDetails } from './order-details..table';
 import {
-	OrderDetailsForeignKey,
 	OrderForeignKey,
+	AccountForeignKey,
+	OrderDetailsForeignKey,
 } from '@backend-libs/foreign-keys';
 
 @Table
 export class Order
 	extends Model<IOrderAttributes, IOrderCreationAttributes>
-	implements IOrderAttributes {
+	implements IOrderAttributes
+{
 	@Column({
 		allowNull: true,
 		type: DataType.UUID,
@@ -32,9 +33,18 @@ export class Order
 	@Column({ type: DataType.STRING })
 	messageForOwner!: string;
 
+	@Column({
+		allowNull: false,
+		type: DataType.UUID,
+	})
+	OwnerCode!: string;
+
 	@HasMany(
 		() => OrderDetails,
 		OrderForeignKey.hasMany(OrderDetailsForeignKey)
 	)
 	OrderDetails?: OrderDetails[];
+
+	@BelongsTo(() => Account, OrderForeignKey.belongsTo(AccountForeignKey))
+	Owner?: Account;
 }

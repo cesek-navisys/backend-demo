@@ -1,21 +1,21 @@
 import {
-	BelongsTo,
-	Column,
-	DataType,
-	ForeignKey,
-	Model,
-} from 'sequelize-typescript';
-import {
-	IOrderAttributes,
-	IOrderDetailsAttributes,
-	IOrderDetailsCreationAttributes,
-	IProductAttributes,
+  IOrderDetailsAttributes,
+  IOrderDetailsCreationAttributes
 } from '@backend-libs/entities';
-import { Order } from './order.table';
 import {
-	OrderDetailsForeignKey,
-	OrderForeignKey,
+  OrderDetailsForeignKey,
+  OrderForeignKey,
+  ProductForeignKey,
 } from '@backend-libs/foreign-keys';
+import {
+  BelongsTo,
+  Column,
+  DataType,
+  ForeignKey,
+  Model,
+} from 'sequelize-typescript';
+import { Order } from './order.table';
+import { Product } from './product.table';
 
 // HOMEWORK: Co je singleton class?
 export class OrderDetails
@@ -55,4 +55,7 @@ export class OrderDetails
 
 	@BelongsTo(() => Order, OrderDetailsForeignKey.belongsTo(OrderForeignKey))
 	Order?: Order;
+
+	@BelongsTo(() => Product, OrderDetailsForeignKey.belongsTo(ProductForeignKey))
+	Product?: Product;
 }
