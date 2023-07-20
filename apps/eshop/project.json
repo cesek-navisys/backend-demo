@@ -31,7 +31,9 @@
       "executor": "@nx/js:node",
       "defaultConfiguration": "development",
       "options": {
-        "buildTarget": "eshop:build"
+        "buildTarget": "eshop:build",
+        "inspect": true,
+        "port": 7777
       },
       "configurations": {
         "development": {

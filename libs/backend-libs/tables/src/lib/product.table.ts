@@ -23,8 +23,7 @@ import {
 @Table
 export class Product
 	extends Model<IProductAttributes, IProductCreationAttributes>
-	implements IProductAttributes
-{
+	implements IProductAttributes {
 	@Column({
 		allowNull: true,
 		type: DataType.UUID,
