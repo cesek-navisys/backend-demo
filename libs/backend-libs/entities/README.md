@@ -16,7 +16,7 @@ title: ENTITY RELATION DIAGRAM
 
 erDiagram
     ACCOUNT ||--o{ ORDER : "belongs to Account (OwnerCode)"
-    ACCOUNT ||--o{ PRODUCT : has
+    ACCOUNT ||--o{ PRODUCT : "belongs to Account (OwnerCode)"
     ACCOUNT {
         code string PK
         name string
@@ -25,13 +25,13 @@ erDiagram
         phone string UK
         address string
     }
-    ORDER ||--|{ ORDER-DETAIL : contains
+    ORDER ||--|{ ORDER-DETAIL : "belongs to Order (OrderCode)"
     ORDER {
         code string PK
         messageForOwner string
         OwnerCode string FK
     }
-    PRODUCT ||--|{ ORDER-DETAIL : in
+    PRODUCT ||--|{ ORDER-DETAIL : "belongs to Product (ProductCode)"
     PRODUCT {
         code string PK
         name string
