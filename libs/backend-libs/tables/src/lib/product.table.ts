@@ -1,15 +1,15 @@
 import { Account } from './account.table';
-import { Color } from '@shared/enums';
+import { Color } from '@backend-demo/shared/enums';
 import { OrderDetails } from './order-details.table';
 import {
 	IProductAttributes,
 	IProductCreationAttributes,
-} from '@backend-libs/entities';
+} from '@backend-demo/backend-libs/entities';
 import {
 	AccountForeignKey,
 	OrderDetailsForeignKey,
 	ProductForeignKey,
-} from '@backend-libs/foreign-keys';
+} from '@backend-demo/backend-libs/foreign-keys';
 import {
 	BelongsTo,
 	Column,
@@ -23,8 +23,7 @@ import {
 @Table
 export class Product
 	extends Model<IProductAttributes, IProductCreationAttributes>
-	implements IProductAttributes
-{
+	implements IProductAttributes {
 	@Column({
 		allowNull: true,
 		type: DataType.UUID,

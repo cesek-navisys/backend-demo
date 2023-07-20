@@ -17,8 +17,17 @@
 		"noImplicitThis": true,
 		"baseUrl": ".",
 		"paths": {
+			"@backend-demo/backend-libs/entities": [
+				"libs/backend-libs/entities/src/index.ts"
+			],
 			"@backend-demo/backend-libs/foreign-keys": [
 				"libs/backend-libs/foreign-keys/src/index.ts"
+			],
+			"@backend-demo/backend-libs/modules/database-module": [
+				"libs/backend-libs/modules/database-module/src/index.ts"
+			],
+			"@backend-demo/backend-libs/tables": [
+				"libs/backend-libs/tables/src/index.ts"
 			],
 			"@backend-demo/shared/constants": [
 				"libs/shared/constants/src/index.ts"
@@ -26,12 +35,6 @@
 			"@backend-demo/shared/enums": ["libs/shared/enums/src/index.ts"],
 			"@backend-demo/shared/type-helpers": [
 				"libs/shared/type-helpers/src/index.ts"
-			],
-			"@backend-demo/backend-libs/entities": [
-				"libs/backend-libs/entities/src/index.ts"
-			],
-			"@backend-demo/backend-libs/tables": [
-				"libs/backend-libs/tables/src/index.ts"
 			]
 		}
 	},
