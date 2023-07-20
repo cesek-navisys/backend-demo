@@ -60,6 +60,6 @@ export class Product
 	)
 	OrderDetails?: OrderDetails[];
 
-	@BelongsTo(() => Account, ProductForeignKey.belongsTo(AccountForeignKey))
+	@BelongsTo(() => Account, AccountForeignKey.belongsTo())
 	Owner?: Account;
 }
