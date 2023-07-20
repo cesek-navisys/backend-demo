@@ -5,6 +5,7 @@ import {
 import {
 	OrderDetailsForeignKey,
 	OrderForeignKey,
+	ProductForeignKey,
 } from '@backend-demo/backend-libs/foreign-keys';
 import {
 	BelongsTo,
@@ -14,6 +15,7 @@ import {
 	Model,
 } from 'sequelize-typescript';
 import { Order } from './order.table';
+import { Product } from './product.table';
 
 // HOMEWORK: Co je singleton class?
 export class OrderDetails
@@ -46,12 +48,16 @@ export class OrderDetails
 	})
 	OrderCode!: string;
 
+	@ForeignKey(() => Product)
 	@Column({
 		type: DataType.UUID,
 		allowNull: false,
 	})
 	ProductCode!: string;
 
-	@BelongsTo(() => Order, OrderDetailsForeignKey.belongsTo(OrderForeignKey))
+	@BelongsTo(() => Order, OrderForeignKey.belongsTo(OrderDetailsForeignKey))
 	Order?: Order;
+
+	@BelongsTo(() => Product, ProductForeignKey.belongsTo())
+	Product?: Product;
 }

@@ -1,13 +1,24 @@
 import {
+	IAccountAttributes,
 	IOrderAttributes,
 	IOrderCreationAttributes,
 } from '@backend-demo/backend-libs/entities';
 import {
+	AccountForeignKey,
 	OrderDetailsForeignKey,
 	OrderForeignKey,
 } from '@backend-demo/backend-libs/foreign-keys';
-import { Column, DataType, HasMany, Model, Table } from 'sequelize-typescript';
-import { OrderDetails } from './order-details..table';
+import {
+	BelongsTo,
+	Column,
+	DataType,
+	ForeignKey,
+	HasMany,
+	Model,
+	Table,
+} from 'sequelize-typescript';
+import { OrderDetails } from './order-details.table';
+import { Account } from './account.table';
 
 @Table
 export class Order
@@ -15,7 +26,7 @@ export class Order
 	implements IOrderAttributes
 {
 	@Column({
-		allowNull: true,
+		allowNull: false,
 		type: DataType.UUID,
 		primaryKey: true,
 	})
@@ -23,6 +34,16 @@ export class Order
 
 	@Column({ type: DataType.STRING })
 	messageForOwner!: string;
+
+	@ForeignKey(() => Account)
+	@Column({
+		type: DataType.UUID,
+		allowNull: false,
+	})
+	AccountCode!: string;
+
+	@BelongsTo(() => Account, AccountForeignKey.belongsTo())
+	Account?: IAccountAttributes;
 
 	@HasMany(
 		() => OrderDetails,
