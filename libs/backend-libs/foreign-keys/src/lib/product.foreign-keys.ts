@@ -4,7 +4,7 @@ import { PRODUCT_ALIAS, PRODUCT_CODE_ALIAS, PRODUCTS_ALIAS } from '@shared/const
 
 export class ProductForeignKey extends TableForeignKey {
   static override readonly params: DefaultBelongsToOptions = {
-      as: { plural: PRODUCT_ALIAS, singular: PRODUCTS_ALIAS },
+      as: { plural: PRODUCTS_ALIAS, singular: PRODUCT_ALIAS },
       foreignKey: PRODUCT_CODE_ALIAS,
       onDelete: ConstraintRule.CASCADE,
       onUpdate: ConstraintRule.CASCADE,
