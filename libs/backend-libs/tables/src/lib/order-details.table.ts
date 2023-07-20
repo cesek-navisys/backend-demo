@@ -57,6 +57,6 @@ export class OrderDetails
 	@BelongsTo(() => Order, OrderDetailsForeignKey.belongsTo(OrderForeignKey))
 	Order?: Order;
 
-	@BelongsTo(() => Product, OrderDetailsForeignKey.belongsTo(ProductForeignKey))
+	@BelongsTo(() => Product, ProductForeignKey.belongsTo())
 	Product?: Product;
 }
