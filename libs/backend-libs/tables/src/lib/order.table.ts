@@ -1,5 +1,6 @@
+import { Account } from './account.table';
+import { OrderDetails } from './order-details.table';
 import {
-	IAccountAttributes,
 	IOrderAttributes,
 	IOrderCreationAttributes,
 } from '@backend-demo/backend-libs/entities';
@@ -17,8 +18,6 @@ import {
 	Model,
 	Table,
 } from 'sequelize-typescript';
-import { OrderDetails } from './order-details.table';
-import { Account } from './account.table';
 
 @Table
 export class Order
@@ -37,17 +36,17 @@ export class Order
 
 	@ForeignKey(() => Account)
 	@Column({
-		type: DataType.UUID,
 		allowNull: false,
+		type: DataType.UUID,
 	})
 	AccountCode!: string;
-
-	@BelongsTo(() => Account, AccountForeignKey.belongsTo())
-	Account?: IAccountAttributes;
 
 	@HasMany(
 		() => OrderDetails,
 		OrderForeignKey.hasMany(OrderDetailsForeignKey)
 	)
 	OrderDetails?: OrderDetails[];
+
+	@BelongsTo(() => Account, AccountForeignKey.belongsTo())
+	Account?: Account;
 }

@@ -1,21 +1,24 @@
+import { Account } from './account.table';
+import { Color } from '@backend-demo/shared/enums';
+import { OrderDetails } from './order-details.table';
 import {
 	IProductAttributes,
 	IProductCreationAttributes,
 } from '@backend-demo/backend-libs/entities';
 import {
 	AccountForeignKey,
+	OrderDetailsForeignKey,
 	ProductForeignKey,
 } from '@backend-demo/backend-libs/foreign-keys';
-import { Color } from '@backend-demo/shared/enums';
 import {
 	BelongsTo,
 	Column,
 	DataType,
 	ForeignKey,
+	HasMany,
 	Model,
 	Table,
 } from 'sequelize-typescript';
-import { Account } from './account.table';
 
 @Table
 export class Product
@@ -25,6 +28,7 @@ export class Product
 	@Column({
 		allowNull: true,
 		type: DataType.UUID,
+		primaryKey: true,
 	})
 	code!: string;
 
@@ -34,15 +38,27 @@ export class Product
 	@Column({ type: DataType.STRING })
 	description!: string;
 
-	@Column({ type: DataType.FLOAT })
+	@Column({ type: DataType.STRING })
 	price!: number;
 
-	@Column({ type: DataType.ENUM })
-	color!: Color | null;
+	@Column({
+		allowNull: false,
+		type: DataType.STRING,
+	})
+	color!: Color;
 
 	@ForeignKey(() => Account)
-	@Column({ type: DataType.UUID })
+	@Column({
+		allowNull: false,
+		type: DataType.UUID,
+	})
 	OwnerCode!: string;
+
+	@HasMany(
+		() => OrderDetails,
+		ProductForeignKey.hasMany(OrderDetailsForeignKey)
+	)
+	OrderDetails?: OrderDetails[];
 
 	@BelongsTo(() => Account, AccountForeignKey.belongsTo())
 	Owner?: Account;
