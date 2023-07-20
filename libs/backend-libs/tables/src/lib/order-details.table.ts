@@ -13,11 +13,12 @@ import {
 	DataType,
 	ForeignKey,
 	Model,
+	Table,
 } from 'sequelize-typescript';
 import { Order } from './order.table';
 import { Product } from './product.table';
 
-// HOMEWORK: Co je singleton class?
+@Table
 export class OrderDetails
 	extends Model<IOrderDetailsAttributes, IOrderDetailsCreationAttributes>
 	implements IOrderDetailsAttributes {
@@ -29,7 +30,7 @@ export class OrderDetails
 	code!: string;
 
 	@Column({
-		type: DataType.NUMBER,
+		type: DataType.DECIMAL,
 		allowNull: false,
 	})
 	quantity!: number;
@@ -54,7 +55,7 @@ export class OrderDetails
 	})
 	ProductCode!: string;
 
-	@BelongsTo(() => Order, OrderDetailsForeignKey.belongsTo(OrderForeignKey))
+	@BelongsTo(() => Order, OrderForeignKey.belongsTo())
 	Order?: Order;
 
 	@BelongsTo(() => Product, ProductForeignKey.belongsTo())
