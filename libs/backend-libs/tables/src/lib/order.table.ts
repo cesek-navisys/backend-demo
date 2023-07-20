@@ -47,6 +47,6 @@ export class Order
 	)
 	OrderDetails?: OrderDetails[];
 
-	@BelongsTo(() => Account, OrderForeignKey.belongsTo(AccountForeignKey))
+	@BelongsTo(() => Account, AccountForeignKey.belongsTo())
 	Owner?: Account;
 }
