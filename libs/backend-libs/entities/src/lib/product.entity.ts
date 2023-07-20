@@ -1,5 +1,5 @@
 import { Optional } from 'sequelize';
-import { Color } from '@shared/enums';
+import { Color } from '@backend-demo/shared/enums';
 import { IAccountAttributes } from './account.entity';
 
 export interface IProductOwnAttributes {

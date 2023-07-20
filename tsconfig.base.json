@@ -10,38 +10,30 @@
 		"importHelpers": true,
 		"target": "es2015",
 		"module": "esnext",
-		"lib": [
-			"es2020",
-			"dom"
-		],
+		"lib": ["es2020", "dom"],
 		"skipLibCheck": true,
 		"skipDefaultLibCheck": true,
 		"esModuleInterop": true,
 		"noImplicitThis": true,
 		"baseUrl": ".",
 		"paths": {
-			"@backend-libs/foreign-keys": [
+			"@backend-demo/backend-libs/foreign-keys": [
 				"libs/backend-libs/foreign-keys/src/index.ts"
 			],
-			"@shared/constants": [
+			"@backend-demo/shared/constants": [
 				"libs/shared/constants/src/index.ts"
 			],
-			"@shared/enums": [
-				"libs/shared/enums/src/index.ts"
-			],
-			"@shared/type-helpers": [
+			"@backend-demo/shared/enums": ["libs/shared/enums/src/index.ts"],
+			"@backend-demo/shared/type-helpers": [
 				"libs/shared/type-helpers/src/index.ts"
 			],
-			"@backend-libs/entities": [
+			"@backend-demo/backend-libs/entities": [
 				"libs/backend-libs/entities/src/index.ts"
 			],
-			"@backend-libs/tables": [
+			"@backend-demo/backend-libs/tables": [
 				"libs/backend-libs/tables/src/index.ts"
 			]
 		}
 	},
-	"exclude": [
-		"node_modules",
-		"tmp"
-	]
+	"exclude": ["node_modules", "tmp"]
 }
