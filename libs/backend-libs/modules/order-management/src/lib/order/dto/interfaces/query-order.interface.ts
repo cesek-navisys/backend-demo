@@ -1,0 +1,4 @@
+/**
+ * IOrderQueryOne
+ * IOrderQueryMany
+ */
