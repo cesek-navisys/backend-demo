@@ -29,7 +29,7 @@ export class OrderReadService {
 		params: IOrderFindOneParams,
 		query?: IOrderFindOneQuery
 	): Promise<Order | null> {
-		return await this.orderRepository.findOne<Order>({
+		return this.orderRepository.findOne<Order>({
 			where: { code: params.code },
 			include: query?.includeAccount ? Account : undefined,
 		});
@@ -39,21 +39,22 @@ export class OrderReadService {
 		params: IOrderFindFirstParams,
 		query?: IOrderFindFirstQuery
 	): Promise<Order | null> {
-		const orders = await this.orderRepository.findAll<Order>({
+		const orders = this.orderRepository.findOne<Order>({
 			where: {
 				messageForOwner: params.messageForOwner,
 				AccountCode: params.AccountCode,
 			},
 			include: query?.includeAccount ? Account : undefined,
+			limit: 1,
 		});
-		return orders[0];
+		return orders;
 	}
 
 	async findAll(
 		params: IOrderFindManyParams,
 		query?: IOrderFindManyQuery
 	): Promise<Order[] | null> {
-		return await this.orderRepository.findAll<Order>({
+		return this.orderRepository.findAll<Order>({
 			where: {
 				messageForOwner: params.messageForOwner,
 				AccountCode: params.AccountCode,
@@ -66,14 +67,14 @@ export class OrderReadService {
 		params: IOrderFindManyParams,
 		query?: IOrderFindAndCountManyQuery
 	): Promise<Order[] | null> {
-		return await this.orderRepository.findAll<Order>({
+		return this.orderRepository.findAll<Order>({
 			where: {
 				messageForOwner: params.messageForOwner,
 				AccountCode: params.AccountCode,
 			},
 			include: query?.includeAccount ? Account : undefined,
 			limit: query?.limit ?? 10,
-			offset: query?.page ? query.page - 1 : 0,
+			offset: query?.page ? (query.page - 1) * (query.limit ?? 10) : 0,
 		});
 	}
 
