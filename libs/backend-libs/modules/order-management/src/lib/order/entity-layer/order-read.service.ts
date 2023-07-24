@@ -9,7 +9,7 @@
  */
 
 import { Account, Order } from '@backend-demo/backend-libs/tables';
-import { Inject } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import {
 	IOrderFindAndCountManyQuery,
 	IOrderFindFirstParams,
@@ -20,6 +20,7 @@ import {
 	IOrderFindOneQuery,
 } from './interfaces/order-read.interfaces';
 
+@Injectable()
 export class OrderReadService {
 	constructor(
 		@Inject('ORDER_REPOSITORY') private orderRepository: typeof Order
@@ -29,17 +30,18 @@ export class OrderReadService {
 		params: IOrderFindOneParams,
 		query?: IOrderFindOneQuery
 	): Promise<Order | null> {
-		return this.orderRepository.findOne<Order>({
-			where: { code: params.code },
+		const order = await this.orderRepository.findOne<Order>({
+			where: { code: params.code, AccountCode: params.AccountCode },
 			include: query?.includeAccount ? Account : undefined,
 		});
+		return order;
 	}
 
 	async findFirst(
 		params: IOrderFindFirstParams,
 		query?: IOrderFindFirstQuery
 	): Promise<Order | null> {
-		const orders = this.orderRepository.findOne<Order>({
+		const order = this.orderRepository.findOne<Order>({
 			where: {
 				messageForOwner: params.messageForOwner,
 				AccountCode: params.AccountCode,
@@ -47,7 +49,7 @@ export class OrderReadService {
 			include: query?.includeAccount ? Account : undefined,
 			limit: 1,
 		});
-		return orders;
+		return order;
 	}
 
 	async findAll(
