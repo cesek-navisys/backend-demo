@@ -1,10 +1,4 @@
-import {
-	Column,
-	DataType,
-	HasMany,
-	Model,
-	Table
-} from 'sequelize-typescript';
+import { Column, DataType, HasMany, Model, Table } from 'sequelize-typescript';
 import { Order } from './order.table';
 import { Product } from './product.table';
 import {
@@ -17,10 +11,11 @@ import {
 	IAccountCreationAttributes,
 } from '@backend-demo/backend-libs/entities';
 
-@Table
+@Table({ paranoid: true })
 export class Account
 	extends Model<IAccountAttributes, IAccountCreationAttributes>
-	implements IAccountAttributes {
+	implements IAccountAttributes
+{
 	@Column({
 		allowNull: true,
 		type: DataType.UUID,
