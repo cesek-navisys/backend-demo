@@ -19,7 +19,7 @@ import {
 	Table,
 } from 'sequelize-typescript';
 
-@Table
+@Table({ paranoid: true })
 export class Order
 	extends Model<IOrderAttributes, IOrderCreationAttributes>
 	implements IOrderAttributes
