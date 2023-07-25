@@ -14,7 +14,6 @@ import {
 	IAccountUpdateOneParams,
 	IAccountUpdateOneQuery,
 } from './interfaces/account-write.interfaces';
-import { IAccountUpdate } from '../dto/interfaces/update-account.interface';
 /**
  * inject AccountReadService v constructoru
  *

@@ -30,7 +30,7 @@ export class AccountReadService {
 
 	async findOne(params: IAccountFindOneParams, query?: IAccountFindOneQuery) {
 		return this.accountRepository.findOne({
-			where: { ...params },
+			where: { code: params.code },
 			include: query?.includeOrders ? Order : undefined,
 		});
 	}
@@ -39,14 +39,13 @@ export class AccountReadService {
 		params: IAccountFindFirstParams,
 		query?: IAccountFindFirstQuery
 	) {
-		const { email } = query ?? {}; // Object destruction
 		return this.accountRepository.findOne({
 			where: {
-				email,
+				email: params?.email,
 				address: {
-					[Op.iLike]: `%${query?.address}%`
-				}
-			}
+					[Op.iLike]: `%${params?.address}%`,
+				},
+			},
 		});
 	}
 
@@ -56,11 +55,12 @@ export class AccountReadService {
 	) {
 		return this.accountRepository.findAll({
 			where: {
+				email: params?.email,
 				address: {
-					[Op.iLike]: `%${query?.address}%`
-				}
-			}
-	});
+					[Op.iLike]: `%${params?.address}%`,
+				},
+			},
+		});
 	}
 
 	async findAndCountAll(
@@ -78,7 +78,7 @@ export class AccountReadService {
 		return this.findFirst({ email });
 	}
 
-	async function findByAddress(address: string) {
-		return this.findFirst()
+	async findByAddress(address: string) {
+		return this.findFirst({ address });
 	}
 }

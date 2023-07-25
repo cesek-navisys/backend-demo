@@ -5,3 +5,10 @@
  *
  * IAccountViewMapper
  */
+
+import { Order, Product } from "@backend-demo/backend-libs/tables";
+
+export interface IAccountViewMapper {
+  // orders: IOrderView []
+  // products: IProductView []
+}

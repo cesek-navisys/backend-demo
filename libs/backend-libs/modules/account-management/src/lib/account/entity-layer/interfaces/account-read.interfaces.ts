@@ -4,8 +4,8 @@ interface IAccountSearchableParams {
 	/**
 	 * You can search by substring (case insensitive)
 	 */
-	address?: string
-	email?: string
+	address?: string;
+	email?: string;
 }
 
 export interface IAccountFindOneParams {
@@ -13,12 +13,8 @@ export interface IAccountFindOneParams {
 }
 export interface IAccountFindOneQuery extends IAccountQueryOne {}
 
-export interface IAccountFindManyParams {}
-export interface IAccountFindManyQuery extends IAccountSearchableParams{
-	//countOrders: boolean;
-}
+export interface IAccountFindManyParams extends IAccountSearchableParams {}
+export interface IAccountFindManyQuery {}
 
-export interface IAccountFindFirstParams {}
-export interface IAccountFindFirstQuery extends IAccountSearchableParams {
-	includeOrders?: boolean;
-}
+export interface IAccountFindFirstParams extends IAccountSearchableParams {}
+export interface IAccountFindFirstQuery extends IAccountQueryOne {}

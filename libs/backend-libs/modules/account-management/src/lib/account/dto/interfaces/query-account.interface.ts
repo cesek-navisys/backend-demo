@@ -4,5 +4,5 @@ export interface IAccountQueryOne {
 	includeOrders?: boolean;
 	includeProducts?: boolean;
 }
-export interface IAccountQueryMany extends IQueryManyBase {}
- 
+export interface IAccountQueryMany extends IQueryManyBase {
+}
