@@ -9,12 +9,14 @@
  * IOrderFindFirstQuery
  */
 
-import { IOrderAttributes } from '@backend-demo/backend-libs/entities';
+import {
+	IOrderAttributes,
+	IOrderUniqueAttributes,
+} from '@backend-demo/backend-libs/entities';
 import { Optional } from 'sequelize';
-import { IOrderQueryMany, IOrderQueryOne } from '../../dto';
+import { IOrderQueryMany, IOrderQueryOne } from '../../dto/interfaces';
 
-export interface IOrderFindOneParams
-	extends Pick<IOrderAttributes, 'code' | 'AccountCode'> {}
+export interface IOrderFindOneParams extends IOrderUniqueAttributes {}
 
 export interface IOrderFindOneQuery extends IOrderQueryOne {}
 

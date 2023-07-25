@@ -17,18 +17,13 @@ export class OrderWasteService {
 		private orderReadService: OrderReadService
 	) {}
 
-	async delete(
-		accountCode: string,
-		orderCode: string,
-		force = false
-	): Promise<Order> {
+	async delete(orderCode: string, force = false): Promise<Order> {
 		await this.orderRepository.destroy({
 			where: { code: orderCode },
 			force,
 		});
 		const order = await this.orderReadService.findOne({
 			code: orderCode,
-			AccountCode: accountCode,
 		});
 		if (order) return order;
 		else
@@ -37,22 +32,13 @@ export class OrderWasteService {
 			);
 	}
 
-	async restore(
-		accountCode: string,
-		orderCode: string,
-		params?: IOrderRestoreParams
-	): Promise<Order | Order[]> {
+	async restore(orderCode: string): Promise<Order | Order[]> {
 		await this.orderRepository.restore({
-			where: {
-				code: orderCode,
-				AccountCode: params?.AccountCode,
-				messageForOwner: params?.messageForOwner,
-			},
+			where: { code: orderCode },
 		});
 
 		const order = await this.orderReadService.findOne({
 			code: orderCode,
-			AccountCode: accountCode,
 		});
 		if (order) return order;
 		else

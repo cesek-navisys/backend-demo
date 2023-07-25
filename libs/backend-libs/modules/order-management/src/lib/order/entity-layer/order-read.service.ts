@@ -8,7 +8,11 @@
  * count
  */
 
-import { Account, Order } from '@backend-demo/backend-libs/tables';
+import {
+	Account,
+	Order,
+	OrderDetails,
+} from '@backend-demo/backend-libs/tables';
 import { Inject, Injectable } from '@nestjs/common';
 import {
 	IOrderFindAndCountManyQuery,
@@ -19,6 +23,7 @@ import {
 	IOrderFindOneParams,
 	IOrderFindOneQuery,
 } from './interfaces/order-read.interfaces';
+import { IOrderQueryOne } from '../dto/interfaces';
 
 @Injectable()
 export class OrderReadService {
@@ -26,13 +31,20 @@ export class OrderReadService {
 		@Inject('ORDER_REPOSITORY') private orderRepository: typeof Order
 	) {}
 
+	private queries(query: IOrderQueryOne | undefined) {
+		const queries = [];
+		if (query?.includeAccount) queries.push(Account);
+		if (query?.includeOrderDetails) queries.push(OrderDetails);
+		return queries;
+	}
+
 	async findOne(
 		params: IOrderFindOneParams,
 		query?: IOrderFindOneQuery
 	): Promise<Order | null> {
 		const order = await this.orderRepository.findOne<Order>({
-			where: { code: params.code, AccountCode: params.AccountCode },
-			include: query?.includeAccount ? Account : undefined,
+			where: { code: params.code },
+			include: this.queries(query),
 		});
 		return order;
 	}
@@ -46,8 +58,7 @@ export class OrderReadService {
 				messageForOwner: params.messageForOwner,
 				AccountCode: params.AccountCode,
 			},
-			include: query?.includeAccount ? Account : undefined,
-			limit: 1,
+			include: this.queries(query),
 		});
 		return order;
 	}
@@ -61,7 +72,7 @@ export class OrderReadService {
 				messageForOwner: params.messageForOwner,
 				AccountCode: params.AccountCode,
 			},
-			include: query?.includeAccount ? Account : undefined,
+			include: this.queries(query),
 		});
 	}
 
@@ -74,7 +85,7 @@ export class OrderReadService {
 				messageForOwner: params.messageForOwner,
 				AccountCode: params.AccountCode,
 			},
-			include: query?.includeAccount ? Account : undefined,
+			include: this.queries(query),
 			limit: query?.limit ?? 10,
 			offset: query?.page ? (query.page - 1) * (query.limit ?? 10) : 0,
 		});

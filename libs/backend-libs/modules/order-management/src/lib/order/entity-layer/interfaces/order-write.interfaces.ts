@@ -7,6 +7,6 @@ export interface IOrderCreateOneParams extends IOrderCreationAttributes {}
 
 export interface IOrderUpsertOneParams extends IOrderCreationAttributes {}
 
-export interface IOrderUpdateOneParams extends IOrderUpsertOneParams {}
+export interface IOrderUpdateOneParams extends IOrderCreationAttributes {}
 
 export interface IOrderUpdateManyParams extends IOrderAttributes {}

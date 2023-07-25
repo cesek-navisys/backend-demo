@@ -1,3 +1,3 @@
-import { IOrderCreationAttributes } from '@backend-demo/backend-libs/entities';
+import { IOrderUniqueAttributes } from '@backend-demo/backend-libs/entities';
 
-export interface IOrderRestoreParams extends IOrderCreationAttributes {}
+export interface IOrderRestoreParams extends IOrderUniqueAttributes {}

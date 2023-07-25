@@ -34,12 +34,19 @@ export class Order
 	@Column({ type: DataType.STRING })
 	messageForOwner!: string;
 
-	@ForeignKey(() => Account)
 	@Column({
 		allowNull: false,
+		defaultValue: false,
+		type: DataType.BOOLEAN,
+	})
+	confirmed!: boolean;
+
+	@ForeignKey(() => Account)
+	@Column({
+		allowNull: true,
 		type: DataType.UUID,
 	})
-	AccountCode!: string;
+	AccountCode!: string | null;
 
 	@HasMany(
 		() => OrderDetails,
@@ -49,4 +56,6 @@ export class Order
 
 	@BelongsTo(() => Account, AccountForeignKey.belongsTo())
 	Account?: Account;
+
+	// TODO: ne víc než 2 košíky na account. Pomocí unique indexes (sequelize)
 }

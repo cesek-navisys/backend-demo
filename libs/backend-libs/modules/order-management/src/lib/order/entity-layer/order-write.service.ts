@@ -18,7 +18,7 @@ import {
 } from './interfaces/order-write.interfaces';
 import { OrderReadService } from './order-read.service';
 
-@Injectable({})
+@Injectable()
 export class OrderWriteService {
 	constructor(
 		@Inject('ORDER_REPOSITORY') private orderRepository: typeof Order,
@@ -29,8 +29,15 @@ export class OrderWriteService {
 		return this.orderRepository.create({
 			AccountCode: params.AccountCode,
 			messageForOwner: params.messageForOwner,
+			confirmed: params.confirmed,
 		});
 	}
+
+	// POST/orders/basketID/confirm
+	// { accountEmail }
+	// async confirm(params: { code: string }) {
+	// 	return this.orderRepository;
+	// }
 
 	async createMany(params: IOrderCreateOneParams[]): Promise<Order[]> {
 		let orders: Order[] = [];
@@ -38,6 +45,7 @@ export class OrderWriteService {
 			const order = await this.orderRepository.create({
 				AccountCode: param.AccountCode,
 				messageForOwner: param.messageForOwner,
+				confirmed: param.confirmed,
 			});
 			orders.push(order);
 		});
@@ -49,6 +57,7 @@ export class OrderWriteService {
 			await this.orderRepository.upsert({
 				AccountCode: params.AccountCode,
 				messageForOwner: params.messageForOwner,
+				confirmed: params.confirmed,
 			});
 		return instance;
 	}
@@ -62,14 +71,14 @@ export class OrderWriteService {
 			{
 				AccountCode: params.AccountCode,
 				messageForOwner: params.messageForOwner,
+				confirmed: params.confirmed,
 			},
 			{
-				where: { code: orderCode },
+				where: { code: orderCode, AccountCode: accountCode },
 			}
 		);
 		const order = await this.orderReadService.findOne({
 			code: orderCode,
-			AccountCode: accountCode,
 		});
 		if (order) return order;
 		else throw new Error('Order with the provided code was not found.');
@@ -78,7 +87,7 @@ export class OrderWriteService {
 	async updateMany(params: IOrderUpdateManyParams[]): Promise<Order[]> {
 		let orders: Order[] = [];
 		params.forEach(async (param) => {
-			const { '0': affectedNumber } = await this.orderRepository.update(
+			await this.orderRepository.update(
 				{
 					AccountCode: param.AccountCode,
 					messageForOwner: param.messageForOwner,
@@ -89,7 +98,6 @@ export class OrderWriteService {
 			);
 			const order = await this.orderReadService.findOne({
 				code: param.code,
-				AccountCode: param.AccountCode,
 			});
 			if (order) orders.push(order);
 			else
