@@ -4,7 +4,6 @@ import {
 	BadRequestException,
 	Inject,
 	Injectable,
-	NotFoundException,
 } from '@nestjs/common';
 import { AccountReadService } from './account-read.service';
 import {
@@ -24,55 +23,43 @@ export class AccountWasteService {
 
 	async delete(
 		params: IAccountDeleteOneParams,
-		query: IAccountDeleteOneQuery
-	): Promise<Account | undefined> {
-		const account = await this.accountReadService.findOne({
-			...params,
-		});
+		query?: IAccountDeleteOneQuery
+	) {
+		const { code } = params;
 
-		if (!account) {
-			throw new NotFoundException(
-				`Account with code: ${params.code} not found`
-			);
-		}
+		const account = await this.accountReadService.findOne({
+			code: code,
+		});
 
 		this.accountRepository.destroy({
 			where: {
-				...params,
+				code: code,
 			},
 		});
 
-		if (!query.noReturn) {
-			return account;
-		}
-
-		return undefined;
+		return query?.noReturn ? null : account;
 	}
 
 	async restore(
 		params: IAccountRestoreOneParams,
-		query: IAccountRestoreOneQuery
+		query?: IAccountRestoreOneQuery
 	) {
+		const { code } = params;
+
 		const account = await this.accountReadService.findOne({
-			...params,
+			code: code,
 		});
 
-		if (!account) {
-			throw new NotFoundException(
-				`Account with code: ${params.code} not found`
-			);
-		}
-
-		if (!account?.deletedAt) {
+		if (!account.deletedAt) {
 			throw new BadRequestException(`Cannot restore existing record`);
 		}
 
-		this.accountRepository.restore({
-			where: {
-				...params,
-			},
-		});
+		await this.accountRepository.restore({
+      where: {
+        code: code,
+      },
+    });
 
-		return query?.noReturn ? undefined : account;
+		return query?.noReturn ? null : account;
 	}
 }

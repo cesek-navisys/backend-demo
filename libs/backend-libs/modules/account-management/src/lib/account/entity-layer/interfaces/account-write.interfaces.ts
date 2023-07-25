@@ -16,8 +16,12 @@ export interface IAccountUpdateOneParams {
 	code: string;
 }
 
-export interface IAccountUpdateManyQuery {
-	surname: string;
-}
+export interface IAccountUpdateManyQuery {}
 
 export interface IAccountUpdateManyParams {}
+
+export interface IAccountUpsertOneQuery {
+	noReturn: boolean;
+}
+
+export interface IAccountUpsertOneParams {}

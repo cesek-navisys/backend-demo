@@ -1,6 +1,6 @@
 import { IAccountQueryOne } from '../../dto/interfaces/query-account.interface';
 
-interface IAccountSearchableParams {
+interface IAccountSearchableQuery {
 	/**
 	 * You can search by substring (case insensitive)
 	 */
@@ -13,8 +13,10 @@ export interface IAccountFindOneParams {
 }
 export interface IAccountFindOneQuery extends IAccountQueryOne {}
 
-export interface IAccountFindManyParams extends IAccountSearchableParams {}
-export interface IAccountFindManyQuery {}
+export interface IAccountFindManyParams {}
+export interface IAccountFindManyQuery extends IAccountSearchableQuery {}
 
-export interface IAccountFindFirstParams extends IAccountSearchableParams {}
-export interface IAccountFindFirstQuery extends IAccountQueryOne {}
+export interface IAccountFindFirstParams {}
+export interface IAccountFindFirstQuery
+	extends IAccountQueryOne,
+		IAccountSearchableQuery {}

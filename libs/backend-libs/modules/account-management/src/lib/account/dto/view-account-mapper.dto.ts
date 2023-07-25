@@ -1,5 +1,3 @@
-/**
- * v předchozích verzch se používal název souboru také "cross-account-view.interface.ts"
- *
- * view-account-mapper bude importovat view-account
- */
+import { IAccountViewMapper } from './interfaces/view-account-mapper.interface';
+
+export class ViewAccountMapperDto implements IAccountViewMapper {}

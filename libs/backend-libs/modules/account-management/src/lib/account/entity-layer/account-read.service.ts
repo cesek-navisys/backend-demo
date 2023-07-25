@@ -8,7 +8,7 @@
  * count
  */
 
-import { Account, Order } from '@backend-demo/backend-libs/tables';
+import { Account, Order, Product } from '@backend-demo/backend-libs/tables';
 import { ACCOUNT_REPOSITORY } from '@backend-demo/shared/constants';
 import {
 	IAccountFindFirstParams,
@@ -18,8 +18,9 @@ import {
 	IAccountFindOneParams,
 	IAccountFindOneQuery,
 } from './interfaces/account-read.interfaces';
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { Op } from 'sequelize';
+import { IAccountQueryOne } from '../dto/interfaces/query-account.interface';
 
 @Injectable()
 export class AccountReadService {
@@ -28,24 +29,34 @@ export class AccountReadService {
 		private readonly accountRepository: typeof Account
 	) {}
 
-	async findOne(params: IAccountFindOneParams, query?: IAccountFindOneQuery) {
-		return this.accountRepository.findOne({
+	async findOne(
+		params: IAccountFindOneParams,
+		query?: IAccountFindOneQuery
+	): Promise<Account> {
+		const account = await this.accountRepository.findOne({
 			where: { code: params.code },
 			include: query?.includeOrders ? Order : undefined,
 		});
+		if (!account) {
+			throw new NotFoundException(
+				`Account with code: ${params.code} not found`
+			);
+		}
+		return account;
 	}
 
 	async findFirst(
-		params: IAccountFindFirstParams,
+		params?: IAccountFindFirstParams,
 		query?: IAccountFindFirstQuery
-	) {
+	): Promise<Account | null> {
 		return this.accountRepository.findOne({
 			where: {
-				email: params?.email,
+				email: query?.email,
 				address: {
-					[Op.iLike]: `%${params?.address}%`,
+					[Op.iLike]: `%${query?.address}%`,
 				},
 			},
+			include: this.getIncludeList(query),
 		});
 	}
 
@@ -55,9 +66,9 @@ export class AccountReadService {
 	) {
 		return this.accountRepository.findAll({
 			where: {
-				email: params?.email,
+				email: query?.email,
 				address: {
-					[Op.iLike]: `%${params?.address}%`,
+					[Op.iLike]: `%${query?.address}%`,
 				},
 			},
 		});
@@ -67,11 +78,28 @@ export class AccountReadService {
 		params?: IAccountFindManyParams,
 		query?: IAccountFindManyQuery
 	) {
-		return this.accountRepository.findAndCountAll();
+		return this.accountRepository.findAndCountAll({
+			where: {
+				email: query?.email,
+				address: {
+					[Op.iLike]: `%${query?.address}%`,
+				},
+			},
+		});
 	}
 
-	async count() {
-		return this.accountRepository.count();
+	async count(
+		params?: IAccountFindManyParams,
+		query?: IAccountFindManyQuery
+	) {
+		return this.accountRepository.count({
+			where: {
+				email: query?.email,
+				address: {
+					[Op.iLike]: `%${query?.address}%`,
+				},
+			},
+		});
 	}
 
 	async findByEmail(email: string) {
@@ -80,5 +108,12 @@ export class AccountReadService {
 
 	async findByAddress(address: string) {
 		return this.findFirst({ address });
+	}
+
+	private getIncludeList(query: IAccountQueryOne | undefined) {
+		const includes = [];
+		if (query?.includeOrders) includes.push(Order);
+		if (query?.includeProducts) includes.push(Product);
+		return includes;
 	}
 }
