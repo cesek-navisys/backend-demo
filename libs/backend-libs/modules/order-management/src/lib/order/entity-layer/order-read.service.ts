@@ -57,6 +57,7 @@ export class OrderReadService {
 			where: {
 				messageForOwner: params.messageForOwner,
 				AccountCode: params.AccountCode,
+				confirmed: params.confirmed,
 			},
 			include: this.queries(query),
 		});
@@ -71,6 +72,7 @@ export class OrderReadService {
 			where: {
 				messageForOwner: params.messageForOwner,
 				AccountCode: params.AccountCode,
+				confirmed: params.confirmed,
 			},
 			include: this.queries(query),
 		});
@@ -84,6 +86,7 @@ export class OrderReadService {
 			where: {
 				messageForOwner: params.messageForOwner,
 				AccountCode: params.AccountCode,
+				confirmed: params.confirmed,
 			},
 			include: this.queries(query),
 			limit: query?.limit ?? 10,
@@ -96,6 +99,7 @@ export class OrderReadService {
 			where: {
 				messageForOwner: params.messageForOwner,
 				AccountCode: params.AccountCode,
+				confirmed: params.confirmed,
 			},
 		});
 	}

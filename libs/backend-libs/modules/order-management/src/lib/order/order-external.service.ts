@@ -9,7 +9,7 @@
 import { OrderReadService } from './entity-layer/order-read.service';
 import { OrderWriteService } from './entity-layer/order-write.service';
 import { OrderWasteService } from './entity-layer/order-waste.service';
-import { IOrderQueryMany, IOrderQueryOne } from './dto';
+import { IOrderQueryMany, IOrderQueryOne } from './dto/interfaces';
 import {
 	IOrderFindAndCountManyQuery,
 	IOrderFindFirstParams,
@@ -24,39 +24,26 @@ import {
 } from './entity-layer/interfaces/order-write.interfaces';
 import { IOrderRestoreParams } from './entity-layer/interfaces/order-waste.interfaces';
 import { Injectable } from '@nestjs/common';
+import { OrderBasketService } from './domain-layer/order-basket.service';
+import { OrderConfirmedService } from './domain-layer/order-confirmed.service';
 
 @Injectable()
 export class OrderExternalService {
 	constructor(
-		private orderReadService: OrderReadService,
-		private orderWriteService: OrderWriteService,
-		private orderWasteService: OrderWasteService
+		private readonly orderReadService: OrderReadService,
+		private readonly orderWriteService: OrderWriteService,
+		private readonly orderWasteService: OrderWasteService,
+		private readonly orderBasketService: OrderBasketService,
+		private readonly orderConfirmedService: OrderConfirmedService
 	) {}
 
-	async findOne(
-		accountCode: string,
-		orderCode: string,
-		query?: IOrderQueryOne
-	) {
+	async findOne(orderCode: string, query?: IOrderQueryOne) {
 		return this.orderReadService.findOne(
 			{
 				code: orderCode,
-				AccountCode: accountCode,
 			},
 			query
 		);
-	}
-
-	async findAll(params: IOrderFindManyParams, query?: IOrderQueryMany) {
-		return this.orderReadService.findAll(params, query);
-	}
-
-	async findFirst(params: IOrderFindFirstParams, query?: IOrderQueryOne) {
-		return this.orderReadService.findFirst(params, query);
-	}
-
-	async count(params: IOrderFindManyParams) {
-		return this.orderReadService.count(params);
 	}
 
 	async findAndCountAll(
@@ -66,38 +53,31 @@ export class OrderExternalService {
 		return this.orderReadService.findAndCountAll(params, query);
 	}
 
+	async findFirst(params: IOrderFindFirstParams, query?: IOrderQueryOne) {
+		return this.orderReadService.findFirst(params, query);
+	}
+
 	async create(params: IOrderCreateOneParams) {
 		return this.orderWriteService.createOne(params);
 	}
 
-	async createMany(params: IOrderCreateOneParams[]) {
-		return this.orderWriteService.createMany(params);
-	}
-
-	async updateOne(
-		accountCode: string,
-		orderCode: string,
-		params: IOrderUpdateOneParams
-	) {
-		return this.orderWriteService.updateOne(accountCode, orderCode, params);
-	}
-
-	async updateMany(params: IOrderUpdateManyParams[]) {
-		return this.orderWriteService.updateMany(params);
+	async updateOne(orderCode: string, params: IOrderUpdateOneParams) {
+		return this.orderWriteService.updateOne(orderCode, params);
 	}
 
 	async upsertOne(params: IOrderUpsertOneParams) {
 		return this.orderWriteService.upsertOne(params);
 	}
-	async delete(accountCode: string, orderCode: string, force?: boolean) {
-		return this.orderWasteService.delete(accountCode, orderCode, force);
+
+	async delete(orderCode: string, force?: boolean) {
+		return this.orderWasteService.delete(orderCode, force);
 	}
 
-	async restore(
-		accountCode: string,
-		orderCode: string,
-		params: IOrderRestoreParams
-	) {
-		return this.orderWasteService.restore(accountCode, orderCode, params);
+	async confirm(orderCode: string, payload: { email: string }) {
+		return this.orderBasketService.confirm(orderCode, payload);
+	}
+
+	async getReceipt(orderCode: string) {
+		return this.orderConfirmedService.getReceipt(orderCode);
 	}
 }

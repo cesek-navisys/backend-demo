@@ -32,7 +32,7 @@ export class OrderWasteService {
 			);
 	}
 
-	async restore(orderCode: string): Promise<Order | Order[]> {
+	async restore(orderCode: string): Promise<Order> {
 		await this.orderRepository.restore({
 			where: { code: orderCode },
 		});

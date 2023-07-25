@@ -17,20 +17,25 @@ import {
 	IOrderUpsertOneParams,
 } from './interfaces/order-write.interfaces';
 import { OrderReadService } from './order-read.service';
+import { OrderWasteService } from './order-waste.service';
 
 @Injectable()
 export class OrderWriteService {
 	constructor(
 		@Inject('ORDER_REPOSITORY') private orderRepository: typeof Order,
-		private orderReadService: OrderReadService
+		private readonly orderReadService: OrderReadService,
+		private readonly orderWasteService: OrderWasteService
 	) {}
 
 	async createOne(params: IOrderCreateOneParams): Promise<Order> {
-		return this.orderRepository.create({
-			AccountCode: params.AccountCode,
-			messageForOwner: params.messageForOwner,
-			confirmed: params.confirmed,
-		});
+		const order = await this.orderReadService.findFirst(params);
+		if (order) return this.orderWasteService.restore(order?.code);
+		else
+			return this.orderRepository.create({
+				AccountCode: params.AccountCode,
+				messageForOwner: params.messageForOwner,
+				confirmed: params.confirmed,
+			});
 	}
 
 	// POST/orders/basketID/confirm
@@ -63,7 +68,6 @@ export class OrderWriteService {
 	}
 
 	async updateOne(
-		accountCode: string,
 		orderCode: string,
 		params: IOrderUpsertOneParams
 	): Promise<Order> {
@@ -74,7 +78,7 @@ export class OrderWriteService {
 				confirmed: params.confirmed,
 			},
 			{
-				where: { code: orderCode, AccountCode: accountCode },
+				where: { code: orderCode },
 			}
 		);
 		const order = await this.orderReadService.findOne({
@@ -91,6 +95,7 @@ export class OrderWriteService {
 				{
 					AccountCode: param.AccountCode,
 					messageForOwner: param.messageForOwner,
+					confirmed: param.confirmed,
 				},
 				{
 					where: { code: param.code },

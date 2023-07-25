@@ -22,8 +22,8 @@ export interface IOrderFindOneQuery extends IOrderQueryOne {}
 
 export interface IOrderFindFirstParams
 	extends Optional<
-		Pick<IOrderAttributes, 'AccountCode' | 'messageForOwner'>,
-		'AccountCode' | 'messageForOwner'
+		Pick<IOrderAttributes, 'AccountCode' | 'messageForOwner' | 'confirmed'>,
+		'AccountCode' | 'messageForOwner' | 'confirmed'
 	> {}
 
 export interface IOrderFindFirstQuery extends IOrderFindOneQuery {}
@@ -32,7 +32,4 @@ export interface IOrderFindManyParams extends IOrderFindFirstParams {}
 
 export interface IOrderFindManyQuery extends IOrderQueryMany {}
 
-export interface IOrderFindAndCountManyQuery extends IOrderFindManyQuery {
-	limit: number;
-	page: number;
-}
+export interface IOrderFindAndCountManyQuery extends IOrderFindManyQuery {}
