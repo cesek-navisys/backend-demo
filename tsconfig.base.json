@@ -35,6 +35,9 @@
 			"@backend-demo/backend-libs/modules/order-management": [
 				"libs/backend-libs/modules/order-management/src/index.ts"
 			],
+			"@backend-demo/backend-libs/modules/product-management": [
+				"libs/backend-libs/modules/product-management/src/index.ts"
+			],
 			"@backend-demo/backend-libs/tables": [
 				"libs/backend-libs/tables/src/index.ts"
 			],
