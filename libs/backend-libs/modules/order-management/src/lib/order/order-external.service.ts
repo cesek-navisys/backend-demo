@@ -73,6 +73,10 @@ export class OrderExternalService {
 		return this.orderWasteService.delete(orderCode, force);
 	}
 
+	async restore(orderCode: string) {
+		return this.orderWasteService.restore(orderCode);
+	}
+
 	async confirm(orderCode: string, payload: { email: string }) {
 		return this.orderBasketService.confirm(orderCode, payload);
 	}

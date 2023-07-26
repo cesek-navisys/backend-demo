@@ -37,7 +37,7 @@ export class OrderController {
 		return this.orderExternalService.findAndCountAll(params, query);
 	}
 
-	@Get()
+	@Get('first')
 	findFirst(
 		@Body() params: ViewOrderMapperDto,
 		@Query() query: OrderQueryDto
@@ -61,12 +61,17 @@ export class OrderController {
 		return this.orderExternalService.delete(code);
 	}
 
-	@Put(':code')
+	@Put('restore/:code')
+	restore(@Param() code: string) {
+		return this.orderExternalService.restore(code);
+	}
+
+	@Put('confirm/:code')
 	confirm(@Param() code: string, @Body() payload: { email: string }) {
 		return this.orderExternalService.confirm(code, payload);
 	}
 
-	@Get('code')
+	@Get('get-receipt/:code')
 	getReceipt(@Param() code: string) {
 		return this.orderExternalService.getReceipt(code);
 	}

@@ -14,6 +14,8 @@ export class OrderBasketService {
 			code: orderCode,
 		});
 		if (!orderBasket) throw new Error('Order was not found');
+		if (orderBasket.confirmed)
+			throw new Error('Order is already confirmed');
 		let account = await this.accountReadService.findByEmail({
 			email: payload.email,
 		});
