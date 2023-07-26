@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IIntroduceYourself } from './interfaces/introduce-yourself.interface';
-import { IsDate, IsNotEmpty, Length, Matches } from 'class-validator';
+import { IsDate, IsNotEmpty, IsOptional, Length, Matches } from 'class-validator';
 import { Type } from 'class-transformer';
 
 export class IntroduceYourselfDto implements IIntroduceYourself {
