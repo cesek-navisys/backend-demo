@@ -20,7 +20,7 @@ import {
 	Table,
 } from 'sequelize-typescript';
 
-@Table
+@Table({ paranoid: true })
 export class Product
 	extends Model<IProductAttributes, IProductCreationAttributes>
 	implements IProductAttributes {
@@ -37,7 +37,7 @@ export class Product
 	@Column({ type: DataType.STRING })
 	description!: string;
 
-	@Column({ type: DataType.STRING })
+	@Column({ type: DataType.DOUBLE })
 	price!: number;
 
 	@Column({
