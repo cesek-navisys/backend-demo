@@ -37,6 +37,7 @@ export class AccountReadService {
 			where: { code: params.code },
 			include: query?.includeOrders ? Order : undefined,
 		});
+
 		if (!account) {
 			throw new NotFoundException(
 				`Account with code: ${params.code} not found`
@@ -49,7 +50,7 @@ export class AccountReadService {
 		params?: IAccountFindFirstParams,
 		query?: IAccountFindFirstQuery
 	): Promise<Account | null> {
-		return this.accountRepository.findOne({
+		return await this.accountRepository.findOne({
 			where: {
 				email: query?.email,
 				address: {

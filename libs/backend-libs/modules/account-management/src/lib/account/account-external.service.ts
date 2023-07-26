@@ -53,19 +53,12 @@ export class AccountExternalService {
 		params?: IAccountFindManyParams,
 		query?: IAccountFindManyQuery
 	) {
-		const { includeCount } = query?.includeCount;
-
-		if (includeCount) {
+		if (query?.includeCount) {
 			return this.accountReadService.findAndCountAll(params, query);
 		}
 		return this.accountReadService.findAll(params, query);
 	}
-	async findAndCountAll(
-		params?: IAccountFindManyParams,
-		query?: IAccountFindManyQuery
-	) {
-		return this.accountReadService.findAndCountAll(params, query);
-	}
+
 	async count(
 		params?: IAccountFindManyParams,
 		query?: IAccountFindManyQuery
