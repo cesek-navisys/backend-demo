@@ -1,0 +1,26 @@
+{
+	"name": "backend-libs-api-interfaces",
+	"$schema": "../../../node_modules/nx/schemas/project-schema.json",
+	"sourceRoot": "libs/backend-libs/api-interfaces/src",
+	"projectType": "library",
+	"targets": {
+		"build": {
+			"executor": "@nx/js:tsc",
+			"outputs": ["{options.outputPath}"],
+			"options": {
+				"outputPath": "dist/libs/backend-libs/api-interfaces",
+				"main": "libs/backend-libs/api-interfaces/src/index.ts",
+				"tsConfig": "libs/backend-libs/api-interfaces/tsconfig.lib.json",
+				"assets": ["libs/backend-libs/api-interfaces/*.md"]
+			}
+		},
+		"lint": {
+			"executor": "@nx/linter:eslint",
+			"outputs": ["{options.outputFile}"],
+			"options": {
+				"lintFilePatterns": ["libs/backend-libs/api-interfaces/**/*.ts"]
+			}
+		}
+	},
+	"tags": []
+}
