@@ -1,10 +1,4 @@
-import {
-	Column,
-	DataType,
-	HasMany,
-	Model,
-	Table
-} from 'sequelize-typescript';
+import { Column, DataType, HasMany, Model, Table } from 'sequelize-typescript';
 import { Order } from './order.table';
 import { Product } from './product.table';
 import {
@@ -20,7 +14,8 @@ import {
 @Table
 export class Account
 	extends Model<IAccountAttributes, IAccountCreationAttributes>
-	implements IAccountAttributes {
+	implements IAccountAttributes
+{
 	@Column({
 		allowNull: true,
 		type: DataType.UUID,

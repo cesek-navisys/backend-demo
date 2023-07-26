@@ -9,14 +9,23 @@ import {
 	OrderDetailsForeignKey,
 	OrderForeignKey,
 } from '@backend-demo/backend-libs/foreign-keys';
-import { BelongsTo, Column, DataType, ForeignKey, HasMany, Model, Table } from 'sequelize-typescript';
+import {
+	BelongsTo,
+	Column,
+	DataType,
+	ForeignKey,
+	HasMany,
+	Model,
+	Table,
+} from 'sequelize-typescript';
 
-@Table
+@Table({ paranoid: true })
 export class Order
 	extends Model<IOrderAttributes, IOrderCreationAttributes>
-	implements IOrderAttributes {
+	implements IOrderAttributes
+{
 	@Column({
-		allowNull: true,
+		allowNull: false,
 		type: DataType.UUID,
 		primaryKey: true,
 	})
@@ -25,12 +34,19 @@ export class Order
 	@Column({ type: DataType.STRING })
 	messageForOwner!: string;
 
-	@ForeignKey(() => Account)
 	@Column({
 		allowNull: false,
+		defaultValue: false,
+		type: DataType.BOOLEAN,
+	})
+	confirmed!: boolean;
+
+	@ForeignKey(() => Account)
+	@Column({
+		allowNull: true,
 		type: DataType.UUID,
 	})
-	OwnerCode!: string;
+	AccountCode!: string | null;
 
 	@HasMany(
 		() => OrderDetails,
@@ -39,5 +55,7 @@ export class Order
 	OrderDetails?: OrderDetails[];
 
 	@BelongsTo(() => Account, AccountForeignKey.belongsTo())
-	Owner?: Account;
+	Account?: Account;
+
+	// TODO: ne víc než 2 košíky na account. Pomocí unique indexes (sequelize)
 }
