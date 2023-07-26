@@ -5,4 +5,5 @@ export interface IAccountQueryOne {
 	includeProducts?: boolean;
 }
 export interface IAccountQueryMany extends IQueryManyBase {
+	includeCount?: boolean;
 }

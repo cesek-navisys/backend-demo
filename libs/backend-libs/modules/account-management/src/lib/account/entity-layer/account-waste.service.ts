@@ -1,10 +1,6 @@
 import { Account } from '@backend-demo/backend-libs/tables';
 import { ACCOUNT_REPOSITORY } from '@backend-demo/shared/constants';
-import {
-	BadRequestException,
-	Inject,
-	Injectable,
-} from '@nestjs/common';
+import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { AccountReadService } from './account-read.service';
 import {
 	IAccountDeleteOneParams,
@@ -31,13 +27,11 @@ export class AccountWasteService {
 			code: code,
 		});
 
-		this.accountRepository.destroy({
+		return await this.accountRepository.destroy({
 			where: {
 				code: code,
 			},
 		});
-
-		return query?.noReturn ? null : account;
 	}
 
 	async restore(
@@ -54,12 +48,10 @@ export class AccountWasteService {
 			throw new BadRequestException(`Cannot restore existing record`);
 		}
 
-		await this.accountRepository.restore({
-      where: {
-        code: code,
-      },
-    });
-
-		return query?.noReturn ? null : account;
+		return await this.accountRepository.restore({
+			where: {
+				code: code,
+			},
+		});
 	}
 }

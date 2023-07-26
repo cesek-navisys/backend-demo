@@ -6,6 +6,7 @@
  */
 
 export interface IAccountView {
+	code: string
   name: string;
 	surname: string;
 	email: string;

@@ -39,18 +39,16 @@ export class AccountWriteService {
 		payload: IAccountCreate,
 		params?: IAccountCreateOneParams,
 		query?: IAccountCreateOneQuery
-	) {
+	): Promise<Account> {
 		const { address, email, name, phone, surname } = payload;
 
-		return query?.noReturn
-			? this.accountRepository.create({
-					address: address,
-					email: email,
-					name: name,
-					surname: surname,
-					phone: phone,
-			  })
-			: null;
+		return this.accountRepository.create({
+			address: address,
+			email: email,
+			name: name,
+			surname: surname,
+			phone: phone,
+		});
 	}
 
 	async updateOne(
@@ -65,7 +63,7 @@ export class AccountWriteService {
 			code: code,
 		});
 
-		this.accountRepository.update(
+		return this.accountRepository.update(
 			{
 				name: name,
 				surname: surname,
@@ -75,8 +73,6 @@ export class AccountWriteService {
 			},
 			{ where: { code: account.code } }
 		);
-
-		return query?.noReturn ? null : account;
 	}
 
 	async createMany(
@@ -84,11 +80,12 @@ export class AccountWriteService {
 		params?: IAccountCreateManyParams,
 		query?: IAccountCreateManyQuery
 	) {
-		await Promise.all([
+		return await Promise.all([
 			payload.forEach((account) => this.createOne(account)),
 		]);
 	}
 
+	//TODO: Think how to use it
 	async updateMany(
 		payload: IAccountUpdate[],
 		params?: IAccountUpdateManyParams,
@@ -99,7 +96,7 @@ export class AccountWriteService {
 		payload: IAccountCreate,
 		params?: IAccountUpsertOneParams,
 		query?: IAccountUpsertOneQuery
-	) {
+	): Promise<Account> {
 		const { address, email, name, phone, surname } = payload;
 		const [instance, created] = await this.accountRepository.upsert({
 			address: address,
@@ -108,6 +105,6 @@ export class AccountWriteService {
 			surname: surname,
 			phone: phone,
 		});
-		return { instance, created };
+		return instance;
 	}
 }

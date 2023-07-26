@@ -38,23 +38,30 @@ export class AccountExternalService {
 		private readonly accountWasteService: AccountWasteService
 	) {}
 
-	findOne(params: IAccountFindOneParams, query?: IAccountFindOneQuery) {
+	async findOne(params: IAccountFindOneParams, query?: IAccountFindOneQuery) {
 		return this.accountReadService.findOne(params, query);
 	}
+
 	async findFirst(
-		params: IAccountFindFirstParams,
+		params?: IAccountFindFirstParams,
 		query?: IAccountFindFirstQuery
 	) {
 		return this.accountReadService.findFirst(params, query);
 	}
+
 	async findAll(
-		params: IAccountFindManyParams,
+		params?: IAccountFindManyParams,
 		query?: IAccountFindManyQuery
 	) {
+		const { includeCount } = query?.includeCount;
+
+		if (includeCount) {
+			return this.accountReadService.findAndCountAll(params, query);
+		}
 		return this.accountReadService.findAll(params, query);
 	}
 	async findAndCountAll(
-		params: IAccountFindManyParams,
+		params?: IAccountFindManyParams,
 		query?: IAccountFindManyQuery
 	) {
 		return this.accountReadService.findAndCountAll(params, query);
@@ -79,21 +86,21 @@ export class AccountExternalService {
 	}
 	async createOne(
 		payload: IAccountCreate,
-		params: IAccountCreateOneParams,
+		params?: IAccountCreateOneParams,
 		query?: IAccountCreateOneQuery
 	) {
 		return this.accountWriteService.createOne(payload, params, query);
 	}
 	async createMany(
 		payload: IAccountCreate[],
-		params: IAccountCreateManyParams,
-		query: IAccountCreateManyQuery
+		params?: IAccountCreateManyParams,
+		query?: IAccountCreateManyQuery
 	) {
 		return this.accountWriteService.createMany(payload, params, query);
 	}
 	async upsertOne(
 		payload: IAccountCreate,
-		params: IAccountUpsertOneQuery,
+		params?: IAccountUpsertOneQuery,
 		query?: IAccountUpsertOneQuery
 	) {
 		return this.accountWriteService.upsertOne(payload, params, query);
@@ -107,8 +114,8 @@ export class AccountExternalService {
 	}
 	async updateMany(
 		payload: IAccountUpdate[],
-		params: IAccountUpdateManyParams,
-		query: IAccountUpdateManyQuery
+		params?: IAccountUpdateManyParams,
+		query?: IAccountUpdateManyQuery
 	) {
 		return this.accountWriteService.updateMany(payload, params, query);
 	}

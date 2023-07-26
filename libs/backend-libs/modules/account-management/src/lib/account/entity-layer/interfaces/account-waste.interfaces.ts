@@ -2,14 +2,10 @@ export interface IAccountDeleteOneParams {
 	code: string;
 }
 
-export interface IAccountDeleteOneQuery {
-	noReturn: boolean;
-}
+export interface IAccountDeleteOneQuery {}
 
 export interface IAccountRestoreOneParams {
 	code: string;
 }
 
-export interface IAccountRestoreOneQuery {
-	noReturn: boolean;
-}
+export interface IAccountRestoreOneQuery {}
