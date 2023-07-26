@@ -19,43 +19,43 @@ import {
 	UpdateOrderDto,
 	ViewOrderMapperDto,
 } from './dto';
+import { ORDER_CODE_API_PARAM } from '@backend-demo/shared/constants';
+import { orderManagementRoutes } from './order-management.routes';
 
-@Controller('orders')
+@Controller(orderManagementRoutes.order)
 export class OrderController {
-	constructor(private readonly orderExternalService: OrderExternalService) {}
+	constructor(private readonly orderExternalService: OrderExternalService) { }
 
-	@Get(':code')
-	findOne(@Param() code: string, @Query() query?: OrderQueryDto) {
+	@Get(`:${ORDER_CODE_API_PARAM}`)
+	findOne(
+		@Param() accountCode: string,
+		@Param() code: string,
+		@Query() query?: OrderQueryDto) {
 		return this.orderExternalService.findOne(code, query);
 	}
 
 	@Get()
-	findAndCountAll(
-		@Body() params: ViewOrderMapperDto,
+	findAll(
+		@Param() accountCode: string,
 		@Query() query: OrderQueryDto
 	) {
-		return this.orderExternalService.findAndCountAll(params, query);
-	}
-
-	@Get('first')
-	findFirst(
-		@Body() params: ViewOrderMapperDto,
-		@Query() query: OrderQueryDto
-	) {
-		return this.orderExternalService.findFirst(params, query);
+		return this.orderExternalService.findAndCountAll({ AccountCode: accountCode }, query);
 	}
 
 	@Post()
-	create(@Body() params: CreateOrderDto) {
-		return this.orderExternalService.create(params);
+	create(
+		@Param() accountCode: string,
+		@Body() createOrderDto: CreateOrderDto
+	) {
+		return this.orderExternalService.create(createOrderDto);
 	}
 
-	@Put(':code')
-	update(@Body() params: UpdateOrderDto, @Param() code: string) {
-		return this.orderExternalService.updateOne(code, params);
+	@Put(`:${ORDER_CODE_API_PARAM}`)
+	update(@Param() orderCode: string, @Body() updateOrderDto: UpdateOrderDto) {
+		return this.orderExternalService.updateOne(orderCode, updateOrderDto);
 	}
 
-	@Delete(':code')
+	@Delete(`:${ORDER_CODE_API_PARAM}`)
 	// TODO: Implement 'force'
 	remove(@Param() code: string) {
 		return this.orderExternalService.delete(code);
