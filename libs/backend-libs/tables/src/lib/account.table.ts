@@ -11,7 +11,7 @@ import {
 	IAccountCreationAttributes,
 } from '@backend-demo/backend-libs/entities';
 
-@Table
+@Table({ paranoid: true })
 export class Account
 	extends Model<IAccountAttributes, IAccountCreationAttributes>
 	implements IAccountAttributes
