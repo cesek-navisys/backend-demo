@@ -56,6 +56,9 @@ export class AccountExternalService {
 		if (query?.includeCount) {
 			return this.accountReadService.findAndCountAll(params, query);
 		}
+		if (query?.firstOnly) {
+			return this.accountReadService.findFirst(params, query);
+		}
 		return this.accountReadService.findAll(params, query);
 	}
 

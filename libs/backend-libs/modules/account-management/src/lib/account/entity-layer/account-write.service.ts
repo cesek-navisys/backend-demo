@@ -43,11 +43,11 @@ export class AccountWriteService {
 		const { address, email, name, phone, surname } = payload;
 
 		return this.accountRepository.create({
-			address: address,
-			email: email,
-			name: name,
-			surname: surname,
-			phone: phone,
+			address,
+			email,
+			name,
+			surname,
+			phone,
 		});
 	}
 
@@ -60,16 +60,16 @@ export class AccountWriteService {
 		const { code } = params;
 
 		const account = await this.accountReadService.findOne({
-			code: code,
+			code,
 		});
 
 		return this.accountRepository.update(
 			{
-				name: name,
-				surname: surname,
-				address: address,
-				email: email,
-				phone: phone,
+				name,
+				surname,
+				address,
+				email,
+				phone,
 			},
 			{ where: { code: account.code } }
 		);
@@ -80,9 +80,11 @@ export class AccountWriteService {
 		params?: IAccountCreateManyParams,
 		query?: IAccountCreateManyQuery
 	) {
-		return await Promise.all([
-			payload.forEach((account) => this.createOne(account)),
-		]);
+		const accounts: Account[] = [];
+		payload.forEach(async (account) =>
+			accounts.push(await this.createOne(account))
+		);
+		return accounts
 	}
 
 	//TODO: Think how to use it
@@ -99,11 +101,11 @@ export class AccountWriteService {
 	): Promise<Account> {
 		const { address, email, name, phone, surname } = payload;
 		const [instance, created] = await this.accountRepository.upsert({
-			address: address,
-			email: email,
-			name: name,
-			surname: surname,
-			phone: phone,
+			address,
+			email,
+			name,
+			surname,
+			phone,
 		});
 		return instance;
 	}

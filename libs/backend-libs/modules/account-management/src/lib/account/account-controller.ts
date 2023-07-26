@@ -1,8 +1,8 @@
 import {
 	Body,
+	Controller,
 	Delete,
 	Get,
-	Injectable,
 	Param,
 	Patch,
 	Post,
@@ -20,6 +20,7 @@ import {
 	QueryOneAccountDto,
 } from './dto/query-account.dto';
 
+@Controller('/account')
 export class AccountController {
 	constructor(
 		private readonly accountExternalService: AccountExternalService
@@ -30,14 +31,10 @@ export class AccountController {
 		return this.accountExternalService.findOne({ code }, query);
 	}
 	@Get()
-	async findFirst(@Query() query?: QueryManyAccountDto) {
-		return this.accountExternalService.findFirst(query);
-	}
-	@Get()
 	async findAll(@Query() query?: QueryManyAccountDto) {
 		return this.accountExternalService.findAll(query);
 	}
-	@Get('/count')
+	@Get('count')
 	async count() {
 		return this.accountExternalService.count();
 	}
@@ -49,10 +46,6 @@ export class AccountController {
 	@Post()
 	async createOne(@Body() payload: CreateAccountDto) {
 		return this.accountExternalService.createOne(payload);
-	}
-	@Post()
-	async createMany(@Body() payload: CreateAccountDto[]) {
-		return this.accountExternalService.createMany(payload);
 	}
 
 	//TODO: WHAT IS PURPOSE OF THIS?
@@ -66,7 +59,7 @@ export class AccountController {
 		return this.accountExternalService.updateOne(payload, { code });
 	}
 
-	@Get('/restore/:code')
+	@Get('restore/:code')
 	async restore(@Param() code: string) {
 		return this.accountExternalService.restore({ code });
 	}

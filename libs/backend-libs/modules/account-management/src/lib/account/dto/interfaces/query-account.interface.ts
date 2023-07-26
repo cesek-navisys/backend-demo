@@ -6,4 +6,5 @@ export interface IAccountQueryOne {
 }
 export interface IAccountQueryMany extends IQueryManyBase {
 	includeCount?: boolean;
+	firstOnly?: boolean;
 }

@@ -27,9 +27,9 @@ export class AccountWasteService {
 			code: code,
 		});
 
-		return await this.accountRepository.destroy({
+		return this.accountRepository.destroy({
 			where: {
-				code: code,
+				code: account.code,
 			},
 		});
 	}
@@ -37,7 +37,7 @@ export class AccountWasteService {
 	async restore(
 		params: IAccountRestoreOneParams,
 		query?: IAccountRestoreOneQuery
-	) {
+	): Promise<Account> {
 		const { code } = params;
 
 		const account = await this.accountReadService.findOne({
@@ -48,10 +48,12 @@ export class AccountWasteService {
 			throw new BadRequestException(`Cannot restore existing record`);
 		}
 
-		return await this.accountRepository.restore({
+		await this.accountRepository.restore({
 			where: {
-				code: code,
+				code: account.code,
 			},
 		});
+
+		return account;
 	}
 }

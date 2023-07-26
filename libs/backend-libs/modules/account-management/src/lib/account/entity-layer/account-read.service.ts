@@ -50,7 +50,7 @@ export class AccountReadService {
 		params?: IAccountFindFirstParams,
 		query?: IAccountFindFirstQuery
 	): Promise<Account | null> {
-		return await this.accountRepository.findOne({
+		return this.accountRepository.findOne({
 			where: {
 				email: query?.email,
 				address: {
