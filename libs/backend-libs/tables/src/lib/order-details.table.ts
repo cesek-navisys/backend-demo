@@ -21,7 +21,8 @@ import { Product } from './product.table';
 @Table
 export class OrderDetails
 	extends Model<IOrderDetailsAttributes, IOrderDetailsCreationAttributes>
-	implements IOrderDetailsAttributes {
+	implements IOrderDetailsAttributes
+{
 	@Column({
 		type: DataType.UUID,
 		allowNull: false,

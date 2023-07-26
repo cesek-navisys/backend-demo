@@ -1,0 +1,28 @@
+{
+	"name": "backend-libs-modules-account-management",
+	"$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+	"sourceRoot": "libs/backend-libs/modules/account-management/src",
+	"projectType": "library",
+	"targets": {
+		"build": {
+			"executor": "@nx/js:tsc",
+			"outputs": ["{options.outputPath}"],
+			"options": {
+				"outputPath": "dist/libs/backend-libs/modules/account-management",
+				"main": "libs/backend-libs/modules/account-management/src/index.ts",
+				"tsConfig": "libs/backend-libs/modules/account-management/tsconfig.lib.json",
+				"assets": ["libs/backend-libs/modules/account-management/*.md"]
+			}
+		},
+		"lint": {
+			"executor": "@nx/linter:eslint",
+			"outputs": ["{options.outputFile}"],
+			"options": {
+				"lintFilePatterns": [
+					"libs/backend-libs/modules/account-management/**/*.ts"
+				]
+			}
+		}
+	},
+	"tags": []
+}

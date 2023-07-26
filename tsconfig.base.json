@@ -26,6 +26,9 @@
 			"@backend-demo/backend-libs/foreign-keys": [
 				"libs/backend-libs/foreign-keys/src/index.ts"
 			],
+			"@backend-demo/backend-libs/modules/account-management": [
+				"libs/backend-libs/modules/account-management/src/index.ts"
+			],
 			"@backend-demo/backend-libs/modules/database-module": [
 				"libs/backend-libs/modules/database-module/src/index.ts"
 			],

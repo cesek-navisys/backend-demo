@@ -1,12 +1,19 @@
-import { ACCOUNTS_ALIAS, ACCOUNT_ALIAS, ACCOUNT_CODE_ALIAS } from '@backend-demo/shared/constants';
+import {
+	ACCOUNTS_ALIAS,
+	ACCOUNT_ALIAS,
+	ACCOUNT_CODE_ALIAS,
+} from '@backend-demo/shared/constants';
 import { ConstraintRule } from './base/constraint-rule.enum';
-import { DefaultBelongsToOptions, TableForeignKey } from './base/table-foreign-key';
+import {
+	DefaultBelongsToOptions,
+	TableForeignKey,
+} from './base/table-foreign-key';
 
 export class AccountForeignKey extends TableForeignKey {
-  static override readonly params: DefaultBelongsToOptions = {
-    as: { plural: ACCOUNT_ALIAS, singular: ACCOUNTS_ALIAS },
-    foreignKey: ACCOUNT_CODE_ALIAS,
-    onDelete: ConstraintRule.CASCADE,
-    onUpdate: ConstraintRule.CASCADE,
-  }
+	static override readonly params: DefaultBelongsToOptions = {
+		as: { plural: ACCOUNT_ALIAS, singular: ACCOUNTS_ALIAS },
+		foreignKey: ACCOUNT_CODE_ALIAS,
+		onDelete: ConstraintRule.CASCADE,
+		onUpdate: ConstraintRule.CASCADE,
+	};
 }
