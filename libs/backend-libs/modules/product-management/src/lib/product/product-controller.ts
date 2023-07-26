@@ -70,6 +70,7 @@ export class ProductController {
 		return await this.productExternalService.delete(productCode);
 	}
 
+	@Put(':code')
 	async restoreOne(productCode: string) {
 		return await this.productExternalService.restore(productCode);
 	}
