@@ -43,10 +43,10 @@ export class Order
 
 	@ForeignKey(() => Account)
 	@Column({
-		allowNull: true,
+		allowNull: false,
 		type: DataType.UUID,
 	})
-	AccountCode!: string | null;
+	AccountCode!: string;
 
 	@HasMany(
 		() => OrderDetails,

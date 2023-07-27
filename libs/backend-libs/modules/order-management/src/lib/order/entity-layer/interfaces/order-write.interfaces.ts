@@ -1,16 +1,25 @@
-import {
-	IOrderAttributes,
-	IOrderCreationAttributes,
-	IOrderUniqueAttributes,
-} from '@backend-demo/backend-libs/entities';
+import { Optional } from 'sequelize';
 import { IOrderCreate } from '../../dto/interfaces';
+import { IOrderFindOneParams } from './order-read.interfaces';
 
-export interface IOrderCreatePayload extends IOrderCreate { }
+export interface ICreateOrder extends IOrderCreate {}
+export interface IOrderCreateParams
+	extends Pick<IOrderFindOneParams, 'accountCode'> {}
 
-export interface IOrderUpsertOneParams extends IOrderCreationAttributes { }
+export interface IOrderUpsertParams extends IOrderCreateParams {}
 
-export interface IOrderUpdateOneParams extends IOrderCreationAttributes { }
+export interface IUpsertOrder
+	extends Optional<ICreateOrder, 'confirmed' | 'messageForOwner'> {}
+
+export interface IOrderUpdateParams extends IOrderFindOneParams {}
+
+export interface IOrderUpdateParams extends IOrderFindOneParams {}
 
 export interface IOrderUpdateManyParams
-	extends IOrderCreationAttributes,
-	IOrderUniqueAttributes { }
+	extends Omit<IOrderFindOneParams, 'orderCode'> {}
+
+export interface IUpdateOrder extends IUpsertOrder {}
+
+export interface IUpdateManyOrder extends IUpdateOrder {
+	orderCode: string;
+}

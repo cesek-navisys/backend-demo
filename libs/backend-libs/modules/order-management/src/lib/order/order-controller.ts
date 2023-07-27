@@ -24,22 +24,23 @@ import { orderManagementRoutes } from './order-management.routes';
 
 @Controller(orderManagementRoutes.order)
 export class OrderController {
-	constructor(private readonly orderExternalService: OrderExternalService) { }
+	constructor(private readonly orderExternalService: OrderExternalService) {}
 
 	@Get(`:${ORDER_CODE_API_PARAM}`)
 	findOne(
 		@Param() accountCode: string,
-		@Param() code: string,
-		@Query() query?: OrderQueryDto) {
-		return this.orderExternalService.findOne(code, query);
+		@Param() orderCode: string,
+		@Query() query?: OrderQueryDto
+	) {
+		return this.orderExternalService.findOne(orderCode, query);
 	}
 
 	@Get()
-	findAll(
-		@Param() accountCode: string,
-		@Query() query: OrderQueryDto
-	) {
-		return this.orderExternalService.findAndCountAll({ AccountCode: accountCode }, query);
+	findAll(@Param() accountCode: string, @Query() query: OrderQueryDto) {
+		return this.orderExternalService.findAndCountAll(
+			{ AccountCode: accountCode },
+			query
+		);
 	}
 
 	@Post()
@@ -57,22 +58,22 @@ export class OrderController {
 
 	@Delete(`:${ORDER_CODE_API_PARAM}`)
 	// TODO: Implement 'force'
-	remove(@Param() code: string) {
-		return this.orderExternalService.delete(code);
+	remove(@Param() orderCode: string) {
+		return this.orderExternalService.delete(orderCode);
 	}
 
-	@Put('restore/:code')
-	restore(@Param() code: string) {
-		return this.orderExternalService.restore(code);
+	@Put(`restore/:${ORDER_CODE_API_PARAM}`)
+	restore(@Param() orderCode: string) {
+		return this.orderExternalService.restore(orderCode);
 	}
 
-	@Put('confirm/:code')
-	confirm(@Param() code: string, @Body() payload: { email: string }) {
-		return this.orderExternalService.confirm(code, payload);
+	@Put(`confirm/:${ORDER_CODE_API_PARAM}`)
+	confirm(@Param() orderCode: string, @Body() payload: { email: string }) {
+		return this.orderExternalService.confirm(orderCode, payload);
 	}
 
-	@Get('get-receipt/:code')
-	getReceipt(@Param() code: string) {
-		return this.orderExternalService.getReceipt(code);
+	@Get(`get-receipt/:${ORDER_CODE_API_PARAM}`)
+	getReceipt(@Param() orderCode: string) {
+		return this.orderExternalService.getReceipt(orderCode);
 	}
 }
