@@ -12,7 +12,7 @@
 import { Order } from '@backend-demo/backend-libs/tables';
 import { Inject, Injectable } from '@nestjs/common';
 import {
-	IOrderCreateOneParams,
+	IOrderCreatePayload,
 	IOrderUpdateManyParams,
 	IOrderUpsertOneParams,
 } from './interfaces/order-write.interfaces';
@@ -25,9 +25,9 @@ export class OrderWriteService {
 		@Inject('ORDER_REPOSITORY') private orderRepository: typeof Order,
 		private readonly orderReadService: OrderReadService,
 		private readonly orderWasteService: OrderWasteService
-	) {}
+	) { }
 
-	async createOne(params: IOrderCreateOneParams): Promise<Order> {
+	async createOne(params: IOrderCreatePayload): Promise<Order> {
 		const order = await this.orderReadService.findFirst(params);
 		if (order) return this.orderWasteService.restore(order?.code);
 		else
@@ -44,7 +44,7 @@ export class OrderWriteService {
 	// 	return this.orderRepository;
 	// }
 
-	async createMany(params: IOrderCreateOneParams[]): Promise<Order[]> {
+	async createMany(params: IOrderCreatePayload[]): Promise<Order[]> {
 		let orders: Order[] = [];
 		params.forEach(async (param) => {
 			const order = await this.orderRepository.create({
