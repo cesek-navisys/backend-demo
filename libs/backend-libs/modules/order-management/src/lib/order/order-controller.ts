@@ -19,20 +19,26 @@ import {
 	UpdateOrderDto,
 	ViewOrderDto,
 } from './dto';
-import { ORDER_CODE_API_PARAM } from '@backend-demo/shared/constants';
+import {
+	ACCOUNT_CODE_API_PARAM,
+	ORDER_CODE_API_PARAM,
+} from '@backend-demo/shared/constants';
 import { orderManagementRoutes } from './order-management.routes';
 import { plainToClass } from 'class-transformer';
-import { ApiResponse } from '@nestjs/swagger';
+import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 
 @Controller(orderManagementRoutes.order)
 export class OrderController {
 	constructor(private readonly orderExternalService: OrderExternalService) {}
 
+	@ApiOperation({
+		summary: 'Get order by code',
+	})
 	@ApiResponse({ type: ViewOrderDto })
 	@Get(`:${ORDER_CODE_API_PARAM}`)
 	findOne(
-		@Param() accountCode: string,
-		@Param() orderCode: string,
+		@Param(ACCOUNT_CODE_API_PARAM) accountCode: string,
+		@Param(ORDER_CODE_API_PARAM) orderCode: string,
 		@Query() query?: OrderQueryDto
 	) {
 		const result = this.orderExternalService.findOne(
@@ -42,9 +48,15 @@ export class OrderController {
 		return plainToClass(ViewOrderDto, result);
 	}
 
+	@ApiOperation({
+		summary: 'Get all orders',
+	})
 	@ApiResponse({ type: ViewOrderDto, isArray: true })
 	@Get()
-	findAll(@Param() accountCode: string, @Query() query: OrderQueryDto) {
+	findAll(
+		@Param(ACCOUNT_CODE_API_PARAM) accountCode: string,
+		@Query() query: OrderQueryDto
+	) {
 		const result = this.orderExternalService.findAndCountAll(
 			{ accountCode },
 			query
@@ -52,10 +64,13 @@ export class OrderController {
 		return plainToClass(ViewOrderDto, result);
 	}
 
+	@ApiOperation({
+		summary: 'Create order',
+	})
 	@ApiResponse({ type: ViewOrderDto })
 	@Post()
 	create(
-		@Param() accountCode: string,
+		@Param(ACCOUNT_CODE_API_PARAM) accountCode: string,
 		@Body() createOrderDto: CreateOrderDto
 	) {
 		const result = this.orderExternalService.create(
@@ -65,11 +80,14 @@ export class OrderController {
 		return plainToClass(ViewOrderDto, result);
 	}
 
+	@ApiOperation({
+		summary: 'Update order',
+	})
 	@ApiResponse({ type: ViewOrderDto })
 	@Put(`:${ORDER_CODE_API_PARAM}`)
 	update(
-		@Param() accountCode: string,
-		@Param() orderCode: string,
+		@Param(ACCOUNT_CODE_API_PARAM) accountCode: string,
+		@Param(ORDER_CODE_API_PARAM) orderCode: string,
 		@Body() updateOrderDto: UpdateOrderDto
 	) {
 		const result = this.orderExternalService.update(
@@ -79,10 +97,15 @@ export class OrderController {
 		return plainToClass(ViewOrderDto, result);
 	}
 
+	@ApiOperation({
+		summary: 'Remove order',
+	})
 	@ApiResponse({ type: ViewOrderDto })
 	@Delete(`:${ORDER_CODE_API_PARAM}`)
-	// TODO: Implement 'force'
-	remove(@Param() accountCode: string, @Param() orderCode: string) {
+	remove(
+		@Param(ORDER_CODE_API_PARAM) accountCode: string,
+		@Param(ORDER_CODE_API_PARAM) orderCode: string
+	) {
 		const result = this.orderExternalService.delete({
 			accountCode,
 			orderCode,
@@ -90,9 +113,15 @@ export class OrderController {
 		return plainToClass(ViewOrderDto, result);
 	}
 
+	@ApiOperation({
+		summary: 'Restore order',
+	})
 	@ApiResponse({ type: ViewOrderDto })
 	@Put(orderManagementRoutes.orderRestore)
-	restore(@Param() accountCode: string, @Param() orderCode: string) {
+	restore(
+		@Param(ORDER_CODE_API_PARAM) accountCode: string,
+		@Param(ORDER_CODE_API_PARAM) orderCode: string
+	) {
 		const result = this.orderExternalService.restore({
 			accountCode,
 			orderCode,
@@ -100,9 +129,15 @@ export class OrderController {
 		return plainToClass(ViewOrderDto, result);
 	}
 
+	@ApiOperation({
+		summary: 'Confirm order',
+	})
 	@ApiResponse({ type: ViewOrderDto })
 	@Put(orderManagementRoutes.orderConfirm)
-	confirm(@Param() accountCode: string, @Param() orderCode: string) {
+	confirm(
+		@Param(ACCOUNT_CODE_API_PARAM) accountCode: string,
+		@Param(ORDER_CODE_API_PARAM) orderCode: string
+	) {
 		const result = this.orderExternalService.confirm({
 			accountCode,
 			orderCode,
@@ -110,9 +145,15 @@ export class OrderController {
 		return plainToClass(ViewOrderDto, result);
 	}
 
+	@ApiOperation({
+		summary: 'Get order details for order',
+	})
 	@ApiResponse({ type: ViewOrderDto })
 	@Get(orderManagementRoutes.orderGetReceipt)
-	getReceipt(@Param() accountCode: string, @Param() orderCode: string) {
+	getReceipt(
+		@Param(ACCOUNT_CODE_API_PARAM) accountCode: string,
+		@Param(ORDER_CODE_API_PARAM) orderCode: string
+	) {
 		const result = this.orderExternalService.getReceipt({
 			accountCode,
 			orderCode,
