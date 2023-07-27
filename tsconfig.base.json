@@ -10,7 +10,10 @@
 		"importHelpers": true,
 		"target": "es2015",
 		"module": "esnext",
-		"lib": ["es2020", "dom"],
+		"lib": [
+			"es2020",
+			"dom"
+		],
 		"skipLibCheck": true,
 		"skipDefaultLibCheck": true,
 		"esModuleInterop": true,
@@ -47,11 +50,16 @@
 			"@backend-demo/shared/constants": [
 				"libs/shared/constants/src/index.ts"
 			],
-			"@backend-demo/shared/enums": ["libs/shared/enums/src/index.ts"],
+			"@backend-demo/shared/enums": [
+				"libs/shared/enums/src/index.ts"
+			],
 			"@backend-demo/shared/type-helpers": [
 				"libs/shared/type-helpers/src/index.ts"
 			]
 		}
 	},
-	"exclude": ["node_modules", "tmp"]
+	"exclude": [
+		"node_modules",
+		"tmp"
+	]
 }
