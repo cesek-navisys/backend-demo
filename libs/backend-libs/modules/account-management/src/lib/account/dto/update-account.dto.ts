@@ -1,7 +1,15 @@
+import { ApiPropertyOptional } from '@nestjs/swagger';
 import { IAccountUpdate } from './interfaces/update-account.interface';
-import { ApiProperty} from '@nestjs/swagger';
 
 export class UpdateAccountDto implements IAccountUpdate {
-  @ApiProperty()
-  code!: string;
+	@ApiPropertyOptional()
+	name?: string;
+	@ApiPropertyOptional()
+	surname?: string;
+	@ApiPropertyOptional()
+	email?: string;
+	@ApiPropertyOptional()
+	phone?: string;
+	@ApiPropertyOptional()
+	address?: string;
 }

@@ -20,15 +20,15 @@ export class AccountWasteService {
 		params: IAccountDeleteOneParams,
 		query?: IAccountDeleteOneQuery
 	) {
-		const { code } = params;
+		const { accountCode} = params;
 
 		const account = await this.accountReadService.findOne({
-			code: code,
+			accountCode
 		});
 
 		return this.accountRepository.destroy({
 			where: {
-				code: account.code,
+				code: account.code
 			},
 		});
 	}
@@ -37,10 +37,10 @@ export class AccountWasteService {
 		params: IAccountRestoreOneParams,
 		query?: IAccountRestoreOneQuery
 	): Promise<Account> {
-		const { code } = params;
+		const { accountCode } = params;
 
 		const account = await this.accountReadService.findOne({
-			code: code,
+			accountCode,
 		});
 
 		if (!account.deletedAt) {

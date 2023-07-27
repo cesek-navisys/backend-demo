@@ -1,11 +1,3 @@
-/**
- * je totéž, co controller - tzn. bude mít stejné metody i parametry
- * jako parametry bude používat interfaces
- *
- * findOne(accountCode: string, orderCode: string, query?: IOrderQueryOne)
- *
- */
-
 import { Injectable } from '@nestjs/common';
 import { OrderBasketService } from './domain-layer/order-basket.service';
 import { OrderConfirmedService } from './domain-layer/order-confirmed.service';

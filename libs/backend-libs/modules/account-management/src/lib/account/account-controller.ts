@@ -6,61 +6,63 @@ import {
 	Param,
 	Patch,
 	Post,
-	Query,
 } from '@nestjs/common';
 import { AccountExternalService } from './account-external.service';
 import { CreateAccountDto } from './dto/create-account.dto';
 import { UpdateAccountDto } from './dto/update-account.dto';
-/**
- * controller bude mít stejné metody jako external-service, ale bude používat dto classes
- */
 
 import {
-	QueryManyAccountDto,
-	QueryOneAccountDto,
-} from './dto/query-account.dto';
+	ACCOUNTS_ALIAS,
+	ACCOUNT_CODE_API_PARAM,
+} from '@backend-demo/shared/constants';
+import {
+	ApiAcceptedResponse,
+	ApiCreatedResponse,
+	ApiNoContentResponse,
+	ApiOkResponse,
+	ApiTags,
+} from '@nestjs/swagger';
+import { accountManagementRoutes } from '../account-management.routes';
 
-@Controller('/account')
+@ApiTags(ACCOUNTS_ALIAS)
+@Controller(accountManagementRoutes.account)
 export class AccountController {
 	constructor(
 		private readonly accountExternalService: AccountExternalService
 	) {}
 
-	@Get(':code')
-	async findOne(@Param() code: string, @Query() query?: QueryOneAccountDto) {
-		return this.accountExternalService.findOne({ code }, query);
+	@Get(`:${ACCOUNT_CODE_API_PARAM}`)
+	@ApiOkResponse()
+	async findOne(@Param() accountCode: string) {
+		return this.accountExternalService.findOne({ accountCode });
 	}
 	@Get()
-	async findAll(@Query() query?: QueryManyAccountDto) {
-		return this.accountExternalService.findAll(query);
+	@ApiOkResponse()
+	async findAll() {
+		return this.accountExternalService.findAndCountAll();
 	}
-	@Get('count')
-	async count() {
-		return this.accountExternalService.count();
-	}
-	@Delete(':code')
-	async delete(@Param() code: string) {
-		return this.accountExternalService.delete({ code });
+
+	@Delete(`:${ACCOUNT_CODE_API_PARAM}`)
+	@ApiNoContentResponse()
+	async delete(@Param() accountCode: string) {
+		return this.accountExternalService.delete({ accountCode });
 	}
 
 	@Post()
-	async createOne(@Body() payload: CreateAccountDto) {
-		return this.accountExternalService.createOne(payload);
+	@ApiCreatedResponse()
+	async create(@Body() createAccountDto: CreateAccountDto) {
+		return this.accountExternalService.create(createAccountDto);
 	}
 
-	//TODO: WHAT IS PURPOSE OF THIS?
-	// @Post()
-	// async upsertOne(@Body() payload: CreateAccountDto) {
-	// 	return this.accountExternalService.upsertOne(payload);
-	// }
-
-	@Patch(':code')
-	async updateOne(@Param() code: string, @Body() payload: UpdateAccountDto) {
-		return this.accountExternalService.updateOne(payload, { code });
-	}
-
-	@Get('restore/:code')
-	async restore(@Param() code: string) {
-		return this.accountExternalService.restore({ code });
+	@Patch(`:${ACCOUNT_CODE_API_PARAM}`)
+	@ApiAcceptedResponse()
+	async update(
+		@Param() accountCode: string,
+		@Body() updateAccountDto: UpdateAccountDto
+	) {
+		return this.accountExternalService.update(
+			{ accountCode },
+			updateAccountDto
+		);
 	}
 }

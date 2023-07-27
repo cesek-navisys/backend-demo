@@ -1,11 +1,11 @@
 export interface IAccountDeleteOneParams {
-	code: string;
+	accountCode: string;
 }
 
 export interface IAccountDeleteOneQuery {}
 
 export interface IAccountRestoreOneParams {
-	code: string;
+	accountCode: string;
 }
 
 export interface IAccountRestoreOneQuery {}

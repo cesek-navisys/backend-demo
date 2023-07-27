@@ -12,15 +12,12 @@ interface IAccountSearchableQuery {
 }
 
 export interface IAccountFindOneParams {
-	code: string;
+	accountCode: string;
 }
 export interface IAccountFindOneQuery extends IAccountQueryOne {}
 
 export interface IAccountFindManyParams {}
-export interface IAccountFindManyQuery extends IAccountSearchableQuery {
-	includeCount?: boolean;
-	firstOnly?: boolean;
-}
+export interface IAccountFindManyQuery extends IAccountSearchableQuery {}
 
 export interface IAccountFindFirstParams {}
 export interface IAccountFindFirstQuery
