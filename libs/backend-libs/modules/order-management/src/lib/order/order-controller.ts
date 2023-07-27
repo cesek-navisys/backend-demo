@@ -13,12 +13,7 @@ import {
 	Query,
 } from '@nestjs/common';
 import { OrderExternalService } from './order-external.service';
-import {
-	CreateOrderDto,
-	OrderQueryDto,
-	UpdateOrderDto,
-	ViewOrderMapperDto,
-} from './dto';
+import { CreateOrderDto, OrderQueryDto, UpdateOrderDto } from './dto';
 import { ORDER_CODE_API_PARAM } from '@backend-demo/shared/constants';
 import { orderManagementRoutes } from './order-management.routes';
 
@@ -32,13 +27,16 @@ export class OrderController {
 		@Param() orderCode: string,
 		@Query() query?: OrderQueryDto
 	) {
-		return this.orderExternalService.findOne(orderCode, query);
+		return this.orderExternalService.findOne(
+			{ accountCode, orderCode },
+			query
+		);
 	}
 
 	@Get()
 	findAll(@Param() accountCode: string, @Query() query: OrderQueryDto) {
 		return this.orderExternalService.findAndCountAll(
-			{ AccountCode: accountCode },
+			{ accountCode },
 			query
 		);
 	}
@@ -48,32 +46,42 @@ export class OrderController {
 		@Param() accountCode: string,
 		@Body() createOrderDto: CreateOrderDto
 	) {
-		return this.orderExternalService.create(createOrderDto);
+		return this.orderExternalService.create(
+			{ accountCode },
+			createOrderDto
+		);
 	}
 
 	@Put(`:${ORDER_CODE_API_PARAM}`)
-	update(@Param() orderCode: string, @Body() updateOrderDto: UpdateOrderDto) {
-		return this.orderExternalService.updateOne(orderCode, updateOrderDto);
+	update(
+		@Param() accountCode: string,
+		@Param() orderCode: string,
+		@Body() updateOrderDto: UpdateOrderDto
+	) {
+		return this.orderExternalService.update(
+			{ accountCode, orderCode },
+			updateOrderDto
+		);
 	}
 
 	@Delete(`:${ORDER_CODE_API_PARAM}`)
 	// TODO: Implement 'force'
-	remove(@Param() orderCode: string) {
-		return this.orderExternalService.delete(orderCode);
+	remove(@Param() accountCode: string, @Param() orderCode: string) {
+		return this.orderExternalService.delete({ accountCode, orderCode });
 	}
 
-	@Put(`restore/:${ORDER_CODE_API_PARAM}`)
-	restore(@Param() orderCode: string) {
-		return this.orderExternalService.restore(orderCode);
+	@Put(`${orderManagementRoutes.orderRestore}:${ORDER_CODE_API_PARAM}`)
+	restore(@Param() accountCode: string, @Param() orderCode: string) {
+		return this.orderExternalService.restore({ accountCode, orderCode });
 	}
 
-	@Put(`confirm/:${ORDER_CODE_API_PARAM}`)
-	confirm(@Param() orderCode: string, @Body() payload: { email: string }) {
-		return this.orderExternalService.confirm(orderCode, payload);
+	@Put(`${orderManagementRoutes.orderConfirm}/:${ORDER_CODE_API_PARAM}`)
+	confirm(@Param() accountCode: string, @Param() orderCode: string) {
+		return this.orderExternalService.confirm({ accountCode, orderCode });
 	}
 
-	@Get(`get-receipt/:${ORDER_CODE_API_PARAM}`)
-	getReceipt(@Param() orderCode: string) {
-		return this.orderExternalService.getReceipt(orderCode);
+	@Get(`${orderManagementRoutes.orderGetReceipt}/:${ORDER_CODE_API_PARAM}`)
+	getReceipt(@Param() accountCode: string, @Param() orderCode: string) {
+		return this.orderExternalService.getReceipt({ accountCode, orderCode });
 	}
 }

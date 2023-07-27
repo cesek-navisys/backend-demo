@@ -8,7 +8,10 @@
 import { Order } from '@backend-demo/backend-libs/tables';
 import { Inject, Injectable } from '@nestjs/common';
 import { OrderReadService } from './order-read.service';
-import { IOrderRestoreParams } from './interfaces/order-waste.interfaces';
+import {
+	IOrderDeleteParams,
+	IOrderRestoreParams,
+} from './interfaces/order-waste.interfaces';
 
 @Injectable()
 export class OrderWasteService {
@@ -17,13 +20,17 @@ export class OrderWasteService {
 		private orderReadService: OrderReadService
 	) {}
 
-	async delete(orderCode: string, force = false): Promise<Order> {
+	async delete(params: IOrderDeleteParams): Promise<Order> {
+		const { orderCode, accountCode } = params;
 		await this.orderRepository.destroy({
-			where: { code: orderCode },
-			force,
+			where: {
+				code: orderCode,
+				AccountCode: accountCode,
+			},
 		});
 		const order = await this.orderReadService.findOne({
-			code: orderCode,
+			accountCode,
+			orderCode,
 		});
 		if (order) return order;
 		else
@@ -32,13 +39,15 @@ export class OrderWasteService {
 			);
 	}
 
-	async restore(orderCode: string): Promise<Order> {
+	async restore(params: IOrderRestoreParams): Promise<Order> {
+		const { accountCode, orderCode } = params;
 		await this.orderRepository.restore({
-			where: { code: orderCode },
+			where: { code: orderCode, AccountCode: accountCode },
 		});
 
 		const order = await this.orderReadService.findOne({
-			code: orderCode,
+			orderCode,
+			accountCode,
 		});
 		if (order) return order;
 		else

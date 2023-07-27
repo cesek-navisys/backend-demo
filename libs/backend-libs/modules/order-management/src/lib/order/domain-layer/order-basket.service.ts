@@ -10,7 +10,7 @@ export class OrderBasketService {
 		private readonly orderWriteService: OrderWriteService
 	) {}
 
-	async confirm(params: IOrderConfirmParams, payload: { email: string }) {
+	async confirm(params: IOrderConfirmParams) {
 		const orderBasket = await this.orderReadService.findOne({
 			orderCode: params.orderCode,
 			accountCode: params.accountCode,
