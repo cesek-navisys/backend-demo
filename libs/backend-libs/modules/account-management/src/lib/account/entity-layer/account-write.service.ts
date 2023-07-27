@@ -1,5 +1,4 @@
 import { Account } from '@backend-demo/backend-libs/tables';
-import { ACCOUNT_REPOSITORY } from '@backend-demo/shared/constants';
 import { AccountReadService } from './account-read.service';
 import { Inject, Injectable } from '@nestjs/common';
 import {
@@ -30,7 +29,7 @@ import { IAccountUpdate } from '../dto/interfaces/update-account.interface';
 @Injectable()
 export class AccountWriteService {
 	constructor(
-		@Inject(ACCOUNT_REPOSITORY)
+		@Inject('ACCOUNT_REPOSITORY')
 		private readonly accountRepository: typeof Account,
 		private readonly accountReadService: AccountReadService
 	) {}
