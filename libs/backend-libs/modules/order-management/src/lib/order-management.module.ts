@@ -6,6 +6,8 @@ import { OrderExternalService } from './order/order-external.service';
 import { OrderReadService } from './order/entity-layer/order-read.service';
 import { OrderWriteService } from './order/entity-layer/order-write.service';
 import { OrderWasteService } from './order/entity-layer/order-waste.service';
+import { OrderBasketService } from './order/domain-layer/order-basket.service';
+import { OrderConfirmedService } from './order/domain-layer/order-confirmed.service';
 
 @Module({
 	imports: [DatabaseModule],
@@ -15,6 +17,8 @@ import { OrderWasteService } from './order/entity-layer/order-waste.service';
 		OrderReadService,
 		OrderWriteService,
 		OrderWasteService,
+		OrderBasketService,
+		OrderConfirmedService,
 		...orderProviders,
 	],
 	exports: [],

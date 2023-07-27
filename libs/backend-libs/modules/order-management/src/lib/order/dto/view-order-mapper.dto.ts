@@ -8,18 +8,17 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IOrderViewMapper } from './interfaces';
 import { ViewOrderDto } from './view-order.dto';
 import { Account, OrderDetails } from '@backend-demo/backend-libs/tables';
+import { Expose, Type } from 'class-transformer';
 
 export class ViewOrderMapperDto
 	extends ViewOrderDto
 	implements IOrderViewMapper
 {
-	@ApiPropertyOptional({
-		type: Account,
-	})
-	account?: any;
+	// @ApiPropertyOptional()
+	// @Type(() => ViewAccountDto)
+	// account?: ViewAccountDto;
 
-	@ApiPropertyOptional({
-		type: OrderDetails,
-	})
-	orderDetails?: any;
+	// @ApiPropertyOptional()
+	// @Type(() => ViewOrderDetailsDto)
+	// orderDetails?: ViewOrderDetailsDto;
 }
