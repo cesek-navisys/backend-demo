@@ -12,6 +12,7 @@
         "eshop",
         "mailer",
         "nestjs",
+        "UUIDV",
         "workdir"
     ],
     "typescript.tsdk": "node_modules/typescript/lib"

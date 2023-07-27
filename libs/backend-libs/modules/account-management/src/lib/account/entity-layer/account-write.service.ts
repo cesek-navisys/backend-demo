@@ -34,10 +34,10 @@ export class AccountWriteService {
 		payload: IAccountUpdatePayload
 	) {
 		const { address, email, name, phone, surname } = payload;
-		const { accountCode } = params;
+		const { code } = params;
 
 		const account = await this.accountReadService.findOne({
-			accountCode,
+			code,
 		});
 
 		return this.accountRepository.update(

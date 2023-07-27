@@ -3,8 +3,8 @@ import { OrderBasketService } from './domain-layer/order-basket.service';
 import { OrderConfirmedService } from './domain-layer/order-confirmed.service';
 import { IOrderQueryOne } from './dto/interfaces';
 import {
-  IOrderFindAndCountManyQuery,
-  IOrderFindManyParams
+	IOrderFindAndCountManyQuery,
+	IOrderFindManyParams,
 } from './entity-layer/interfaces/order-read.interfaces';
 import {
 	IOrderCreatePayload,
@@ -22,21 +22,24 @@ export class OrderExternalService {
 		private readonly orderWasteService: OrderWasteService,
 		private readonly orderBasketService: OrderBasketService,
 		private readonly orderConfirmedService: OrderConfirmedService
-	) { }
+	) {}
 
 	/**
-	 * 
+	 *
 	 * @param params url parameters from controller such as those in get request url BEFORE question mark
 	 * @param query url parameters AFTER question mark
 	 * @returns database instance of the model
 	 */
-	async findOne(params: { accountCode: string, orderCode: string }, query?: IOrderQueryOne) {
+	async findOne(
+		params: { code: string; orderCode: string },
+		query?: IOrderQueryOne
+	) {
 		const { orderCode } = params;
 		return this.orderReadService.findOne(
 			{
 				code: orderCode,
 			},
-			{ ...query, }
+			{ ...query }
 		);
 	}
 
@@ -48,7 +51,7 @@ export class OrderExternalService {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param params url parameters from controller such as those in post request url BEFORE question mark (in write methods we typically do not use query at all)
 	 * @param createOrder json body typically named by the DTO (in controller) or interface (in external-service) in pascalCase
 	 * @returns database instance of the model

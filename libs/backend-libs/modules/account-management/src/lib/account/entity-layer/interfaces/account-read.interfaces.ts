@@ -12,7 +12,7 @@ interface IAccountSearchableQuery {
 }
 
 export interface IAccountFindOneParams {
-	accountCode: string;
+	code: string;
 }
 export interface IAccountFindOneQuery extends IAccountQueryOne {}
 

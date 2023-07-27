@@ -22,13 +22,13 @@ export class AccountReadService {
 		query?: IAccountFindOneQuery
 	): Promise<Account> {
 		const account = await this.accountRepository.findOne({
-			where: { code: params.accountCode },
+			where: { code: params.code },
 			include: query?.includeOrders ? Order : undefined,
 		});
 
 		if (!account) {
 			throw new NotFoundException(
-				`Account with code: ${params.accountCode} not found`
+				`Account with code: ${params.code} not found`
 			);
 		}
 		return account;
@@ -63,18 +63,20 @@ export class AccountReadService {
 		});
 	}
 
-	async findAndCountAll(
-		params?: IAccountFindManyParams,
-		query?: IAccountFindManyQuery
-	) {
-		return this.accountRepository.findAndCountAll({
-			where: {
-				email: query?.email,
-				address: {
-					[Op.iLike]: `%${query?.address}%`,
-				},
-			},
-		});
+	async findAndCountAll(query?: IAccountFindManyQuery) {
+		let where: any = {};
+
+		if (query?.email) {
+			where.email = query.email;
+		}
+
+		if (query?.address) {
+			where.address = {
+				[Op.iLike]: `%${query.address}%`,
+			};
+		}
+
+		return this.accountRepository.findAndCountAll({ where });
 	}
 
 	async count(

@@ -2,6 +2,7 @@ import { IAccountView } from './interfaces/view-account.interface';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class ViewAccountDto implements IAccountView {
+	//TODO: Validace, Transformace
 	@ApiProperty({ required: true, type: String })
 	code!: string;
 

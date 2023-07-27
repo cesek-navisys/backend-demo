@@ -6,7 +6,7 @@ export interface IAccountCreatePayload extends IAccountCreate {}
 export interface IAccountUpdatePayload extends IAccountUpdate {}
 
 export interface IAccountUpsertPayload extends IAccountCreatePayload {
-	accountCode: string;
+	code: string;
 }
 
 export interface IAccountCreateOneQuery {}
@@ -20,7 +20,7 @@ export interface IAccountCreateManyParams {}
 export interface IAccountUpdateOneQuery {}
 
 export interface IAccountUpdateOneParams {
-	accountCode: string;
+	code: string;
 }
 
 export interface IAccountUpdateManyQuery {}

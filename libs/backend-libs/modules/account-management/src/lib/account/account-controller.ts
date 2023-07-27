@@ -13,14 +13,14 @@ import { UpdateAccountDto } from './dto/update-account.dto';
 
 import {
 	ACCOUNTS_ALIAS,
-	ACCOUNT_CODE_API_PARAM,
+	ACCOUNT_CODE_API_PARAM
 } from '@backend-demo/shared/constants';
 import {
 	ApiAcceptedResponse,
 	ApiCreatedResponse,
 	ApiNoContentResponse,
 	ApiOkResponse,
-	ApiTags,
+	ApiTags
 } from '@nestjs/swagger';
 import { accountManagementRoutes } from '../account-management.routes';
 
@@ -33,8 +33,8 @@ export class AccountController {
 
 	@Get(`:${ACCOUNT_CODE_API_PARAM}`)
 	@ApiOkResponse()
-	async findOne(@Param() accountCode: string) {
-		return this.accountExternalService.findOne({ accountCode });
+	async findOne(@Param(ACCOUNT_CODE_API_PARAM) accountCode: string) {
+		return this.accountExternalService.findOne({ code: accountCode });
 	}
 	@Get()
 	@ApiOkResponse()
@@ -44,8 +44,8 @@ export class AccountController {
 
 	@Delete(`:${ACCOUNT_CODE_API_PARAM}`)
 	@ApiNoContentResponse()
-	async delete(@Param() accountCode: string) {
-		return this.accountExternalService.delete({ accountCode });
+	async delete(@Param(ACCOUNT_CODE_API_PARAM) accountCode: string) {
+		return this.accountExternalService.delete({ code: accountCode });
 	}
 
 	@Post()
@@ -57,11 +57,11 @@ export class AccountController {
 	@Patch(`:${ACCOUNT_CODE_API_PARAM}`)
 	@ApiAcceptedResponse()
 	async update(
-		@Param() accountCode: string,
+		@Param(ACCOUNT_CODE_API_PARAM) accountCode: string,
 		@Body() updateAccountDto: UpdateAccountDto
 	) {
 		return this.accountExternalService.update(
-			{ accountCode },
+			{ code: accountCode },
 			updateAccountDto
 		);
 	}

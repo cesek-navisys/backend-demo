@@ -7,5 +7,5 @@
 export interface IOrderView {
 	code: string;
 	messageForOwner: string;
-	accountCode: string;
+	code: string;
 }
