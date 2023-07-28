@@ -1,23 +1,32 @@
-import { IAccountView } from './interfaces/view-account.interface';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { IAccountView } from './interfaces/view-account.interface';
+import { Expose } from '@nestjs/class-transformer';
 
 export class ViewAccountDto implements IAccountView {
-	//TODO: Validace, Transformace
-	@ApiProperty({ required: true, type: String })
+	@Expose()
+	@ApiProperty({
+		required: true,
+		example: 'c3ce9db4-0e90-4cd8-9d60-52013371334b',
+	})
 	code!: string;
 
-	@ApiProperty({ required: true, type: String })
+	@Expose()
+	@ApiProperty({ required: true, example: 'Karel' })
 	name!: string;
 
-	@ApiProperty({ required: true, type: String })
+	@Expose()
+	@ApiProperty({ required: true, example: 'Novák' })
 	surname!: string;
 
-	@ApiProperty({ required: true, type: String })
+	@Expose()
+	@ApiProperty({ required: true, example: 'karel.novak@email.cz' })
 	email!: string;
 
-	@ApiPropertyOptional({ type: String })
+	@Expose()
+	@ApiPropertyOptional({ example: '+420123456789' })
 	phone!: string;
 
-	@ApiProperty({ required: true, type: String })
+	@Expose()
+	@ApiProperty({ required: true, example: 'Nová ulice 65' })
 	address!: string;
 }

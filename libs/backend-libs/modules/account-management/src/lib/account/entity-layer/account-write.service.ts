@@ -8,6 +8,7 @@ import {
 	IAccountUpdatePayload,
 	IAccountUpsertPayload,
 } from './interfaces/account-write.interfaces';
+import { test } from 'node:test';
 
 @Injectable()
 export class AccountWriteService {
@@ -40,7 +41,7 @@ export class AccountWriteService {
 			code,
 		});
 
-		return this.accountRepository.update(
+		const [_, affectedRows] = await this.accountRepository.update(
 			{
 				name,
 				surname,
@@ -48,8 +49,10 @@ export class AccountWriteService {
 				email,
 				phone,
 			},
-			{ where: { code: account.code } }
+			{ where: { code: account.code }, returning: true }
 		);
+
+		return affectedRows[0];
 	}
 
 	async createMany(
