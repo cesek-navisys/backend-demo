@@ -1,4 +1,9 @@
 import {
+	ACCOUNT_CODE_API_PARAM,
+	PRODUCTS_ALIAS,
+	PRODUCT_CODE_API_PARAM,
+} from '@backend-demo/shared/constants';
+import {
 	Body,
 	Controller,
 	Delete,
@@ -8,70 +13,108 @@ import {
 	Put,
 	Query,
 } from '@nestjs/common';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { plainToClass } from 'class-transformer';
 import { CreateProductDto } from './dto/create-product.dto';
-import { ProductExternalService } from './product-external.service';
 import { ProductQueryDto } from './dto/query-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
-import { ViewProductMapperDto } from './dto/view-product-mapper.dto';
+import { ViewProductDto } from './dto/view-product.dto';
+import { ProductExternalService } from './product-external.service';
+import { productManagementRoutes } from './product-management.routes';
 
-@Controller('/products')
+@ApiTags(PRODUCTS_ALIAS)
+@Controller(productManagementRoutes.product)
 export class ProductController {
 	constructor(
 		private readonly productExternalService: ProductExternalService
 	) {}
 
-	@Get(':code')
+	@ApiOperation({
+		summary: 'Get product',
+	})
+	@ApiResponse({ type: ViewProductDto })
+	@Get(`:${PRODUCT_CODE_API_PARAM}`)
 	async findOne(
-		@Param() productCode: string,
+		@Param(ACCOUNT_CODE_API_PARAM) accountCode: string,
+		@Param(PRODUCT_CODE_API_PARAM) productCode: string,
 		@Query() query?: ProductQueryDto
 	) {
-		return await this.productExternalService.findOne(productCode, query);
+		const result = this.productExternalService.findOne(
+			{ productCode, accountCode },
+			query
+		);
+
+		return plainToClass(ViewProductDto, result, {
+			excludeExtraneousValues: true,
+		});
 	}
 
+	@ApiOperation({
+		summary: 'Get all products',
+	})
+	@ApiResponse({
+		type: ViewProductDto,
+		isArray: true,
+	})
 	@Get()
 	async findAll(
-		@Body() params: ViewProductMapperDto,
+		@Param(ACCOUNT_CODE_API_PARAM) accountCode: string,
 		@Query() query?: ProductQueryDto
 	) {
-		return await this.productExternalService.findAll(params, query);
+		const result = this.productExternalService.findAll(
+			{ accountCode },
+			query
+		);
+		return plainToClass(ViewProductDto, result, {
+			excludeExtraneousValues: true,
+		});
 	}
 
-	@Get()
-	async findFirst(
-		@Body() params: ViewProductMapperDto,
-		@Query() query?: ProductQueryDto
-	) {
-		return await this.productExternalService.findFirst(params, query);
-	}
-
-	@Get()
-	async findAndCountAll(
-		@Body() params: ViewProductMapperDto,
-		@Query() query?: ProductQueryDto
-	) {
-		return await this.productExternalService.findAndCountAll(params, query);
-	}
-
+	@ApiOperation({
+		summary: 'Create product',
+	})
+	@ApiResponse({ type: ViewProductDto })
 	@Post()
-	async createOne(@Body() params: CreateProductDto) {
-		return await this.productExternalService.createOne(params);
-	}
-
-	@Put(':code')
-	async updateOne(
-		@Param() productCode: string,
-		@Body() params: UpdateProductDto
+	async create(
+		@Param(ACCOUNT_CODE_API_PARAM) accountCode: string,
+		@Body() createProductDto: CreateProductDto
 	) {
-		return await this.productExternalService.updateOne(productCode, params);
+		const result = this.productExternalService.create(
+			{ accountCode },
+			createProductDto
+		);
+		return plainToClass(ViewProductDto, result, {
+			excludeExtraneousValues: true,
+		});
 	}
 
-	@Delete(':code')
-	async deleteOne(productCode: string) {
-		return await this.productExternalService.delete(productCode);
+	@ApiOperation({
+		summary: 'Update product',
+	})
+	@ApiResponse({ type: ViewProductDto })
+	@Put(`:${PRODUCT_CODE_API_PARAM}`)
+	async update(
+		@Param(ACCOUNT_CODE_API_PARAM) accountCode: string,
+		@Param(PRODUCT_CODE_API_PARAM) productCode: string,
+		@Body() updateProductDto: UpdateProductDto
+	) {
+		const result = this.productExternalService.update(
+			{ accountCode, productCode },
+			updateProductDto
+		);
+		return plainToClass(ViewProductDto, result, {
+			excludeExtraneousValues: true,
+		});
 	}
 
-	@Put(':code')
-	async restoreOne(productCode: string) {
-		return await this.productExternalService.restore(productCode);
+	@ApiOperation({
+		summary: 'Delete product',
+	})
+	@Delete(`:${PRODUCT_CODE_API_PARAM}`)
+	async delete(
+		@Param(PRODUCT_CODE_API_PARAM) productCode: string,
+		@Param(ACCOUNT_CODE_API_PARAM) accountCode: string
+	) {
+		return this.productExternalService.delete({ productCode, accountCode });
 	}
 }

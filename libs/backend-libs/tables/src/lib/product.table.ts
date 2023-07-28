@@ -23,11 +23,13 @@ import {
 @Table({ paranoid: true })
 export class Product
 	extends Model<IProductAttributes, IProductCreationAttributes>
-	implements IProductAttributes {
+	implements IProductAttributes
+{
 	@Column({
 		allowNull: true,
-		type: DataType.UUID,
+		defaultValue: DataType.UUIDV4,
 		primaryKey: true,
+		type: DataType.UUID,
 	})
 	code!: string;
 
@@ -51,7 +53,7 @@ export class Product
 		allowNull: false,
 		type: DataType.UUID,
 	})
-	OwnerCode!: string;
+	AccountCode!: string;
 
 	@HasMany(
 		() => OrderDetails,
@@ -60,5 +62,5 @@ export class Product
 	OrderDetails?: OrderDetails[];
 
 	@BelongsTo(() => Account, AccountForeignKey.belongsTo())
-	Owner?: Account;
+	Account?: Account;
 }

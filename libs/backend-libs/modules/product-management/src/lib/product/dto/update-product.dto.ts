@@ -4,8 +4,4 @@ import { IProductUpdate } from './interfaces/update-product.interface';
 
 export class UpdateProductDto
 	extends PartialType(CreateProductDto)
-	implements IProductUpdate
-{
-	@ApiProperty()
-	code!: string;
-}
+	implements IProductUpdate {}

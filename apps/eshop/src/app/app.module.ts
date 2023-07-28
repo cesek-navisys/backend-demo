@@ -3,13 +3,14 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { DatabaseModule } from '@backend-demo/backend-libs/modules/database-module';
 import { AccountManagementModule } from '@backend-demo/backend-libs/modules/account-management';
+import { ProductManagementModule } from '@backend-demo/backend-libs/modules/product-management';
 
 @Module({
 	imports: [
 		DatabaseModule,
 		AccountManagementModule,
 		// OrderManagementModule,
-		// ProductManagementModule
+		ProductManagementModule,
 	],
 	controllers: [AppController],
 	providers: [AppService],

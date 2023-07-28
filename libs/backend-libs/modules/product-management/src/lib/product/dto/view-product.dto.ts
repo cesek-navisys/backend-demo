@@ -1,29 +1,27 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IProductView } from './interfaces/view-product.interface';
+import { IsNumber } from 'class-validator';
+import { Exclude, Expose } from 'class-transformer';
 
 export class ViewProductDto implements IProductView {
-	@ApiProperty({
-		type: String,
-	})
+	@ApiProperty()
+	@Expose()
 	code!: string;
 
-	@ApiProperty({
-		type: String,
-	})
+	@ApiProperty()
+	@Expose()
 	name!: string;
 
-	@ApiProperty({
-		type: String,
-	})
+	@ApiProperty()
+	@Expose()
 	description!: string;
 
-	@ApiProperty({
-		type: String,
-	})
+	@ApiProperty()
+	@IsNumber()
+	@Expose()
 	price!: number;
 
-	@ApiProperty({
-		type: String,
-	})
-	OwnerCode!: string;
+	@ApiProperty()
+	@Expose()
+	AccountCode!: string;
 }

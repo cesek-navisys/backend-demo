@@ -1,7 +1,10 @@
 import { Product } from '@backend-demo/backend-libs/tables';
 import { Inject, Injectable } from '@nestjs/common';
 import { ProductReadService } from './product-read.service';
-import { IProductDeleteParams } from './interfaces/product-waste.interfaces';
+import {
+	IProductDeleteParams,
+	IProductRestoreParams,
+} from './interfaces/product-waste.interfaces';
 
 @Injectable()
 export class ProductWasteService {
@@ -11,28 +14,36 @@ export class ProductWasteService {
 		private productReadService: ProductReadService
 	) {}
 
-	async delete(productCode: string): Promise<void> {
-		const product = await this.productReadService.findOne({
-			code: productCode,
+	async delete(params: IProductDeleteParams): Promise<void> {
+		const { accountCode, productCode } = params;
+		const product = this.productReadService.findOne({
+			productCode,
+			accountCode,
 		});
 
 		if (!product) {
 			throw new Error(`Product with code ${productCode} does not exist.`);
 		}
 
-		await this.productRepository.destroy({
+		this.productRepository.destroy({
 			where: { code: productCode },
 		});
 	}
 
-	async restore(productCode: string): Promise<Product> {
-		await this.productRepository.restore({
-			where: { code: productCode },
+	async restore(params: IProductRestoreParams): Promise<Product> {
+		const { accountCode, productCode } = params;
+		this.productRepository.restore({
+			where: {
+				code: productCode,
+				AccountCode: accountCode,
+			},
 		});
 
 		const product = await this.productReadService.findOne({
-			code: productCode,
+			productCode,
+			accountCode,
 		});
+
 		if (!product) {
 			throw new Error(`Product with code ${productCode} does not exist.`);
 		}
