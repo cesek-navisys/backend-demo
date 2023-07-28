@@ -1,15 +1,4 @@
-/**
- * accountRepository from accountProvider
- *
- * findOne(params: IAccountFindOneParams, query?: IAccountFindOneQuery)
- * findFirst
- * findAll
- * findAndCountAll
- * count
- */
-
 import { Account, Order, Product } from '@backend-demo/backend-libs/tables';
-import { ACCOUNT_REPOSITORY } from '@backend-demo/shared/constants';
 import {
 	IAccountFindFirstParams,
 	IAccountFindFirstQuery,
@@ -25,8 +14,7 @@ import { IAccountQueryOne } from '../dto/interfaces/query-account.interface';
 @Injectable()
 export class AccountReadService {
 	constructor(
-		@Inject(ACCOUNT_REPOSITORY)
-		private readonly accountRepository: typeof Account
+		@Inject('ACCOUNT_REPOSITORY') private accountRepository: typeof Account
 	) {}
 
 	async findOne(
@@ -75,18 +63,20 @@ export class AccountReadService {
 		});
 	}
 
-	async findAndCountAll(
-		params?: IAccountFindManyParams,
-		query?: IAccountFindManyQuery
-	) {
-		return this.accountRepository.findAndCountAll({
-			where: {
-				email: query?.email,
-				address: {
-					[Op.iLike]: `%${query?.address}%`,
-				},
-			},
-		});
+	async findAndCountAll(query?: IAccountFindManyQuery) {
+		let where: any = {};
+
+		if (query?.email) {
+			where.email = query.email;
+		}
+
+		if (query?.address) {
+			where.address = {
+				[Op.iLike]: `%${query.address}%`,
+			};
+		}
+
+		return this.accountRepository.findAndCountAll({ where });
 	}
 
 	async count(
@@ -117,4 +107,13 @@ export class AccountReadService {
 		if (query?.includeProducts) includes.push(Product);
 		return includes;
 	}
+}
+function InjectRepository(
+	arg0: string
+): (
+	target: typeof AccountReadService,
+	propertyKey: undefined,
+	parameterIndex: 0
+) => void {
+	throw new Error('Function not implemented.');
 }

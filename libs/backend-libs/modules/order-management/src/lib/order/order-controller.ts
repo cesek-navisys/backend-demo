@@ -24,29 +24,27 @@ import { orderManagementRoutes } from './order-management.routes';
 
 @Controller(orderManagementRoutes.order)
 export class OrderController {
-	constructor(private readonly orderExternalService: OrderExternalService) { }
+	constructor(private readonly orderExternalService: OrderExternalService) {}
 
 	@Get(`:${ORDER_CODE_API_PARAM}`)
 	findOne(
-		@Param() accountCode: string,
 		@Param() code: string,
-		@Query() query?: OrderQueryDto) {
+		@Param() code: string,
+		@Query() query?: OrderQueryDto
+	) {
 		return this.orderExternalService.findOne(code, query);
 	}
 
 	@Get()
-	findAll(
-		@Param() accountCode: string,
-		@Query() query: OrderQueryDto
-	) {
-		return this.orderExternalService.findAndCountAll({ AccountCode: accountCode }, query);
+	findAll(@Param() code: string, @Query() query: OrderQueryDto) {
+		return this.orderExternalService.findAndCountAll(
+			{ AccountCode: code },
+			query
+		);
 	}
 
 	@Post()
-	create(
-		@Param() accountCode: string,
-		@Body() createOrderDto: CreateOrderDto
-	) {
+	create(@Param() code: string, @Body() createOrderDto: CreateOrderDto) {
 		return this.orderExternalService.create(createOrderDto);
 	}
 

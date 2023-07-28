@@ -10,7 +10,7 @@ export class CreateOrderDto implements IOrderCreate {
 	@ApiProperty({
 		type: String,
 	})
-	accountCode!: string;
+	code!: string;
 
 	@ApiProperty({
 		type: Boolean,
