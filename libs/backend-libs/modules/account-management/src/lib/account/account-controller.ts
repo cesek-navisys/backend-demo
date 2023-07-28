@@ -20,6 +20,7 @@ import {
 	ApiAcceptedResponse,
 	ApiCreatedResponse,
 	ApiOkResponse,
+	ApiOperation,
 	ApiTags,
 } from '@nestjs/swagger';
 import { accountManagementRoutes } from '../account-management.routes';
@@ -34,6 +35,7 @@ export class AccountController {
 	) {}
 
 	@Get(`:${ACCOUNT_CODE_API_PARAM}`)
+	@ApiOperation({ summary: 'Find single account' })
 	@ApiOkResponse()
 	async findOne(@Param(ACCOUNT_CODE_API_PARAM) accountCode: string) {
 		const entity = this.accountExternalService.findOne({
@@ -43,8 +45,10 @@ export class AccountController {
 			excludeExtraneousValues: true,
 		});
 	}
+
 	@Get()
-	@ApiOkResponse()
+	@ApiOperation({ summary: 'Find accounts' })
+	@ApiOkResponse({ type: [ViewAccountDto] })
 	async findAll() {
 		const { rows, count } =
 			await this.accountExternalService.findAndCountAll();
@@ -60,6 +64,7 @@ export class AccountController {
 
 	@Delete(`:${ACCOUNT_CODE_API_PARAM}`)
 	@HttpCode(204)
+	@ApiOperation({ summary: 'Delete account' })
 	@ApiAcceptedResponse()
 	async delete(@Param(ACCOUNT_CODE_API_PARAM) accountCode: string) {
 		await this.accountExternalService.delete({ code: accountCode });
@@ -67,6 +72,7 @@ export class AccountController {
 	}
 
 	@Post()
+	@ApiOperation({ summary: 'Create account' })
 	@ApiCreatedResponse()
 	async create(@Body() createAccountDto: CreateAccountDto) {
 		const entity = await this.accountExternalService.create(
@@ -78,6 +84,7 @@ export class AccountController {
 	}
 
 	@Patch(`:${ACCOUNT_CODE_API_PARAM}`)
+	@ApiOperation({ summary: 'Update account' })
 	@ApiOkResponse()
 	async update(
 		@Param(ACCOUNT_CODE_API_PARAM) accountCode: string,
