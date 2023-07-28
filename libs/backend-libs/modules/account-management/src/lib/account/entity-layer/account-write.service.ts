@@ -1,45 +1,24 @@
 import { Account } from '@backend-demo/backend-libs/tables';
-import { ACCOUNT_REPOSITORY } from '@backend-demo/shared/constants';
-import { AccountReadService } from './account-read.service';
 import { Inject, Injectable } from '@nestjs/common';
+import { AccountReadService } from './account-read.service';
 import {
 	IAccountCreateManyParams,
-	IAccountCreateManyQuery,
-	IAccountCreateOneParams,
-	IAccountCreateOneQuery,
-	IAccountUpdateManyParams,
-	IAccountUpdateManyQuery,
+	IAccountCreatePayload,
 	IAccountUpdateOneParams,
-	IAccountUpdateOneQuery,
-	IAccountUpsertOneParams,
-	IAccountUpsertOneQuery,
+	IAccountUpdatePayload,
+	IAccountUpsertPayload,
 } from './interfaces/account-write.interfaces';
-import { IAccountCreate } from '../dto/interfaces/create-account.interface';
-import { IAccountUpdate } from '../dto/interfaces/update-account.interface';
-/**
- * inject AccountReadService v konstruktoru
- *
- * transaction -- na konci (možná bude libka transactionService)
- * createOne
- * createMany
- * upsertOne
- * updateOne
- * updateMany
- */
+import { test } from 'node:test';
 
 @Injectable()
 export class AccountWriteService {
 	constructor(
-		@Inject(ACCOUNT_REPOSITORY)
+		@Inject('ACCOUNT_REPOSITORY')
 		private readonly accountRepository: typeof Account,
 		private readonly accountReadService: AccountReadService
 	) {}
 
-	async createOne(
-		payload: IAccountCreate,
-		params?: IAccountCreateOneParams,
-		query?: IAccountCreateOneQuery
-	): Promise<Account> {
+	async createOne(payload: IAccountCreatePayload): Promise<Account> {
 		const { address, email, name, phone, surname } = payload;
 
 		return this.accountRepository.create({
@@ -52,9 +31,8 @@ export class AccountWriteService {
 	}
 
 	async updateOne(
-		payload: IAccountUpdate,
 		params: IAccountUpdateOneParams,
-		query?: IAccountUpdateOneQuery
+		payload: IAccountUpdatePayload
 	) {
 		const { address, email, name, phone, surname } = payload;
 		const { code } = params;
@@ -63,7 +41,7 @@ export class AccountWriteService {
 			code,
 		});
 
-		return this.accountRepository.update(
+		const [_, affectedRows] = await this.accountRepository.update(
 			{
 				name,
 				surname,
@@ -71,34 +49,30 @@ export class AccountWriteService {
 				email,
 				phone,
 			},
-			{ where: { code: account.code } }
+			{ where: { code: account.code }, returning: true }
 		);
+
+		return affectedRows[0];
 	}
 
 	async createMany(
-		payload: IAccountCreate[],
-		params?: IAccountCreateManyParams,
-		query?: IAccountCreateManyQuery
+		params: IAccountCreateManyParams,
+		payload: IAccountCreatePayload[]
 	) {
 		const accounts: Account[] = [];
 		payload.forEach(async (account) =>
 			accounts.push(await this.createOne(account))
 		);
-		return accounts
+		return accounts;
 	}
 
-	//TODO: Think how to use it
-	async updateMany(
-		payload: IAccountUpdate[],
-		params?: IAccountUpdateManyParams,
-		query?: IAccountUpdateManyQuery
-	) {}
+	// async updateMany(
+	// 	payload: IAccountUpdatePayload[],
+	// 	params?: IAccountUpdateManyParams,
+	// 	query?: IAccountUpdateManyQuery
+	// ) {}
 
-	async upsertOne(
-		payload: IAccountCreate,
-		params?: IAccountUpsertOneParams,
-		query?: IAccountUpsertOneQuery
-	): Promise<Account> {
+	async upsertOne(payload: IAccountUpsertPayload): Promise<Account> {
 		const { address, email, name, phone, surname } = payload;
 		const [instance, created] = await this.accountRepository.upsert({
 			address,

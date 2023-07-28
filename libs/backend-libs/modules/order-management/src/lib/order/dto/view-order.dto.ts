@@ -19,5 +19,5 @@ export class ViewOrderDto implements IOrderView {
 	@ApiProperty({
 		type: String,
 	})
-	accountCode!: string;
+	code!: string;
 }

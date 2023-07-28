@@ -1,31 +1,18 @@
-/**
- * je totéž, co controller - tzn. bude mít stejné metody i parametry
- * jako parametry bude používat interfaces
- *
- * findOne(accountCode: string, orderCode: string, query?: IOrderQueryOne)
- *
- */
-
-import { OrderReadService } from './entity-layer/order-read.service';
-import { OrderWriteService } from './entity-layer/order-write.service';
-import { OrderWasteService } from './entity-layer/order-waste.service';
-import { IOrderQueryMany, IOrderQueryOne } from './dto/interfaces';
-import {
-	IOrderFindAndCountManyQuery,
-	IOrderFindFirstParams,
-	IOrderFindManyParams,
-	IOrderFindManyQuery,
-} from './entity-layer/interfaces/order-read.interfaces';
-import {
-	IOrderCreatePayload,
-	IOrderUpdateManyParams,
-	IOrderUpdateOneParams,
-	IOrderUpsertOneParams,
-} from './entity-layer/interfaces/order-write.interfaces';
-import { IOrderRestoreParams } from './entity-layer/interfaces/order-waste.interfaces';
 import { Injectable } from '@nestjs/common';
 import { OrderBasketService } from './domain-layer/order-basket.service';
 import { OrderConfirmedService } from './domain-layer/order-confirmed.service';
+import { IOrderQueryOne } from './dto/interfaces';
+import {
+	IOrderFindAndCountManyQuery,
+	IOrderFindManyParams,
+} from './entity-layer/interfaces/order-read.interfaces';
+import {
+	IOrderCreatePayload,
+	IOrderUpdateOneParams,
+} from './entity-layer/interfaces/order-write.interfaces';
+import { OrderReadService } from './entity-layer/order-read.service';
+import { OrderWasteService } from './entity-layer/order-waste.service';
+import { OrderWriteService } from './entity-layer/order-write.service';
 
 @Injectable()
 export class OrderExternalService {
@@ -35,21 +22,24 @@ export class OrderExternalService {
 		private readonly orderWasteService: OrderWasteService,
 		private readonly orderBasketService: OrderBasketService,
 		private readonly orderConfirmedService: OrderConfirmedService
-	) { }
+	) {}
 
 	/**
-	 * 
+	 *
 	 * @param params url parameters from controller such as those in get request url BEFORE question mark
 	 * @param query url parameters AFTER question mark
 	 * @returns database instance of the model
 	 */
-	async findOne(params: { accountCode: string, orderCode: string }, query?: IOrderQueryOne) {
+	async findOne(
+		params: { code: string; orderCode: string },
+		query?: IOrderQueryOne
+	) {
 		const { orderCode } = params;
 		return this.orderReadService.findOne(
 			{
 				code: orderCode,
 			},
-			{ ...query, }
+			{ ...query }
 		);
 	}
 
@@ -61,7 +51,7 @@ export class OrderExternalService {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param params url parameters from controller such as those in post request url BEFORE question mark (in write methods we typically do not use query at all)
 	 * @param createOrder json body typically named by the DTO (in controller) or interface (in external-service) in pascalCase
 	 * @returns database instance of the model

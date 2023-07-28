@@ -1,34 +1,14 @@
-import { Injectable } from '@nestjs/common';
 import { AccountReadService } from './entity-layer/account-read.service';
 import { AccountWasteService } from './entity-layer/account-waste.service';
 import { AccountWriteService } from './entity-layer/account-write.service';
+import { IAccountDeleteOneParams } from './entity-layer/interfaces/account-waste.interfaces';
+import { IAccountFindOneParams, IAccountFindOneQuery } from './entity-layer/interfaces/account-read.interfaces';
+import { Injectable } from '@nestjs/common';
 import {
-	IAccountFindFirstParams,
-	IAccountFindFirstQuery,
-	IAccountFindManyParams,
-	IAccountFindManyQuery,
-	IAccountFindOneParams,
-	IAccountFindOneQuery,
-} from './entity-layer/interfaces/account-read.interfaces';
-import {
-	IAccountDeleteOneParams,
-	IAccountDeleteOneQuery,
-	IAccountRestoreOneParams,
-	IAccountRestoreOneQuery,
-} from './entity-layer/interfaces/account-waste.interfaces';
-import {
-	IAccountCreateManyParams,
-	IAccountCreateManyQuery,
-	IAccountCreateOneParams,
-	IAccountCreateOneQuery,
-	IAccountUpdateManyParams,
-	IAccountUpdateManyQuery,
+	IAccountCreatePayload,
 	IAccountUpdateOneParams,
-	IAccountUpdateOneQuery,
-	IAccountUpsertOneQuery,
+	IAccountUpdatePayload,
 } from './entity-layer/interfaces/account-write.interfaces';
-import { IAccountCreate } from './dto/interfaces/create-account.interface';
-import { IAccountUpdate } from './dto/interfaces/update-account.interface';
 
 @Injectable()
 export class AccountExternalService {
@@ -42,77 +22,19 @@ export class AccountExternalService {
 		return this.accountReadService.findOne(params, query);
 	}
 
-	async findFirst(
-		params?: IAccountFindFirstParams,
-		query?: IAccountFindFirstQuery
-	) {
-		return this.accountReadService.findFirst(params, query);
+	async findAndCountAll() {
+		return this.accountReadService.findAndCountAll();
 	}
-
-	async findAll(
-		params?: IAccountFindManyParams,
-		query?: IAccountFindManyQuery
-	) {
-		if (query?.includeCount) {
-			return this.accountReadService.findAndCountAll(params, query);
-		}
-		if (query?.firstOnly) {
-			return this.accountReadService.findFirst(params, query);
-		}
-		return this.accountReadService.findAll(params, query);
+	async create(payload: IAccountCreatePayload) {
+		return this.accountWriteService.createOne(payload);
 	}
-
-	async count(
-		params?: IAccountFindManyParams,
-		query?: IAccountFindManyQuery
-	) {
-		return this.accountReadService.count(params, query);
-	}
-	async delete(
-		params: IAccountDeleteOneParams,
-		query?: IAccountDeleteOneQuery
-	) {
-		return this.accountWasteService.delete(params, query);
-	}
-	async restore(
-		params: IAccountRestoreOneParams,
-		query?: IAccountRestoreOneQuery
-	) {
-		return this.accountWasteService.restore(params, query);
-	}
-	async createOne(
-		payload: IAccountCreate,
-		params?: IAccountCreateOneParams,
-		query?: IAccountCreateOneQuery
-	) {
-		return this.accountWriteService.createOne(payload, params, query);
-	}
-	async createMany(
-		payload: IAccountCreate[],
-		params?: IAccountCreateManyParams,
-		query?: IAccountCreateManyQuery
-	) {
-		return this.accountWriteService.createMany(payload, params, query);
-	}
-	async upsertOne(
-		payload: IAccountCreate,
-		params?: IAccountUpsertOneQuery,
-		query?: IAccountUpsertOneQuery
-	) {
-		return this.accountWriteService.upsertOne(payload, params, query);
-	}
-	async updateOne(
-		payload: IAccountUpdate,
+	async update(
 		params: IAccountUpdateOneParams,
-		query?: IAccountUpdateOneQuery
+		payload: IAccountUpdatePayload
 	) {
-		return this.accountWriteService.updateOne(payload, params, query);
+		return this.accountWriteService.updateOne(params, payload);
 	}
-	async updateMany(
-		payload: IAccountUpdate[],
-		params?: IAccountUpdateManyParams,
-		query?: IAccountUpdateManyQuery
-	) {
-		return this.accountWriteService.updateMany(payload, params, query);
+	async delete(params: IAccountDeleteOneParams) {
+		return this.accountWasteService.delete(params);
 	}
 }

@@ -1,5 +1,5 @@
 export interface IOrderCreate {
-	accountCode: string;
+	code: string;
 	messageForOwner: string;
 	confirmed: boolean;
 }
