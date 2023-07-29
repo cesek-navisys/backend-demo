@@ -1,7 +1,7 @@
+import { Color } from '@backend-demo/shared/enums';
 import { ApiProperty } from '@nestjs/swagger';
+import { Expose } from 'class-transformer';
 import { IProductView } from './interfaces/view-product.interface';
-import { IsNumber } from 'class-validator';
-import { Exclude, Expose } from 'class-transformer';
 
 export class ViewProductDto implements IProductView {
 	@ApiProperty()
@@ -17,9 +17,12 @@ export class ViewProductDto implements IProductView {
 	description!: string;
 
 	@ApiProperty()
-	@IsNumber()
 	@Expose()
 	price!: number;
+
+	@ApiProperty()
+	@Expose()
+	color?: Color;
 
 	@ApiProperty()
 	@Expose()

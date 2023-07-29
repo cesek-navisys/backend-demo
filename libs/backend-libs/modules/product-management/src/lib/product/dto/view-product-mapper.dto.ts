@@ -9,7 +9,7 @@ export class ViewProductMapperDto
 	implements IProductViewMapper
 {
 	@ApiPropertyOptional({
-		type: ViewAccountDto,
+		type: [ViewAccountDto],
 	})
 	@Type(() => ViewAccountDto)
 	Account?: ViewAccountDto;

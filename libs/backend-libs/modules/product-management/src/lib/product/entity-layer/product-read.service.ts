@@ -23,8 +23,8 @@ export class ProductReadService {
 
 	private queries(query: IProductQueryOne | undefined) {
 		const queries = [];
-		if (query?.includeAccount) queries.push(Account);
-		if (query?.includeOrderDetails) queries.push(OrderDetails);
+		if (query?.includeAccount) queries.push({ model: Account });
+		if (query?.includeOrderDetails) queries.push({ model: OrderDetails });
 		return queries;
 	}
 
