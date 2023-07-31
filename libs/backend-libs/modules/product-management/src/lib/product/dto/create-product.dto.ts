@@ -1,6 +1,6 @@
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Color } from '@backend-demo/shared/enums';
 import { IProductCreate } from './interfaces/create-product.interface';
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsNotEmpty, IsNumber, Length } from 'class-validator';
 
 export class CreateProductDto implements IProductCreate {

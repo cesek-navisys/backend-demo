@@ -1,8 +1,8 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { IProductViewMapper } from './interfaces/view-product-mapper.interface';
-import { ViewProductDto } from './view-product.dto';
-import { ViewAccountDto } from '@backend-demo/backend-libs/modules/account-management';
 import { Expose, Type } from 'class-transformer';
+import { IProductViewMapper } from './interfaces/view-product-mapper.interface';
+import { ViewAccountDto } from '@backend-demo/backend-libs/modules/account-management';
+import { ViewProductDto } from './view-product.dto';
 
 export class ViewProductMapperDto
 	extends ViewProductDto

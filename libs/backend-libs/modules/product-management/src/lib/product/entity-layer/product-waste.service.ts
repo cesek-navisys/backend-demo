@@ -1,5 +1,5 @@
-import { Product } from '@backend-demo/backend-libs/tables';
 import { Inject, Injectable } from '@nestjs/common';
+import { Product } from '@backend-demo/backend-libs/tables';
 import { ProductReadService } from './product-read.service';
 import {
 	IProductDeleteParams,

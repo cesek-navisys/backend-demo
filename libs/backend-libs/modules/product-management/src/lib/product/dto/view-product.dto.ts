@@ -1,5 +1,5 @@
-import { Color } from '@backend-demo/shared/enums';
 import { ApiProperty } from '@nestjs/swagger';
+import { Color } from '@backend-demo/shared/enums';
 import { Expose } from 'class-transformer';
 import { IProductView } from './interfaces/view-product.interface';
 

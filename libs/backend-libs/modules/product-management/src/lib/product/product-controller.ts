@@ -19,7 +19,7 @@ import { ProductExternalService } from './product-external.service';
 import { ProductQueryDto } from './dto/query-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { ViewProductMapperDto } from './dto/view-product-mapper.dto';
-import { plainToClass, plainToInstance } from 'class-transformer';
+import { plainToInstance } from 'class-transformer';
 import { productManagementRoutes } from './product-management.routes';
 
 @ApiTags(PRODUCTS_ALIAS)
