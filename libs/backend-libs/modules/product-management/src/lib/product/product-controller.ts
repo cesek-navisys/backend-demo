@@ -14,12 +14,12 @@ import {
 	Query,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { plainToClass } from 'class-transformer';
 import { CreateProductDto } from './dto/create-product.dto';
+import { ProductExternalService } from './product-external.service';
 import { ProductQueryDto } from './dto/query-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
-import { ViewProductDto } from './dto/view-product.dto';
-import { ProductExternalService } from './product-external.service';
+import { ViewProductMapperDto } from './dto/view-product-mapper.dto';
+import { plainToClass, plainToInstance } from 'class-transformer';
 import { productManagementRoutes } from './product-management.routes';
 
 @ApiTags(PRODUCTS_ALIAS)
@@ -32,7 +32,7 @@ export class ProductController {
 	@ApiOperation({
 		summary: 'Get product',
 	})
-	@ApiResponse({ type: ViewProductDto })
+	@ApiResponse({ type: ViewProductMapperDto })
 	@Get(`:${PRODUCT_CODE_API_PARAM}`)
 	async findOne(
 		@Param(ACCOUNT_CODE_API_PARAM) accountCode: string,
@@ -44,7 +44,7 @@ export class ProductController {
 			query
 		);
 
-		return plainToClass(ViewProductDto, result, {
+		return plainToInstance(ViewProductMapperDto, result, {
 			excludeExtraneousValues: true,
 		});
 	}
@@ -53,7 +53,7 @@ export class ProductController {
 		summary: 'Get all products',
 	})
 	@ApiResponse({
-		type: ViewProductDto,
+		type: ViewProductMapperDto,
 		isArray: true,
 	})
 	@Get()
@@ -65,7 +65,7 @@ export class ProductController {
 			{ accountCode },
 			query
 		);
-		return plainToClass(ViewProductDto, result, {
+		return plainToInstance(ViewProductMapperDto, result, {
 			excludeExtraneousValues: true,
 		});
 	}
@@ -73,7 +73,7 @@ export class ProductController {
 	@ApiOperation({
 		summary: 'Create product',
 	})
-	@ApiResponse({ type: ViewProductDto })
+	@ApiResponse({ type: ViewProductMapperDto })
 	@Post()
 	async create(
 		@Param(ACCOUNT_CODE_API_PARAM) accountCode: string,
@@ -83,7 +83,7 @@ export class ProductController {
 			{ accountCode },
 			createProductDto
 		);
-		return plainToClass(ViewProductDto, result, {
+		return plainToInstance(ViewProductMapperDto, result, {
 			excludeExtraneousValues: true,
 		});
 	}
@@ -91,7 +91,7 @@ export class ProductController {
 	@ApiOperation({
 		summary: 'Update product',
 	})
-	@ApiResponse({ type: ViewProductDto })
+	@ApiResponse({ type: ViewProductMapperDto })
 	@Put(`:${PRODUCT_CODE_API_PARAM}`)
 	async update(
 		@Param(ACCOUNT_CODE_API_PARAM) accountCode: string,
@@ -102,7 +102,7 @@ export class ProductController {
 			{ accountCode, productCode },
 			updateProductDto
 		);
-		return plainToClass(ViewProductDto, result, {
+		return plainToInstance(ViewProductMapperDto, result, {
 			excludeExtraneousValues: true,
 		});
 	}
