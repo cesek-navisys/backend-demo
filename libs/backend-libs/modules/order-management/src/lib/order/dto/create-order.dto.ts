@@ -1,19 +1,15 @@
 import { IOrderCreate } from './interfaces/create-order.interface';
 import { ApiProperty } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
+import { IsBoolean, Length } from 'class-validator';
 
 export class CreateOrderDto implements IOrderCreate {
-	@ApiProperty({
-		type: String,
-	})
+	@ApiProperty({ example: 'Please sir. Read my message!' })
+	@Length(10, 255)
 	messageForOwner!: string;
 
-	@ApiProperty({
-		type: String,
-	})
-	code!: string;
-
-	@ApiProperty({
-		type: Boolean,
-	})
+	@ApiProperty({ example: false })
+	@Type(() => Boolean)
+	@IsBoolean()
 	confirmed!: boolean;
 }

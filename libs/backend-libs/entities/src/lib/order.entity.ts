@@ -6,7 +6,7 @@ export interface IOrderOwnAttributes {
 	code: string;
 	messageForOwner: string;
 	confirmed: boolean;
-	AccountCode: string | null;
+	AccountCode: string;
 }
 export interface IOrderReferenceAttributes {
 	OrderDetails: IOrderDetailsUniqueAttributes[];

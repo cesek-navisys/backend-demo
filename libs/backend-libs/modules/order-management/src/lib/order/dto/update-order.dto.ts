@@ -1,14 +1,14 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IOrderUpdate } from './interfaces';
+import { Type } from 'class-transformer';
+import { IsBoolean } from 'class-validator';
 
 export class UpdateOrderDto implements IOrderUpdate {
-	@ApiPropertyOptional({
-		type: String,
-	})
+	@ApiPropertyOptional()
 	messageForOwner?: string;
 
-	@ApiPropertyOptional({
-		type: Boolean,
-	})
+	@ApiPropertyOptional()
+	@Type(() => Boolean)
+	@IsBoolean()
 	confirmed?: boolean;
 }

@@ -1,35 +1,19 @@
-/**
- * IOrderFindOneParams
- * IOrderFindOneQuery
- *
- * IOrderFindManyParams
- * IOrderFindManyQuery
- *
- * IOrderFindFirstParams
- * IOrderFindFirstQuery
- */
-
-import {
-	IOrderAttributes,
-	IOrderUniqueAttributes,
-} from '@backend-demo/backend-libs/entities';
-import { Optional } from 'sequelize';
 import { IOrderQueryMany, IOrderQueryOne } from '../../dto/interfaces';
 
-export interface IOrderFindOneParams extends IOrderUniqueAttributes { }
+export interface IOrderFindOneParams {
+	accountCode: string;
+	orderCode: string;
+}
 
-export interface IOrderFindOneQuery extends IOrderQueryOne { }
+export interface IOrderFindOneQuery extends IOrderQueryOne {}
 
-export interface IOrderFindFirstParams
-	extends Optional<
-		Pick<IOrderAttributes, 'AccountCode' | 'messageForOwner' | 'confirmed'>,
-		'AccountCode' | 'messageForOwner' | 'confirmed'
-	> { }
+export interface IOrderFindFirstParams extends IOrderFindOneParams {}
 
-export interface IOrderFindFirstQuery extends IOrderFindOneQuery { }
+export interface IOrderFindFirstQuery extends IOrderFindOneQuery {}
 
-export interface IOrderFindManyParams extends IOrderFindFirstParams { }
+export interface IOrderFindManyParams
+	extends Omit<IOrderFindFirstParams, 'orderCode'> {}
 
-export interface IOrderFindManyQuery extends IOrderQueryMany { }
+export interface IOrderFindManyQuery extends IOrderQueryMany {}
 
-export interface IOrderFindAndCountManyQuery extends IOrderFindManyQuery { }
+export interface IOrderFindAndCountManyQuery extends IOrderFindManyQuery {}

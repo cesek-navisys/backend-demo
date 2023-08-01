@@ -23,11 +23,13 @@ import {
 @Table({ paranoid: true })
 export class Product
 	extends Model<IProductAttributes, IProductCreationAttributes>
-	implements IProductAttributes {
+	implements IProductAttributes
+{
 	@Column({
 		allowNull: true,
 		type: DataType.UUID,
 		primaryKey: true,
+		defaultValue: DataType.UUIDV4,
 	})
 	code!: string;
 

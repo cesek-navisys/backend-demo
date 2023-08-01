@@ -1,15 +1,6 @@
-/**
- * IOrderQueryOne
- * IOrderQueryMany
- */
+import { IQueryManyBase } from '@backend-demo/backend-libs/api-interfaces';
 
-// Temporary interface to be implemented in a different lib
-export interface IPaginationQuery {
-	page?: number;
-	limit?: number;
-}
-
-export interface IOrderQueryOne extends IPaginationQuery {
+export interface IOrderQueryOne extends IQueryManyBase {
 	includeAccount?: boolean;
 	includeOrderDetails?: boolean;
 }
