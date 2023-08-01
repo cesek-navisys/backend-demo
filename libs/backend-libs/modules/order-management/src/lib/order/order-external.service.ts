@@ -1,18 +1,39 @@
+/**
+ * je totéž, co controller - tzn. bude mít stejné metody i parametry
+ * jako parametry bude používat interfaces
+ *
+ * findOne(accountCode: string, orderCode: string, query?: IOrderQueryOne)
+ *
+ */
+
+import { OrderReadService } from './entity-layer/order-read.service';
+import { OrderWriteService } from './entity-layer/order-write.service';
+import { OrderWasteService } from './entity-layer/order-waste.service';
+import {
+	IOrderCreate,
+	IOrderQueryMany,
+	IOrderQueryOne,
+} from './dto/interfaces';
+import {
+	IOrderFindAndCountManyQuery,
+	IOrderFindFirstParams,
+	IOrderFindManyParams,
+	IOrderFindManyQuery,
+	IOrderFindOneParams,
+} from './entity-layer/interfaces/order-read.interfaces';
+import {
+	IOrderCreateParams,
+	IOrderUpdateParams,
+	IUpdateOrder,
+} from './entity-layer/interfaces/order-write.interfaces';
+import {
+	IOrderDeleteParams,
+	IOrderRestoreParams,
+} from './entity-layer/interfaces/order-waste.interfaces';
 import { Injectable } from '@nestjs/common';
 import { OrderBasketService } from './domain-layer/order-basket.service';
 import { OrderConfirmedService } from './domain-layer/order-confirmed.service';
-import { IOrderQueryOne } from './dto/interfaces';
-import {
-	IOrderFindAndCountManyQuery,
-	IOrderFindManyParams,
-} from './entity-layer/interfaces/order-read.interfaces';
-import {
-	IOrderCreatePayload,
-	IOrderUpdateOneParams,
-} from './entity-layer/interfaces/order-write.interfaces';
-import { OrderReadService } from './entity-layer/order-read.service';
-import { OrderWasteService } from './entity-layer/order-waste.service';
-import { OrderWriteService } from './entity-layer/order-write.service';
+import { IOrderConfirmParams } from './domain-layer/interfaces/order-basket.interface';
 
 @Injectable()
 export class OrderExternalService {
@@ -30,14 +51,12 @@ export class OrderExternalService {
 	 * @param query url parameters AFTER question mark
 	 * @returns database instance of the model
 	 */
-	async findOne(
-		params: { code: string; orderCode: string },
-		query?: IOrderQueryOne
-	) {
-		const { orderCode } = params;
+	async findOne(params: IOrderFindOneParams, query?: IOrderQueryOne) {
+		const { orderCode, accountCode } = params;
 		return this.orderReadService.findOne(
 			{
-				code: orderCode,
+				orderCode,
+				accountCode,
 			},
 			{ ...query }
 		);
@@ -56,27 +75,27 @@ export class OrderExternalService {
 	 * @param createOrder json body typically named by the DTO (in controller) or interface (in external-service) in pascalCase
 	 * @returns database instance of the model
 	 */
-	async create(params: {}, createOrder: IOrderCreatePayload) {
-		return this.orderWriteService.createOne(createOrder);
+	async create(params: IOrderCreateParams, createOrder: IOrderCreate) {
+		return this.orderWriteService.createOne(params, createOrder);
 	}
 
-	async update(orderCode: string, params: IOrderUpdateOneParams) {
-		return this.orderWriteService.updateOne(orderCode, params);
+	async update(params: IOrderUpdateParams, updateOrder: IUpdateOrder) {
+		return this.orderWriteService.updateOne(params, updateOrder);
 	}
 
-	async delete(orderCode: string, force?: boolean) {
-		return this.orderWasteService.delete(orderCode, force);
+	async delete(params: IOrderDeleteParams) {
+		return this.orderWasteService.delete(params);
 	}
 
-	async restore(orderCode: string) {
-		return this.orderWasteService.restore(orderCode);
+	async restore(params: IOrderRestoreParams) {
+		return this.orderWasteService.restore(params);
 	}
 
-	async confirm(orderCode: string, payload: { email: string }) {
-		return this.orderBasketService.confirm(orderCode, payload);
+	async confirm(params: IOrderConfirmParams) {
+		return this.orderBasketService.confirm(params);
 	}
 
-	async getReceipt(orderCode: string) {
-		return this.orderConfirmedService.getReceipt(orderCode);
+	async getReceipt(params: IOrderFindOneParams) {
+		return this.orderConfirmedService.getReceipt(params);
 	}
 }

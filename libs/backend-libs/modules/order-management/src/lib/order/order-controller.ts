@@ -17,60 +17,170 @@ import {
 	CreateOrderDto,
 	OrderQueryDto,
 	UpdateOrderDto,
-	ViewOrderMapperDto,
+	ViewOrderDto,
 } from './dto';
-import { ORDER_CODE_API_PARAM } from '@backend-demo/shared/constants';
+import {
+	ACCOUNT_CODE_API_PARAM,
+	ORDERS_ALIAS,
+	ORDER_CODE_API_PARAM,
+} from '@backend-demo/shared/constants';
 import { orderManagementRoutes } from './order-management.routes';
+import { plainToClass } from 'class-transformer';
+import {
+	ApiCreatedResponse,
+	ApiOperation,
+	ApiResponse,
+	ApiTags,
+} from '@nestjs/swagger';
 
+@ApiTags(ORDERS_ALIAS)
 @Controller(orderManagementRoutes.order)
 export class OrderController {
 	constructor(private readonly orderExternalService: OrderExternalService) {}
 
+	@ApiOperation({
+		summary: 'Get order by code',
+	})
+	@ApiResponse({ type: ViewOrderDto })
 	@Get(`:${ORDER_CODE_API_PARAM}`)
 	findOne(
-		@Param() code: string,
-		@Param() code: string,
+		@Param(ACCOUNT_CODE_API_PARAM) accountCode: string,
+		@Param(ORDER_CODE_API_PARAM) orderCode: string,
 		@Query() query?: OrderQueryDto
 	) {
-		return this.orderExternalService.findOne(code, query);
-	}
-
-	@Get()
-	findAll(@Param() code: string, @Query() query: OrderQueryDto) {
-		return this.orderExternalService.findAndCountAll(
-			{ AccountCode: code },
+		const result = this.orderExternalService.findOne(
+			{ accountCode, orderCode },
 			query
 		);
+		return plainToClass(ViewOrderDto, result, {
+			excludeExtraneousValues: true,
+		});
 	}
 
+	@ApiOperation({
+		summary: 'Get all orders',
+	})
+	@ApiResponse({ type: ViewOrderDto, isArray: true })
+	@Get()
+	findAll(
+		@Param(ACCOUNT_CODE_API_PARAM) accountCode: string,
+		@Query() query: OrderQueryDto
+	) {
+		const result = this.orderExternalService.findAndCountAll(
+			{ accountCode },
+			query
+		);
+		return plainToClass(ViewOrderDto, result, {
+			excludeExtraneousValues: true,
+		});
+	}
+
+	@ApiOperation({
+		summary: 'Create order',
+	})
+	@ApiCreatedResponse()
 	@Post()
-	create(@Param() code: string, @Body() createOrderDto: CreateOrderDto) {
-		return this.orderExternalService.create(createOrderDto);
+	create(
+		@Param(ACCOUNT_CODE_API_PARAM) accountCode: string,
+		@Body() createOrderDto: CreateOrderDto
+	) {
+		const result = this.orderExternalService.create(
+			{ accountCode },
+			createOrderDto
+		);
+		return plainToClass(ViewOrderDto, result, {
+			excludeExtraneousValues: true,
+		});
 	}
 
+	@ApiOperation({
+		summary: 'Update order',
+	})
+	@ApiResponse({ type: ViewOrderDto })
 	@Put(`:${ORDER_CODE_API_PARAM}`)
-	update(@Param() orderCode: string, @Body() updateOrderDto: UpdateOrderDto) {
-		return this.orderExternalService.updateOne(orderCode, updateOrderDto);
+	update(
+		@Param(ACCOUNT_CODE_API_PARAM) accountCode: string,
+		@Param(ORDER_CODE_API_PARAM) orderCode: string,
+		@Body() updateOrderDto: UpdateOrderDto
+	) {
+		const result = this.orderExternalService.update(
+			{ accountCode, orderCode },
+			updateOrderDto
+		);
+		return plainToClass(ViewOrderDto, result, {
+			excludeExtraneousValues: true,
+		});
 	}
 
+	@ApiOperation({
+		summary: 'Remove order',
+	})
+	@ApiResponse({ type: ViewOrderDto })
 	@Delete(`:${ORDER_CODE_API_PARAM}`)
-	// TODO: Implement 'force'
-	remove(@Param() code: string) {
-		return this.orderExternalService.delete(code);
+	remove(
+		@Param(ACCOUNT_CODE_API_PARAM) accountCode: string,
+		@Param(ORDER_CODE_API_PARAM) orderCode: string
+	) {
+		const result = this.orderExternalService.delete({
+			accountCode,
+			orderCode,
+		});
+		return plainToClass(ViewOrderDto, result, {
+			excludeExtraneousValues: true,
+		});
 	}
 
-	@Put('restore/:code')
-	restore(@Param() code: string) {
-		return this.orderExternalService.restore(code);
+	@ApiOperation({
+		summary: 'Restore order',
+	})
+	@ApiResponse({ type: ViewOrderDto })
+	@Put(orderManagementRoutes.orderRestore)
+	restore(
+		@Param(ACCOUNT_CODE_API_PARAM) accountCode: string,
+		@Param(ORDER_CODE_API_PARAM) orderCode: string
+	) {
+		const result = this.orderExternalService.restore({
+			accountCode,
+			orderCode,
+		});
+		return plainToClass(ViewOrderDto, result, {
+			excludeExtraneousValues: true,
+		});
 	}
 
-	@Put('confirm/:code')
-	confirm(@Param() code: string, @Body() payload: { email: string }) {
-		return this.orderExternalService.confirm(code, payload);
+	@ApiOperation({
+		summary: 'Confirm order',
+	})
+	@ApiResponse({ type: ViewOrderDto })
+	@Put(orderManagementRoutes.orderConfirm)
+	confirm(
+		@Param(ACCOUNT_CODE_API_PARAM) accountCode: string,
+		@Param(ORDER_CODE_API_PARAM) orderCode: string
+	) {
+		const result = this.orderExternalService.confirm({
+			accountCode,
+			orderCode,
+		});
+		return plainToClass(ViewOrderDto, result, {
+			excludeExtraneousValues: true,
+		});
 	}
 
-	@Get('get-receipt/:code')
-	getReceipt(@Param() code: string) {
-		return this.orderExternalService.getReceipt(code);
+	@ApiOperation({
+		summary: 'Get order details for order',
+	})
+	@ApiResponse({ type: ViewOrderDto })
+	@Get(orderManagementRoutes.orderGetReceipt)
+	getReceipt(
+		@Param(ACCOUNT_CODE_API_PARAM) accountCode: string,
+		@Param(ORDER_CODE_API_PARAM) orderCode: string
+	) {
+		const result = this.orderExternalService.getReceipt({
+			accountCode,
+			orderCode,
+		});
+		return plainToClass(ViewOrderDto, result, {
+			excludeExtraneousValues: true,
+		});
 	}
 }

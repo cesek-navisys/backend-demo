@@ -25,9 +25,10 @@ export class Order
 	implements IOrderAttributes
 {
 	@Column({
-		allowNull: false,
+		allowNull: true,
 		type: DataType.UUID,
 		primaryKey: true,
+		defaultValue: DataType.UUIDV4,
 	})
 	code!: string;
 
@@ -43,10 +44,10 @@ export class Order
 
 	@ForeignKey(() => Account)
 	@Column({
-		allowNull: true,
+		allowNull: false,
 		type: DataType.UUID,
 	})
-	AccountCode!: string | null;
+	AccountCode!: string;
 
 	@HasMany(
 		() => OrderDetails,

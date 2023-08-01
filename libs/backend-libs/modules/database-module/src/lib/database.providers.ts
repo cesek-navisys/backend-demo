@@ -8,7 +8,7 @@ export const databaseProviders = [
 			const sequelize = new Sequelize({
 				dialect: 'postgres',
 				host: 'localhost',
-				port: 5432,
+				port: Number(process?.env?.['DB_PORT']) ?? 5432,
 				username: 'postgres',
 				password: 'postgres',
 				database: 'backend-demo',
