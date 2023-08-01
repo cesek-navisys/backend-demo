@@ -25,9 +25,10 @@ export class Order
 	implements IOrderAttributes
 {
 	@Column({
-		allowNull: false,
+		allowNull: true,
 		type: DataType.UUID,
 		primaryKey: true,
+		defaultValue: DataType.UUIDV4,
 	})
 	code!: string;
 

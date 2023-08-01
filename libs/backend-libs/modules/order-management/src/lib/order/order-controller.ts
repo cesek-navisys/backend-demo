@@ -21,12 +21,19 @@ import {
 } from './dto';
 import {
 	ACCOUNT_CODE_API_PARAM,
+	ORDERS_ALIAS,
 	ORDER_CODE_API_PARAM,
 } from '@backend-demo/shared/constants';
 import { orderManagementRoutes } from './order-management.routes';
 import { plainToClass } from 'class-transformer';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import {
+	ApiCreatedResponse,
+	ApiOperation,
+	ApiResponse,
+	ApiTags,
+} from '@nestjs/swagger';
 
+@ApiTags(ORDERS_ALIAS)
 @Controller(orderManagementRoutes.order)
 export class OrderController {
 	constructor(private readonly orderExternalService: OrderExternalService) {}
@@ -45,7 +52,9 @@ export class OrderController {
 			{ accountCode, orderCode },
 			query
 		);
-		return plainToClass(ViewOrderDto, result);
+		return plainToClass(ViewOrderDto, result, {
+			excludeExtraneousValues: true,
+		});
 	}
 
 	@ApiOperation({
@@ -61,13 +70,15 @@ export class OrderController {
 			{ accountCode },
 			query
 		);
-		return plainToClass(ViewOrderDto, result);
+		return plainToClass(ViewOrderDto, result, {
+			excludeExtraneousValues: true,
+		});
 	}
 
 	@ApiOperation({
 		summary: 'Create order',
 	})
-	@ApiResponse({ type: ViewOrderDto })
+	@ApiCreatedResponse()
 	@Post()
 	create(
 		@Param(ACCOUNT_CODE_API_PARAM) accountCode: string,
@@ -77,7 +88,9 @@ export class OrderController {
 			{ accountCode },
 			createOrderDto
 		);
-		return plainToClass(ViewOrderDto, result);
+		return plainToClass(ViewOrderDto, result, {
+			excludeExtraneousValues: true,
+		});
 	}
 
 	@ApiOperation({
@@ -94,7 +107,9 @@ export class OrderController {
 			{ accountCode, orderCode },
 			updateOrderDto
 		);
-		return plainToClass(ViewOrderDto, result);
+		return plainToClass(ViewOrderDto, result, {
+			excludeExtraneousValues: true,
+		});
 	}
 
 	@ApiOperation({
@@ -103,14 +118,16 @@ export class OrderController {
 	@ApiResponse({ type: ViewOrderDto })
 	@Delete(`:${ORDER_CODE_API_PARAM}`)
 	remove(
-		@Param(ORDER_CODE_API_PARAM) accountCode: string,
+		@Param(ACCOUNT_CODE_API_PARAM) accountCode: string,
 		@Param(ORDER_CODE_API_PARAM) orderCode: string
 	) {
 		const result = this.orderExternalService.delete({
 			accountCode,
 			orderCode,
 		});
-		return plainToClass(ViewOrderDto, result);
+		return plainToClass(ViewOrderDto, result, {
+			excludeExtraneousValues: true,
+		});
 	}
 
 	@ApiOperation({
@@ -119,14 +136,16 @@ export class OrderController {
 	@ApiResponse({ type: ViewOrderDto })
 	@Put(orderManagementRoutes.orderRestore)
 	restore(
-		@Param(ORDER_CODE_API_PARAM) accountCode: string,
+		@Param(ACCOUNT_CODE_API_PARAM) accountCode: string,
 		@Param(ORDER_CODE_API_PARAM) orderCode: string
 	) {
 		const result = this.orderExternalService.restore({
 			accountCode,
 			orderCode,
 		});
-		return plainToClass(ViewOrderDto, result);
+		return plainToClass(ViewOrderDto, result, {
+			excludeExtraneousValues: true,
+		});
 	}
 
 	@ApiOperation({
@@ -142,7 +161,9 @@ export class OrderController {
 			accountCode,
 			orderCode,
 		});
-		return plainToClass(ViewOrderDto, result);
+		return plainToClass(ViewOrderDto, result, {
+			excludeExtraneousValues: true,
+		});
 	}
 
 	@ApiOperation({
@@ -158,6 +179,8 @@ export class OrderController {
 			accountCode,
 			orderCode,
 		});
-		return plainToClass(ViewOrderDto, result);
+		return plainToClass(ViewOrderDto, result, {
+			excludeExtraneousValues: true,
+		});
 	}
 }

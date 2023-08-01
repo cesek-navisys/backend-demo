@@ -20,22 +20,29 @@ export class OrderWasteService {
 		private orderReadService: OrderReadService
 	) {}
 
-	async delete(params: IOrderDeleteParams): Promise<Order> {
+	async delete(params: IOrderDeleteParams): Promise<Order[] | null> {
 		const { orderCode, accountCode } = params;
-		await this.orderRepository.destroy({
-			where: {
-				code: orderCode,
-				AccountCode: accountCode,
-			},
-		});
 		const order = await this.orderReadService.findOne({
 			accountCode,
 			orderCode,
+		})
+		if (!order) throw new Error(
+			`Provided code: ${orderCode} is not associated with any records in the database`
+		);
+		await this.orderRepository.destroy({
+			where: {
+				code: order.code,
+				AccountCode: order.AccountCode,
+			},
 		});
-		if (order) return order;
+		const orders = await this.orderReadService.findAll({
+			accountCode,
+		});
+		const deletedOrder = orders?.some((order) => order.code === orderCode);
+		if (!deletedOrder) return orders;
 		else
 			throw new Error(
-				`Provided code: ${orderCode} is not associated with any records in the database`
+				`Removal of the order was not successful`
 			);
 	}
 
