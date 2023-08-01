@@ -1,23 +1,24 @@
+import { Injectable } from '@nestjs/common';
+import { IProductCreate } from './dto/interfaces/create-product.interface';
 import {
 	IProductQueryMany,
 	IProductQueryOne,
 } from './dto/interfaces/query-product.interface';
 import {
-	IProductFindFirstParams,
-	IProductFindFirstQuery,
 	IProductFindManyParams,
-	IProductFindManyQuery,
+	IProductFindOneParams,
 } from './entity-layer/interfaces/product-read.interfaces';
 import { IProductDeleteParams } from './entity-layer/interfaces/product-waste.interfaces';
 import {
-	IProductCreateOneParams,
-	IProductUpdateOneParams,
-	IProductUpsertOneParams,
+	IProductCreateParams,
+	IProductUpdateParams,
+	IUpdateProduct,
 } from './entity-layer/interfaces/product-write.interfaces';
 import { ProductReadService } from './entity-layer/product-read.service';
 import { ProductWasteService } from './entity-layer/product-waste.service';
 import { ProductWriteService } from './entity-layer/product-write.service';
 
+@Injectable()
 export class ProductExternalService {
 	constructor(
 		private readonly productReadService: ProductReadService,
@@ -25,45 +26,30 @@ export class ProductExternalService {
 		private readonly productWriteService: ProductWriteService
 	) {}
 
-	async findOne(productCode: string, query?: IProductQueryOne) {
-		return this.productReadService.findOne({ code: productCode }, query);
+	async findOne(params: IProductFindOneParams, query?: IProductQueryOne) {
+		const { productCode, accountCode } = params;
+		return this.productReadService.findOne(
+			{
+				productCode,
+				accountCode,
+			},
+			{ ...query }
+		);
 	}
 
 	async findAll(params: IProductFindManyParams, query?: IProductQueryMany) {
-		return await this.productReadService.findAll(params, query);
+		return this.productReadService.findAll(params, query);
 	}
 
-	async findFirst(
-		params: IProductFindFirstParams,
-		query?: IProductFindFirstQuery
-	) {
-		return await this.productReadService.findFirst(params, query);
+	async create(params: IProductCreateParams, createProduct: IProductCreate) {
+		return this.productWriteService.createOne(params, createProduct);
 	}
 
-	async findAndCountAll(
-		params: IProductFindManyParams,
-		query?: IProductFindManyQuery
-	) {
-		return await this.productReadService.findAndCountAll(params, query);
+	async update(params: IProductUpdateParams, updateOrder: IUpdateProduct) {
+		return this.productWriteService.updateOne(params, updateOrder);
 	}
 
-	async createOne(params: IProductCreateOneParams) {
-		return await this.productWriteService.createOne(params);
-	}
-
-	async upsertOne(params: IProductUpsertOneParams) {
-		return await this.productWriteService.upsertOne(params);
-	}
-
-	async updateOne(productCode: string, params: IProductUpdateOneParams) {
-		return await this.productWriteService.updateOne(productCode, params);
-	}
-
-	async delete(productCode: string) {
-		return await this.productWasteService.delete(productCode);
-	}
-
-	async restore(productCode: string) {
-		return await this.productWasteService.restore(productCode);
+	async delete(params: IProductDeleteParams) {
+		return this.productWasteService.delete(params);
 	}
 }

@@ -1,13 +1,16 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Product } from '@backend-demo/backend-libs/tables';
-import { ProductReadService } from './product-read.service';
 import {
-	IProductCreateManyParams,
-	IProductCreateOneParams,
+	ICreateProduct,
+	IProductCreateParams,
 	IProductUpdateManyParams,
-	IProductUpdateOneParams,
-	IProductUpsertOneParams,
+	IProductUpdateParams,
+	IProductUpsertParams,
+	IUpdateManyProduct,
+	IUpdateProduct,
+	IUpsertProduct,
 } from './interfaces/product-write.interfaces';
+import { ProductReadService } from './product-read.service';
 
 @Injectable()
 export class ProductWriteService {
@@ -17,60 +20,106 @@ export class ProductWriteService {
 		private productReadService: ProductReadService
 	) {}
 
-	async createOne(params: IProductCreateOneParams): Promise<Product> {
-		const product = await this.productRepository.create(params);
+	async createOne(
+		params: IProductCreateParams,
+		createProduct: ICreateProduct
+	): Promise<Product> {
+		const { name, description, price, color } = createProduct;
+		const product = await this.productRepository.create({
+			AccountCode: params.accountCode,
+			color,
+			description,
+			name,
+			price,
+		});
 		return product.save();
 	}
 
-	async createMany(params: IProductCreateManyParams): Promise<Product[]> {
-		return await this.productRepository.bulkCreate(params.products);
+	async createMany(
+		params: IProductCreateParams,
+		createProduct: ICreateProduct[]
+	): Promise<Product[]> {
+		const products = await Promise.all(
+			createProduct.map(async (productParams) => {
+				const product = await this.productRepository.create({
+					AccountCode: params.accountCode,
+					color: productParams.color,
+					description: productParams.description,
+					name: productParams.name,
+					price: productParams.price,
+				});
+				return product.save();
+			})
+		);
+		return products;
 	}
 
-	async upsertOne(params: IProductUpsertOneParams): Promise<Product> {
-		const [product] = await this.productRepository.upsert(params);
+	async upsertOne(
+		params: IProductUpsertParams,
+		upsertProduct: IUpsertProduct
+	): Promise<Product> {
+		const { accountCode } = params;
+		const { color, description, name, price } = upsertProduct;
 
-		const existingProduct = await this.productReadService.findOne({
-			code: params.code,
-		});
-		if (existingProduct) {
-			throw new Error(`Product with code ${params.code} already exists.`);
+		if (!name || !description || price === undefined) {
+			throw new Error('Name, description, and price must be defined');
 		}
 
+		const [product] = await this.productRepository.upsert({
+			AccountCode: accountCode,
+			name,
+			color,
+			description,
+			price,
+		});
 		return product;
 	}
 
 	async updateOne(
-		productCode: string,
-		params: IProductUpdateOneParams
-	): Promise<[number, Product[]]> {
-		const { code, ...changes } = params;
-
+		params: IProductUpdateParams,
+		updateProduct: IUpdateProduct
+	): Promise<Product> {
+		const { accountCode, productCode } = params;
 		const existingProduct = await this.productReadService.findOne({
-			code: params.code,
+			productCode,
+			accountCode,
 		});
-		if (existingProduct) {
-			throw new Error(`Product with code ${params.code} already exists.`);
+		if (!existingProduct) {
+			throw new Error(
+				`Product with code ${params.productCode} already exists.`
+			);
 		}
-
-		return await this.productRepository.update(changes, {
-			where: { code: productCode },
-			returning: true,
-		});
+		const updatedProduct = await existingProduct.update(updateProduct);
+		return updatedProduct;
 	}
 
 	async updateMany(
-		params: IProductUpdateManyParams
-	): Promise<[number, Product[]]> {
-		const { OwnerCode, ...changes } = params;
+		params: IProductUpdateManyParams,
+		updateProducts: IUpdateManyProduct[]
+	): Promise<Product[]> {
+		const { accountCode } = params;
+		const updatedProducts: Product[] = [];
 
-		const count = await this.productReadService.count({ OwnerCode });
-		if (count === 0) {
-			throw new Error(`No products found for OwnerCode ${OwnerCode}.`);
+		for (const updateProduct of updateProducts) {
+			const { productCode, ...updateProps } = updateProduct;
+			const [numberOfAffectedRows, affectedRows] =
+				await this.productRepository.update(updateProps, {
+					where: {
+						AccountCode: accountCode,
+						code: productCode,
+					},
+					returning: true,
+				});
+
+			if (numberOfAffectedRows === 0) {
+				throw new Error(
+					`Product with code ${productCode} does not exist.`
+				);
+			}
+
+			updatedProducts.push(affectedRows[0]);
 		}
 
-		return await this.productRepository.update(changes, {
-			where: { OwnerCode },
-			returning: true,
-		});
+		return updatedProducts;
 	}
 }

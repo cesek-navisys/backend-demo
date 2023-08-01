@@ -27,9 +27,9 @@ export class Product
 {
 	@Column({
 		allowNull: true,
-		type: DataType.UUID,
-		primaryKey: true,
 		defaultValue: DataType.UUIDV4,
+		primaryKey: true,
+		type: DataType.UUID,
 	})
 	code!: string;
 
@@ -53,7 +53,7 @@ export class Product
 		allowNull: false,
 		type: DataType.UUID,
 	})
-	OwnerCode!: string;
+	AccountCode!: string;
 
 	@HasMany(
 		() => OrderDetails,
@@ -62,5 +62,5 @@ export class Product
 	OrderDetails?: OrderDetails[];
 
 	@BelongsTo(() => Account, AccountForeignKey.belongsTo())
-	Owner?: Account;
+	Account?: Account;
 }

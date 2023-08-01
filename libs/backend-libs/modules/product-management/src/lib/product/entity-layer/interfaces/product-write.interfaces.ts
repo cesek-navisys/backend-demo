@@ -1,20 +1,22 @@
 import { IProductCreate } from '../../dto/interfaces/create-product.interface';
-import { IProductUpdate } from '../../dto/interfaces/update-product.interface';
+import { IProductFindOneParams } from './product-read.interfaces';
 
-export interface IProductCreateOneParams extends IProductCreate {}
+export interface ICreateProduct extends IProductCreate {}
 
-export interface IProductCreateManyParams {
-	products: IProductCreateOneParams[];
-}
+export interface IProductCreateParams
+	extends Pick<IProductFindOneParams, 'accountCode'> {}
 
-export interface IProductUpsertOneParams extends IProductCreateOneParams {
-	code: string;
-}
+export interface IUpsertProduct extends Partial<ICreateProduct> {}
 
-export interface IProductUpdateOneParams extends Partial<IProductUpdate> {
-	code: string;
-}
+export interface IProductUpsertParams extends IProductCreateParams {}
 
-export interface IProductUpdateManyParams extends Partial<IProductUpdate> {
-	OwnerCode: string;
+export interface IUpdateProduct extends IUpsertProduct {}
+
+export interface IProductUpdateParams extends IProductFindOneParams {}
+
+export interface IProductUpdateManyParams
+	extends Omit<IProductFindOneParams, 'productCode'> {}
+
+export interface IUpdateManyProduct extends IUpdateProduct {
+	productCode: string;
 }

@@ -1,8 +1,8 @@
 import { IQueryManyBase } from '@backend-demo/backend-libs/api-interfaces';
 
-export interface IProductQueryOne {
+export interface IProductQueryOne extends IQueryManyBase {
 	includeOrderDetails?: boolean;
-	includeOwner?: boolean;
+	includeAccount?: boolean;
 }
 
-export interface IProductQueryMany extends IQueryManyBase {}
+export interface IProductQueryMany extends IProductQueryOne {}

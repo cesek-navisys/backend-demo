@@ -4,5 +4,5 @@ export interface IProductView {
 	name: string;
 	description: string;
 	price: number;
-	OwnerCode: string;
+	AccountCode: string;
 }
