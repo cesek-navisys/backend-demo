@@ -1,4 +1,4 @@
-import { Column, DataType, HasMany, Model, Table } from 'sequelize-typescript';
+import { Column, DataType, HasMany, IsUUID, Model, PrimaryKey, Table } from 'sequelize-typescript';
 import { Order } from './order.table';
 import { Product } from './product.table';
 import {
@@ -19,6 +19,8 @@ export class Account
 	@Column({
 		allowNull: true,
 		type: DataType.UUID,
+		primaryKey: true,
+		defaultValue: DataType.UUIDV4
 	})
 	code!: string;
 
