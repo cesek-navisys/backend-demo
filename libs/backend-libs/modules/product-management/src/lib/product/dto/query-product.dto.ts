@@ -3,7 +3,7 @@ import {
 	IProductQueryMany,
 	IProductQueryOne,
 } from './interfaces/query-product.interface';
-import { IsBoolean, IsNumber } from 'class-validator';
+import { IsBoolean, IsNumber, IsOptional } from 'class-validator';
 import { Transform } from 'class-transformer';
 
 export class ProductQueryDto implements IProductQueryOne, IProductQueryMany {
@@ -12,6 +12,7 @@ export class ProductQueryDto implements IProductQueryOne, IProductQueryMany {
 		default: false,
 	})
 	@IsBoolean()
+	@IsOptional()
 	@Transform(({ value }) => Boolean(value))
 	includeOrderDetails?: boolean;
 
@@ -20,6 +21,7 @@ export class ProductQueryDto implements IProductQueryOne, IProductQueryMany {
 		default: false,
 	})
 	@IsBoolean()
+	@IsOptional()
 	@Transform(({ value }) => Boolean(value))
 	includeAccount?: boolean;
 
@@ -28,6 +30,7 @@ export class ProductQueryDto implements IProductQueryOne, IProductQueryMany {
 		type: Number,
 	})
 	@IsNumber()
+	@IsOptional()
 	@Transform(({ value }) => Number(value))
 	limit?: number;
 
@@ -36,6 +39,7 @@ export class ProductQueryDto implements IProductQueryOne, IProductQueryMany {
 		type: Number,
 	})
 	@IsNumber()
+	@IsOptional()
 	@Transform(({ value }) => Number(value))
 	page?: number;
 }
