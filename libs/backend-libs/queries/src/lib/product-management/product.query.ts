@@ -6,13 +6,13 @@ export interface IFindProductByCodeQuery {
 }
 
 export class FindProductByCodeQuery extends Query<Product> {
-    constructor(
-        public readonly params: IFindProductByCodeQuery,
-    ) { super() }
+    constructor(public readonly params: IFindProductByCodeQuery) {
+        super();
+    }
 }
 
 export class FindFirstAccountProductQuery extends Query<Product> {
-    constructor(
-        public readonly accountCode: string
-    ) { super() }
+    constructor(public readonly accountCode: string) {
+        super();
+    }
 }
