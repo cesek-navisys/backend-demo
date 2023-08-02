@@ -12,9 +12,14 @@
 import { Order } from '@backend-demo/backend-libs/tables';
 import { Inject, Injectable } from '@nestjs/common';
 import {
-	IOrderCreatePayload,
+	ICreateOrder,
+	IOrderCreateParams,
+	IOrderUpsertParams,
+	IUpdateOrder,
+	IUpsertOrder,
+	IOrderUpdateParams,
 	IOrderUpdateManyParams,
-	IOrderUpsertOneParams,
+	IUpdateManyOrder,
 } from './interfaces/order-write.interfaces';
 import { OrderReadService } from './order-read.service';
 import { OrderWasteService } from './order-waste.service';
@@ -25,17 +30,17 @@ export class OrderWriteService {
 		@Inject('ORDER_REPOSITORY') private orderRepository: typeof Order,
 		private readonly orderReadService: OrderReadService,
 		private readonly orderWasteService: OrderWasteService
-	) { }
+	) {}
 
-	async createOne(params: IOrderCreatePayload): Promise<Order> {
-		const order = await this.orderReadService.findFirst(params);
-		if (order) return this.orderWasteService.restore(order?.code);
-		else
-			return this.orderRepository.create({
-				AccountCode: params.AccountCode,
-				messageForOwner: params.messageForOwner,
-				confirmed: params.confirmed,
-			});
+	async createOne(
+		params: IOrderCreateParams,
+		createOrder: ICreateOrder
+	): Promise<Order> {
+		return this.orderRepository.create({
+			AccountCode: params.accountCode,
+			messageForOwner: createOrder.messageForOwner,
+			confirmed: createOrder.confirmed,
+		});
 	}
 
 	// POST/orders/basketID/confirm
@@ -44,70 +49,85 @@ export class OrderWriteService {
 	// 	return this.orderRepository;
 	// }
 
-	async createMany(params: IOrderCreatePayload[]): Promise<Order[]> {
+	async createMany(
+		params: IOrderCreateParams,
+		createOrders: ICreateOrder[]
+	): Promise<Order[]> {
 		let orders: Order[] = [];
-		params.forEach(async (param) => {
+		createOrders.forEach(async (createOrder) => {
 			const order = await this.orderRepository.create({
-				AccountCode: param.AccountCode,
-				messageForOwner: param.messageForOwner,
-				confirmed: param.confirmed,
+				AccountCode: params.accountCode,
+				messageForOwner: createOrder.messageForOwner,
+				confirmed: createOrder.confirmed,
 			});
 			orders.push(order);
 		});
 		return orders;
 	}
 
-	async upsertOne(params: IOrderUpsertOneParams): Promise<Order> {
+	async upsertOne(
+		params: IOrderUpsertParams,
+		upsertOrder: IUpsertOrder
+	): Promise<Order> {
 		const { '0': instance, '1': created } =
 			await this.orderRepository.upsert({
-				AccountCode: params.AccountCode,
-				messageForOwner: params.messageForOwner,
-				confirmed: params.confirmed,
+				AccountCode: params.accountCode,
+				messageForOwner: upsertOrder.messageForOwner,
+				confirmed: upsertOrder.confirmed,
 			});
 		return instance;
 	}
 
 	async updateOne(
-		orderCode: string,
-		params: IOrderUpsertOneParams
+		params: IOrderUpdateParams,
+		updateOrder: IUpdateOrder
 	): Promise<Order> {
 		await this.orderRepository.update(
 			{
-				AccountCode: params.AccountCode,
-				messageForOwner: params.messageForOwner,
-				confirmed: params.confirmed,
+				messageForOwner: updateOrder.messageForOwner,
+				confirmed: updateOrder.confirmed,
 			},
 			{
-				where: { code: orderCode },
+				where: {
+					code: params.orderCode,
+					AccountCode: params.accountCode,
+				},
 			}
 		);
 		const order = await this.orderReadService.findOne({
-			code: orderCode,
+			accountCode: params.accountCode,
+			orderCode: params.orderCode,
 		});
 		if (order) return order;
 		else throw new Error('Order with the provided code was not found.');
 	}
 
-	async updateMany(params: IOrderUpdateManyParams[]): Promise<Order[]> {
+	async updateMany(
+		params: IOrderUpdateManyParams,
+		updateOrders: IUpdateManyOrder[]
+	): Promise<Order[]> {
 		let orders: Order[] = [];
-		params.forEach(async (param) => {
+		updateOrders.forEach(async (updateOrder, index) => {
 			await this.orderRepository.update(
 				{
-					AccountCode: param.AccountCode,
-					messageForOwner: param.messageForOwner,
-					confirmed: param.confirmed,
+					messageForOwner: updateOrder.messageForOwner,
+					confirmed: updateOrder.confirmed,
 				},
 				{
-					where: { code: param.code },
+					where: {
+						code: updateOrder.orderCode,
+						AccountCode: params.accountCode,
+					},
 				}
 			);
 			const order = await this.orderReadService.findOne({
-				code: param.code,
+				accountCode: params.accountCode,
+				orderCode: updateOrder.orderCode,
 			});
 			if (order) orders.push(order);
 			else
 				throw new Error(
-					`Code ${param.code} is not associated with any existing records.`
+					`Code ${updateOrder.orderCode} is not associated with any existing records.`
 				);
 		});
 		return orders;

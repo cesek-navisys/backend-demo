@@ -8,7 +8,7 @@ export interface IProductOwnAttributes {
 	description: string;
 	price: number;
 	color: Color | null;
-	OwnerCode: string;
+	AccountCode: string;
 }
 
 // Reference data to other tables

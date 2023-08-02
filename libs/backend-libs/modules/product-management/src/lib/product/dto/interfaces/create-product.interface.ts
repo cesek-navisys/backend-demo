@@ -5,5 +5,4 @@ export interface IProductCreate {
 	description: string;
 	price: number;
 	color?: Color;
-	OwnerCode: string;
 }

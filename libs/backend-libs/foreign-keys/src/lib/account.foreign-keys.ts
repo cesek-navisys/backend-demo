@@ -11,7 +11,7 @@ import {
 
 export class AccountForeignKey extends TableForeignKey {
 	static override readonly params: DefaultBelongsToOptions = {
-		as: { plural: ACCOUNT_ALIAS, singular: ACCOUNTS_ALIAS },
+		as: { plural: ACCOUNTS_ALIAS, singular: ACCOUNT_ALIAS },
 		foreignKey: ACCOUNT_CODE_ALIAS,
 		onDelete: ConstraintRule.CASCADE,
 		onUpdate: ConstraintRule.CASCADE,

@@ -43,7 +43,7 @@ export class OrderReadService {
 		query?: IOrderFindOneQuery
 	): Promise<Order | null> {
 		const order = await this.orderRepository.findOne<Order>({
-			where: { code: params.code },
+			where: { code: params.orderCode, AccountCode: params.accountCode },
 			include: this.queries(query),
 		});
 		return order;
@@ -55,9 +55,8 @@ export class OrderReadService {
 	): Promise<Order | null> {
 		const order = this.orderRepository.findOne<Order>({
 			where: {
-				messageForOwner: params.messageForOwner,
-				AccountCode: params.AccountCode,
-				confirmed: params.confirmed,
+				code: params.orderCode,
+				AccountCode: params.accountCode,
 			},
 			include: this.queries(query),
 		});
@@ -69,38 +68,29 @@ export class OrderReadService {
 		query?: IOrderFindManyQuery
 	): Promise<Order[] | null> {
 		return this.orderRepository.findAll<Order>({
-			where: {
-				messageForOwner: params.messageForOwner,
-				AccountCode: params.AccountCode,
-				confirmed: params.confirmed,
-			},
 			include: this.queries(query),
-		});
-	}
-
-	async findAndCountAll(
-		params: IOrderFindManyParams,
-		query?: IOrderFindAndCountManyQuery
-	): Promise<Order[] | null> {
-		return this.orderRepository.findAll<Order>({
-			where: {
-				messageForOwner: params.messageForOwner,
-				AccountCode: params.AccountCode,
-				confirmed: params.confirmed,
-			},
-			include: this.queries(query),
-			limit: query?.limit ?? 10,
-			offset: query?.page ? (query.page - 1) * (query.limit ?? 10) : 0,
 		});
 	}
 
 	async count(params: IOrderFindManyParams): Promise<number> {
 		return this.orderRepository.count<Order>({
 			where: {
-				messageForOwner: params.messageForOwner,
-				AccountCode: params.AccountCode,
-				confirmed: params.confirmed,
+				AccountCode: params.accountCode,
 			},
 		});
+	}
+
+	async findAndCountAll(
+		params: IOrderFindManyParams,
+		query?: IOrderFindAndCountManyQuery
+	): Promise<{ rows: Order[] | null; count: number } | Order[]> {
+		const allOrders = await this.orderRepository.findAndCountAll<Order>({
+			where: { AccountCode: params.accountCode },
+			include: this.queries(query),
+			limit: query?.limit ?? 10,
+			offset: query?.page ? (query.page - 1) * (query.limit ?? 10) : 0,
+		});
+		if (query?.includeCount) return allOrders;
+		else return allOrders.rows;
 	}
 }

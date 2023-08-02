@@ -1,3 +1,5 @@
-import { IOrderUniqueAttributes } from '@backend-demo/backend-libs/entities';
+import { IOrderFindOneParams } from './order-read.interfaces';
 
-export interface IOrderRestoreParams extends IOrderUniqueAttributes {}
+export interface IOrderDeleteParams extends IOrderFindOneParams {}
+
+export interface IOrderRestoreParams extends IOrderFindOneParams {}

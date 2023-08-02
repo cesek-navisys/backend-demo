@@ -1,3 +1,5 @@
-import { IProductUniqueAttributes } from '@backend-demo/backend-libs/entities';
+import { IProductFindOneParams } from './product-read.interfaces';
 
-export interface IProductDeleteParams extends IProductUniqueAttributes {}
+export interface IProductDeleteParams extends IProductFindOneParams {}
+
+export interface IProductRestoreParams extends IProductFindOneParams {}

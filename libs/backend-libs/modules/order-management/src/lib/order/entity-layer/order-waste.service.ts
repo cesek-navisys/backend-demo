@@ -8,7 +8,10 @@
 import { Order } from '@backend-demo/backend-libs/tables';
 import { Inject, Injectable } from '@nestjs/common';
 import { OrderReadService } from './order-read.service';
-import { IOrderRestoreParams } from './interfaces/order-waste.interfaces';
+import {
+	IOrderDeleteParams,
+	IOrderRestoreParams,
+} from './interfaces/order-waste.interfaces';
 
 @Injectable()
 export class OrderWasteService {
@@ -17,28 +20,41 @@ export class OrderWasteService {
 		private orderReadService: OrderReadService
 	) {}
 
-	async delete(orderCode: string, force = false): Promise<Order> {
-		await this.orderRepository.destroy({
-			where: { code: orderCode },
-			force,
-		});
+	async delete(params: IOrderDeleteParams): Promise<Order[] | null> {
+		const { orderCode, accountCode } = params;
 		const order = await this.orderReadService.findOne({
-			code: orderCode,
+			accountCode,
+			orderCode,
+		})
+		if (!order) throw new Error(
+			`Provided code: ${orderCode} is not associated with any records in the database`
+		);
+		await this.orderRepository.destroy({
+			where: {
+				code: order.code,
+				AccountCode: order.AccountCode,
+			},
 		});
-		if (order) return order;
+		const orders = await this.orderReadService.findAll({
+			accountCode,
+		});
+		const deletedOrder = orders?.some((order) => order.code === orderCode);
+		if (!deletedOrder) return orders;
 		else
 			throw new Error(
-				`Provided code: ${orderCode} is not associated with any records in the database`
+				`Removal of the order was not successful`
 			);
 	}
 
-	async restore(orderCode: string): Promise<Order> {
+	async restore(params: IOrderRestoreParams): Promise<Order> {
+		const { accountCode, orderCode } = params;
 		await this.orderRepository.restore({
-			where: { code: orderCode },
+			where: { code: orderCode, AccountCode: accountCode },
 		});
 
 		const order = await this.orderReadService.findOne({
-			code: orderCode,
+			orderCode,
+			accountCode,
 		});
 		if (order) return order;
 		else
