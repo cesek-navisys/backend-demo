@@ -18,7 +18,8 @@ async function bootstrap() {
 		.addTag('eshop')
 		.build();
 	const document = SwaggerModule.createDocument(app, config);
-	SwaggerModule.setup('api', app, document);
+	const urlSwaggerHome = 'api';
+	SwaggerModule.setup(urlSwaggerHome, app, document);
 
 	const globalPrefix = '';
 	app.setGlobalPrefix(globalPrefix);
@@ -27,7 +28,7 @@ async function bootstrap() {
 
 	await app.listen(port);
 	Logger.log(
-		`🚀 Application is running on: http://localhost:${port}/${globalPrefix}`
+		`🚀 Application is running on: http://localhost:${port}${globalPrefix ? '/' + globalPrefix : ''}/${urlSwaggerHome}`
 	);
 }
 

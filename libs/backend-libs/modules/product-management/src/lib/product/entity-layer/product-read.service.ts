@@ -19,7 +19,7 @@ export class ProductReadService {
 	constructor(
 		@Inject('PRODUCTS_REPOSITORY')
 		private productRepository: typeof Product
-	) {}
+	) { }
 
 	private queries(query: IProductQueryOne | undefined) {
 		const queries = [];
@@ -57,9 +57,8 @@ export class ProductReadService {
 		params: IProductFindFirstParams,
 		query?: IProductFindFirstQuery
 	): Promise<Product | null> {
-		return this.productRepository.findOne<Product>({
+		return this.productRepository.findOne({
 			where: {
-				code: params.productCode,
 				AccountCode: params.accountCode,
 			},
 			include: this.queries(query),
@@ -70,7 +69,7 @@ export class ProductReadService {
 		params: IProductFindManyParams,
 		query?: IProductFindManyQuery
 	): Promise<{ rows: Product[]; count: number }> {
-		return this.productRepository.findAndCountAll<Product>({
+		return this.productRepository.findAndCountAll({
 			where: { AccountCode: params.accountCode },
 			limit: query?.limit,
 		});
