@@ -1,0 +1,26 @@
+{
+	"name": "backend-libs-events",
+	"$schema": "../../../node_modules/nx/schemas/project-schema.json",
+	"sourceRoot": "libs/backend-libs/events/src",
+	"projectType": "library",
+	"targets": {
+		"build": {
+			"executor": "@nx/js:tsc",
+			"outputs": ["{options.outputPath}"],
+			"options": {
+				"outputPath": "dist/libs/backend-libs/events",
+				"main": "libs/backend-libs/events/src/index.ts",
+				"tsConfig": "libs/backend-libs/events/tsconfig.lib.json",
+				"assets": ["libs/backend-libs/events/*.md"]
+			}
+		},
+		"lint": {
+			"executor": "@nx/linter:eslint",
+			"outputs": ["{options.outputFile}"],
+			"options": {
+				"lintFilePatterns": ["libs/backend-libs/events/**/*.ts"]
+			}
+		}
+	},
+	"tags": []
+}
