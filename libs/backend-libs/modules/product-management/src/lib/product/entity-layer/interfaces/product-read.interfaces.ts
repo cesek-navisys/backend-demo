@@ -1,24 +1,21 @@
-import {
-	IProductAttributes,
-	IProductUniqueAttributes,
-} from '@backend-demo/backend-libs/entities';
+import { Optional } from 'sequelize';
 import {
 	IProductQueryMany,
 	IProductQueryOne,
 } from '../../dto/interfaces/query-product.interface';
-import { Optional } from 'sequelize';
 
-export interface IProductFindOneParams extends IProductUniqueAttributes {}
-
-export interface IProductFindOneQuery extends IProductQueryOne {}
-
-export interface IProductFindManyParams {
-	OwnerCode: string;
+export interface IProductFindOneParams {
+	productCode: string;
+	accountCode: string;
 }
 
-export interface IProductFindManyQuery extends IProductQueryMany {}
+export interface IProductFindOneQuery extends IProductQueryOne { }
 
-export interface IProductFindFirstParams
-	extends Optional<IProductAttributes, 'description' | 'price' | 'color'> {}
+export interface IProductFindManyParams
+	extends Pick<IProductFindFirstParams, 'accountCode'> { }
 
-export interface IProductFindFirstQuery extends IProductFindOneQuery {}
+export interface IProductFindManyQuery extends IProductQueryMany { }
+
+export interface IProductFindFirstParams extends Pick<IProductFindOneParams, 'accountCode'> { }
+
+export interface IProductFindFirstQuery extends IProductFindOneQuery { }

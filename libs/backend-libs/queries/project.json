@@ -1,0 +1,26 @@
+{
+	"name": "backend-libs-queries",
+	"$schema": "../../../node_modules/nx/schemas/project-schema.json",
+	"sourceRoot": "libs/backend-libs/queries/src",
+	"projectType": "library",
+	"targets": {
+		"build": {
+			"executor": "@nx/js:tsc",
+			"outputs": ["{options.outputPath}"],
+			"options": {
+				"outputPath": "dist/libs/backend-libs/queries",
+				"main": "libs/backend-libs/queries/src/index.ts",
+				"tsConfig": "libs/backend-libs/queries/tsconfig.lib.json",
+				"assets": ["libs/backend-libs/queries/*.md"]
+			}
+		},
+		"lint": {
+			"executor": "@nx/linter:eslint",
+			"outputs": ["{options.outputFile}"],
+			"options": {
+				"lintFilePatterns": ["libs/backend-libs/queries/**/*.ts"]
+			}
+		}
+	},
+	"tags": []
+}

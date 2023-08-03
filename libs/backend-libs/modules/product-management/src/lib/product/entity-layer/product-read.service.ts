@@ -19,12 +19,12 @@ export class ProductReadService {
 	constructor(
 		@Inject('PRODUCTS_REPOSITORY')
 		private productRepository: typeof Product
-	) {}
+	) { }
 
 	private queries(query: IProductQueryOne | undefined) {
 		const queries = [];
-		if (query?.includeOrderDetails) queries.push(OrderDetails);
-		if (query?.includeOwner) queries.push(Account);
+		if (query?.includeAccount) queries.push({ model: Account });
+		if (query?.includeOrderDetails) queries.push({ model: OrderDetails });
 		return queries;
 	}
 
@@ -32,8 +32,11 @@ export class ProductReadService {
 		params: IProductFindOneParams,
 		query?: IProductFindOneQuery
 	): Promise<Product | null> {
-		return await this.productRepository.findOne<Product>({
-			where: { code: params.code },
+		return this.productRepository.findOne<Product>({
+			where: {
+				code: params.productCode,
+				AccountCode: params.accountCode,
+			},
 			include: this.queries(query),
 		});
 	}
@@ -42,9 +45,11 @@ export class ProductReadService {
 		params: IProductFindManyParams,
 		query?: IProductFindManyQuery
 	): Promise<Product[] | null> {
-		return await this.productRepository.findAll<Product>({
-			where: { OwnerCode: params.OwnerCode },
-			limit: query?.limit,
+		return this.productRepository.findAll<Product>({
+			where: {
+				AccountCode: params.accountCode,
+			},
+			include: this.queries(query),
 		});
 	}
 
@@ -52,11 +57,9 @@ export class ProductReadService {
 		params: IProductFindFirstParams,
 		query?: IProductFindFirstQuery
 	): Promise<Product | null> {
-		return await this.productRepository.findOne({
+		return this.productRepository.findOne({
 			where: {
-				code: params.code,
-				OwnerCode: params.OwnerCode,
-				name: params.name,
+				AccountCode: params.accountCode,
 			},
 			include: this.queries(query),
 		});
@@ -66,15 +69,15 @@ export class ProductReadService {
 		params: IProductFindManyParams,
 		query?: IProductFindManyQuery
 	): Promise<{ rows: Product[]; count: number }> {
-		return await this.productRepository.findAndCountAll<Product>({
-			where: { OwnerCode: params.OwnerCode },
+		return this.productRepository.findAndCountAll({
+			where: { AccountCode: params.accountCode },
 			limit: query?.limit,
 		});
 	}
 
 	async count(params: IProductFindManyParams): Promise<number> {
-		return await this.productRepository.count({
-			where: { OwnerCode: params.OwnerCode },
+		return this.productRepository.count({
+			where: { AccountCode: params.accountCode },
 		});
 	}
 }

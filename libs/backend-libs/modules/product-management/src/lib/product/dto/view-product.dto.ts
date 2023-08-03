@@ -1,29 +1,30 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Color } from '@backend-demo/shared/enums';
+import { Expose } from 'class-transformer';
 import { IProductView } from './interfaces/view-product.interface';
 
 export class ViewProductDto implements IProductView {
-	@ApiProperty({
-		type: String,
-	})
+	@ApiProperty()
+	@Expose()
 	code!: string;
 
-	@ApiProperty({
-		type: String,
-	})
+	@ApiProperty()
+	@Expose()
 	name!: string;
 
-	@ApiProperty({
-		type: String,
-	})
+	@ApiProperty()
+	@Expose()
 	description!: string;
 
-	@ApiProperty({
-		type: String,
-	})
+	@ApiProperty()
+	@Expose()
 	price!: number;
 
-	@ApiProperty({
-		type: String,
-	})
-	OwnerCode!: string;
+	@ApiProperty()
+	@Expose()
+	color?: Color;
+
+	@ApiProperty()
+	@Expose()
+	AccountCode!: string;
 }
