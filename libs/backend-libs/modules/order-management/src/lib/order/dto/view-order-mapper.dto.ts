@@ -4,21 +4,22 @@
  * view-order-mapper bude importovat view-order
  */
 
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { ApiPropertyOptional } from '@nestjs/swagger';
 import { IOrderViewMapper } from './interfaces';
+import { Type } from 'class-transformer';
+import { ViewAccountDto } from '@backend-demo/backend-libs/modules/account-management';
+import { ViewOrderDetailsDto } from '../../order-details/dto/view-order-details.dto';
 import { ViewOrderDto } from './view-order.dto';
-import { Account, OrderDetails } from '@backend-demo/backend-libs/tables';
-import { Expose, Type } from 'class-transformer';
 
 export class ViewOrderMapperDto
 	extends ViewOrderDto
 	implements IOrderViewMapper
 {
-	// @ApiPropertyOptional()
-	// @Type(() => ViewAccountDto)
-	// account?: ViewAccountDto;
+	@ApiPropertyOptional()
+	@Type(() => ViewAccountDto)
+	account?: ViewAccountDto;
 
-	// @ApiPropertyOptional()
-	// @Type(() => ViewOrderDetailsDto)
-	// orderDetails?: ViewOrderDetailsDto;
+	@ApiPropertyOptional()
+	@Type(() => ViewOrderDetailsDto)
+	orderDetails?: ViewOrderDetailsDto;
 }
