@@ -10,12 +10,14 @@ import {
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { Op } from 'sequelize';
 import { IAccountQueryOne } from '../dto/interfaces/query-account.interface';
+import { AccountManagementQueryService } from '../../account-management-query.service';
 
 @Injectable()
 export class AccountReadService {
 	constructor(
-		@Inject('ACCOUNT_REPOSITORY') private accountRepository: typeof Account
-	) {}
+		@Inject('ACCOUNT_REPOSITORY') private accountRepository: typeof Account,
+		private readonly accountManagementQueryService: AccountManagementQueryService,
+	) { }
 
 	async findOne(
 		params: IAccountFindOneParams,
@@ -25,6 +27,11 @@ export class AccountReadService {
 			where: { code: params.code },
 			include: query?.includeOrders ? Order : undefined,
 		});
+
+		if (account) {
+			const product = await this.accountManagementQueryService.queryFirstAccountProduct(account.code)
+			console.log(product.name)
+		}
 
 		if (!account) {
 			throw new NotFoundException(
