@@ -21,14 +21,13 @@ export class OrderDetailsReadService {
 		params: IOrderDetailsFindOneParams,
 		query?: IOrderDetailsFindOneQuery
 	): Promise<OrderDetails | null> {
-		const orderDetails =
-			await this.orderDetailsRepository.findOne<OrderDetails>({
-				where: {
-					code: params.orderDetailsCode,
-					OrderCode: params.orderCode,
-				},
-				include: { ...query },
-			});
+		const orderDetails = await this.orderDetailsRepository.findOne({
+			where: {
+				code: params.orderDetailsCode,
+				OrderCode: params.orderCode,
+			},
+			include: { ...query },
+		});
 		return orderDetails;
 	}
 

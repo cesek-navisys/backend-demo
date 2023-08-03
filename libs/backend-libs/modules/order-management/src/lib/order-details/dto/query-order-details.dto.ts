@@ -6,7 +6,7 @@ import {
 import { IsBoolean, IsNumber, IsOptional } from 'class-validator';
 import { Type } from 'class-transformer';
 
-export class OrderDetailsQueyDto
+export class OrderDetailsQueryDto
 	implements IOrderDetailsQueryOne, IOrderDetailsQueryMany
 {
 	@ApiPropertyOptional()
