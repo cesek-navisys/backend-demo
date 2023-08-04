@@ -3,7 +3,6 @@ import {
 	IOrderDetailsCreationAttributes,
 } from '@backend-demo/backend-libs/entities';
 import {
-	OrderDetailsForeignKey,
 	OrderForeignKey,
 	ProductForeignKey,
 } from '@backend-demo/backend-libs/foreign-keys';
@@ -25,8 +24,9 @@ export class OrderDetails
 {
 	@Column({
 		type: DataType.UUID,
-		allowNull: false,
+		allowNull: true,
 		primaryKey: true,
+		defaultValue: DataType.UUIDV4,
 	})
 	code!: string;
 
