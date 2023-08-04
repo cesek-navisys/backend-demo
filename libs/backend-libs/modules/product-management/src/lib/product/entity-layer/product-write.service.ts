@@ -86,7 +86,7 @@ export class ProductWriteService {
 		});
 		if (!existingProduct) {
 			throw new Error(
-				`Product with code ${params.productCode} already exists.`
+				`Product with code ${params.productCode} does not exists.`
 			);
 		}
 		const updatedProduct = await existingProduct.update(updateProduct);
