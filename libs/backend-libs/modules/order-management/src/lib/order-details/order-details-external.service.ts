@@ -1,23 +1,15 @@
 import { Injectable } from '@nestjs/common';
-import { OrderDetailsReadService } from './entity-layer/order-details-read.service';
-import { OrderDetailsWasteService } from './entity-layer/order-details-waste.service';
-import { OrderDetailsWriteService } from './entity-layer/order-details-write.service';
-import {
-	IOrderDetailsFindManyParams,
-	IOrderDetailsFindOneParams,
-} from './entity-layer/interfaces/order-details-read.interfaces';
+import { OrderReadService } from '../order/entity-layer/order-read.service';
+import { IOrderDetailsCreate } from './dto/interfaces/create-order-details.interface';
 import {
 	IOrderDetailsQueryMany,
 	IOrderDetailsQueryOne,
 } from './dto/interfaces/query-order-details.interface';
-import {
-	IOrderDetailsCreateParams,
-	IOrderDetailsUpdateParams,
-	IUpdateOrderDetails,
-} from './entity-layer/interfaces/order-details-write.interfaces';
-import { IOrderDetailsCreate } from './dto/interfaces/create-order-details.interface';
-import { IOrderDetailsDeleteParams } from './entity-layer/interfaces/order-details-waste.interfaces';
-import { OrderReadService } from '../order/entity-layer/order-read.service';
+import { IUpdateOrderDetails } from './entity-layer/interfaces/order-details-write.interfaces';
+import { OrderDetailsReadService } from './entity-layer/order-details-read.service';
+import { OrderDetailsWasteService } from './entity-layer/order-details-waste.service';
+import { OrderDetailsWriteService } from './entity-layer/order-details-write.service';
+import { ProductReadService } from 'libs/backend-libs/modules/product-management/src/lib/product/entity-layer/product-read.service';
 
 @Injectable()
 export class OrderDetailsExternalService {
@@ -25,6 +17,7 @@ export class OrderDetailsExternalService {
 		private readonly orderDetailsReadService: OrderDetailsReadService,
 		private readonly orderDetailsWasteService: OrderDetailsWasteService,
 		private readonly orderDetailsWriteService: OrderDetailsWriteService,
+		private readonly productReadService: ProductReadService,
 		private readonly orderReadService: OrderReadService
 	) {}
 
@@ -54,33 +47,102 @@ export class OrderDetailsExternalService {
 	}
 
 	async findAll(
-		params: IOrderDetailsFindManyParams,
+		params: {
+			orderCode: string;
+			accountCode: string;
+		},
 		query?: IOrderDetailsQueryMany
 	) {
-		return this.orderDetailsReadService.findAll(params, query);
+		const { orderCode, accountCode } = params;
+		const order = await this.orderReadService.findOne({
+			orderCode,
+			accountCode,
+		});
+		if (!order) {
+			throw new Error(`Order with code ${orderCode} was not found`);
+		}
+		return this.orderDetailsReadService.findAll(
+			{
+				orderCode: order.code,
+			},
+			{ ...query }
+		);
 	}
 
 	async create(
-		params: IOrderDetailsCreateParams,
+		params: {
+			orderCode: string;
+			productCode: string;
+			accountCode: string;
+		},
 		createOrderDetails: IOrderDetailsCreate
 	) {
+		const { orderCode, productCode, accountCode } = params;
+		const order = await this.orderReadService.findOne({
+			orderCode,
+			accountCode,
+		});
+		const product = await this.productReadService.findOne({
+			accountCode,
+			productCode,
+		});
+		if (!order) {
+			throw new Error(`Order with code ${orderCode} was not found`);
+		}
+		if (!product) {
+			throw new Error(`Product with code ${productCode} was not found`);
+		}
+
 		return this.orderDetailsWriteService.createOne(
-			params,
+			{
+				orderCode: order.code,
+				productCode: product.code,
+			},
 			createOrderDetails
 		);
 	}
 
 	async update(
-		params: IOrderDetailsUpdateParams,
+		params: {
+			orderCode: string;
+			orderDetailsCode: string;
+			accountCode: string;
+		},
 		updateOrderDetails: IUpdateOrderDetails
 	) {
+		const { orderCode, orderDetailsCode, accountCode } = params;
+		const order = await this.orderReadService.findOne({
+			orderCode,
+			accountCode,
+		});
+		if (!order) {
+			throw new Error(`Order with code ${orderCode} was not found`);
+		}
 		return this.orderDetailsWriteService.updateOne(
-			params,
+			{
+				orderCode: order.code,
+				orderDetailsCode,
+			},
 			updateOrderDetails
 		);
 	}
 
-	async delete(params: IOrderDetailsDeleteParams) {
-		return this.orderDetailsWasteService.delete(params);
+	async delete(params: {
+		orderCode: string;
+		orderDetailsCode: string;
+		accountCode: string;
+	}) {
+		const { orderCode, orderDetailsCode, accountCode } = params;
+		const order = await this.orderReadService.findOne({
+			orderCode,
+			accountCode,
+		});
+		if (!order) {
+			throw new Error(`Order with code ${orderCode} was not found`);
+		}
+		return this.orderDetailsWasteService.delete({
+			orderCode: order.code,
+			orderDetailsCode,
+		});
 	}
 }

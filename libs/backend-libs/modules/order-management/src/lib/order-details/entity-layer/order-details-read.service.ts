@@ -1,4 +1,4 @@
-import { OrderDetails } from '@backend-demo/backend-libs/tables';
+import { OrderDetails, Product } from '@backend-demo/backend-libs/tables';
 import { Inject, Injectable } from '@nestjs/common';
 import {
 	IOrderDetailsFindFirstParams,
@@ -21,12 +21,16 @@ export class OrderDetailsReadService {
 		params: IOrderDetailsFindOneParams,
 		query?: IOrderDetailsFindOneQuery
 	): Promise<OrderDetails | null> {
+		const include = [];
+		if (query?.includeProduct) {
+			include.push({ model: Product });
+		}
 		const orderDetails = await this.orderDetailsRepository.findOne({
 			where: {
 				code: params.orderDetailsCode,
 				OrderCode: params.orderCode,
 			},
-			include: { ...query },
+			include: include,
 		});
 		return orderDetails;
 	}
@@ -48,11 +52,15 @@ export class OrderDetailsReadService {
 		params: IOrderDetailsFindManyParams,
 		query?: IOrderDetailsFindManyQuery
 	): Promise<OrderDetails[] | null> {
+		const include = [];
+		if (query?.includeProduct) {
+			include.push({ model: Product });
+		}
 		return this.orderDetailsRepository.findAll({
 			where: {
 				OrderCode: params.orderCode,
 			},
-			include: { ...query },
+			include: include,
 		});
 	}
 

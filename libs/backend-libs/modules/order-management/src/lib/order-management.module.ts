@@ -14,12 +14,15 @@ import { OrderDetailsWriteService } from './order-details/entity-layer/order-det
 import { OrderDetailsExternalService } from './order-details/order-details-external.service';
 import { OrderDetailsController } from './order-details/order-details-controller';
 import { orderDetailsProviders } from './order-details/entity-layer/order-details.provider';
+import { ProductReadService } from 'libs/backend-libs/modules/product-management/src/lib/product/entity-layer/product-read.service';
+import { productProviders } from 'libs/backend-libs/modules/product-management/src/lib/product/entity-layer/product.provider';
 
 @Module({
 	imports: [DatabaseModule],
 	controllers: [OrderController, OrderDetailsController],
 	providers: [
 		...orderDetailsProviders,
+		...productProviders,
 		...orderProviders,
 		OrderBasketService,
 		OrderConfirmedService,
@@ -31,6 +34,7 @@ import { orderDetailsProviders } from './order-details/entity-layer/order-detail
 		OrderReadService,
 		OrderWasteService,
 		OrderWriteService,
+		ProductReadService,
 	],
 	exports: [],
 })

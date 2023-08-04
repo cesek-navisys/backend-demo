@@ -4,6 +4,4 @@ export interface IOrderDetailsQueryOne extends IQueryManyBase {
 	includeProduct?: boolean;
 }
 
-export interface IOrderDetailsQueryMany extends IOrderDetailsQueryOne {
-	includeCount?: boolean;
-}
+export interface IOrderDetailsQueryMany extends IOrderDetailsQueryOne {}

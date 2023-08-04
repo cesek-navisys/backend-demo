@@ -112,8 +112,8 @@ export class ProductController {
 	})
 	@Delete(`:${PRODUCT_CODE_API_PARAM}`)
 	async delete(
-		@Param(PRODUCT_CODE_API_PARAM) productCode: string,
-		@Param(ACCOUNT_CODE_API_PARAM) accountCode: string
+		@Param(ACCOUNT_CODE_API_PARAM) accountCode: string,
+		@Param(PRODUCT_CODE_API_PARAM) productCode: string
 	) {
 		return this.productExternalService.delete({ productCode, accountCode });
 	}

@@ -23,7 +23,8 @@ import {
 @Table({ paranoid: true })
 export class Product
 	extends Model<IProductAttributes, IProductCreationAttributes>
-	implements IProductAttributes {
+	implements IProductAttributes
+{
 	@Column({
 		allowNull: true,
 		defaultValue: DataType.UUIDV4,
@@ -42,7 +43,7 @@ export class Product
 	price!: number;
 
 	@Column({
-		allowNull: false,
+		allowNull: true,
 		type: DataType.STRING,
 	})
 	color!: Color;

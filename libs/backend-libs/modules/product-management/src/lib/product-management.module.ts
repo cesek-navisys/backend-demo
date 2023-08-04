@@ -7,9 +7,16 @@ import { ProductWasteService } from './product/entity-layer/product-waste.servic
 import { ProductWriteService } from './product/entity-layer/product-write.service';
 import { productProviders } from './product/entity-layer/product.provider';
 import { ProductEventHandler } from './product/event-layer/product-event.handler';
-import { QueryFindFirstProductHandler, QueryFindProductByCodeHandler } from './product/event-layer/product-query.handler';
+import {
+	QueryFindFirstProductHandler,
+	QueryFindProductByCodeHandler,
+} from './product/event-layer/product-query.handler';
 
-const events = [ProductEventHandler, QueryFindProductByCodeHandler, QueryFindFirstProductHandler];
+const events = [
+	ProductEventHandler,
+	QueryFindProductByCodeHandler,
+	QueryFindFirstProductHandler,
+];
 
 @Module({
 	imports: [DatabaseModule],
@@ -23,4 +30,4 @@ const events = [ProductEventHandler, QueryFindProductByCodeHandler, QueryFindFir
 		ProductWriteService,
 	],
 })
-export class ProductManagementModule { }
+export class ProductManagementModule {}

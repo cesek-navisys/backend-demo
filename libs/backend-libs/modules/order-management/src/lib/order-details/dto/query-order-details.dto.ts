@@ -9,17 +9,14 @@ import { Type } from 'class-transformer';
 export class OrderDetailsQueryDto
 	implements IOrderDetailsQueryOne, IOrderDetailsQueryMany
 {
-	@ApiPropertyOptional()
+	@ApiPropertyOptional({
+		type: Boolean,
+		default: false,
+	})
 	@Type(() => Boolean)
 	@IsBoolean()
 	@IsOptional()
 	includeProduct?: boolean;
-
-	@ApiPropertyOptional()
-	@Type(() => Boolean)
-	@IsBoolean()
-	@IsOptional()
-	includeCount?: boolean;
 
 	@ApiPropertyOptional({ example: 1 })
 	@Type(() => Number)

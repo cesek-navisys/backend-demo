@@ -24,8 +24,9 @@ export class OrderDetails
 {
 	@Column({
 		type: DataType.UUID,
-		allowNull: false,
+		allowNull: true,
 		primaryKey: true,
+		defaultValue: DataType.UUIDV4,
 	})
 	code!: string;
 
