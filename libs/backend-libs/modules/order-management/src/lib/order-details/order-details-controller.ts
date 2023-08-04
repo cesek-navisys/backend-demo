@@ -24,8 +24,8 @@ import {
 	ViewOrderDetailsMapperDto,
 } from './dto';
 import { OrderDetailsExternalService } from './order-details-external.service';
-import { orderDetailsManagementRoutes } from './order-details-management.routes';
 import { ViewProductMapperDto } from '@backend-demo/backend-libs/modules/product-management';
+import { orderDetailsManagementRoutes } from './order-details-management.routes';
 
 @ApiTags(ORDER_DETAILS_ALIAS)
 @Controller(orderDetailsManagementRoutes.orderDetails)
