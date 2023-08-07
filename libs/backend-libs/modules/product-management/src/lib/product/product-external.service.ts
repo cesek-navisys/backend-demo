@@ -51,8 +51,8 @@ export class ProductExternalService {
 		return this.productWriteService.updateOne(params, updateOrder);
 	}
 
-	async addToBasket(params: IProductUpdateParams) {
-		return this.productBasketService.addToBasket(params);
+	async addToBasket(params: IProductUpdateParams, quantity: number) {
+		return this.productBasketService.addToBasket({ ...params, quantity });
 	}
 
 	async delete(params: IProductDeleteParams) {

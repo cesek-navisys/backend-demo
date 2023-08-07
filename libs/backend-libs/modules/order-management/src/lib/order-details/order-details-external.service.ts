@@ -5,11 +5,11 @@ import { OrderDetailsReadService } from './entity-layer/order-details-read.servi
 import { OrderDetailsWasteService } from './entity-layer/order-details-waste.service';
 import { OrderDetailsWriteService } from './entity-layer/order-details-write.service';
 import { OrderReadService } from '../order/entity-layer/order-read.service';
-import { ProductReadService } from 'libs/backend-libs/modules/product-management/src/lib/product/entity-layer/product-read.service';
 import {
 	IOrderDetailsQueryMany,
 	IOrderDetailsQueryOne,
 } from './dto/interfaces/query-order-details.interface';
+import { OrderDetailsManagementQueryService } from '../order-management-query.service';
 
 @Injectable()
 export class OrderDetailsExternalService {
@@ -17,7 +17,7 @@ export class OrderDetailsExternalService {
 		private readonly orderDetailsReadService: OrderDetailsReadService,
 		private readonly orderDetailsWasteService: OrderDetailsWasteService,
 		private readonly orderDetailsWriteService: OrderDetailsWriteService,
-		private readonly productReadService: ProductReadService,
+		private readonly orderDetailsManagementQueryService: OrderDetailsManagementQueryService,
 		private readonly orderReadService: OrderReadService
 	) {}
 
@@ -82,10 +82,12 @@ export class OrderDetailsExternalService {
 			orderCode,
 			accountCode,
 		});
-		const product = await this.productReadService.findOne({
-			accountCode,
-			productCode,
-		});
+		const product =
+			await this.orderDetailsManagementQueryService.queryProductByCode({
+				accountCode,
+				productCode,
+			});
+
 		if (!order) {
 			throw new Error(`Order with code ${orderCode} was not found`);
 		}
