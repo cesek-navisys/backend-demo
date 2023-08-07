@@ -55,8 +55,8 @@ export class OrderReadService {
 	): Promise<Order | null> {
 		const order = this.orderRepository.findOne<Order>({
 			where: {
-				code: params.orderCode,
 				AccountCode: params.accountCode,
+				confirmed: query?.confirmed,
 			},
 			include: this.queries(query),
 		});

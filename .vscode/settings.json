@@ -1,6 +1,6 @@
 {
-    "typescript.preferences.quoteStyle": "single",
-    "css.lint.unknownAtRules": "ignore",
+	"typescript.preferences.quoteStyle": "single",
+	"css.lint.unknownAtRules": "ignore",
 	"editor.formatOnSave": true,
 	"[feature]": {
 		"editor.formatOnSave": true
@@ -8,12 +8,6 @@
 	"editor.codeActionsOnSave": {
 		"source.fixAll.eslint": true
 	},
-    "cSpell.words": [
-        "eshop",
-        "mailer",
-        "nestjs",
-        "UUIDV",
-        "workdir"
-    ],
-    "typescript.tsdk": "node_modules/typescript/lib"
+	"cSpell.words": ["eshop", "mailer", "nestjs", "UUIDV", "workdir"],
+	"typescript.tsdk": "node_modules/typescript/lib"
 }

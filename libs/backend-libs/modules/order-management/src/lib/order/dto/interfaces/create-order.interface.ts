@@ -1,4 +1,4 @@
 export interface IOrderCreate {
-	messageForOwner: string;
+	messageForOwner?: string;
 	confirmed: boolean;
 }
