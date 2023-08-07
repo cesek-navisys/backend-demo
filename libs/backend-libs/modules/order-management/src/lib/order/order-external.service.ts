@@ -16,7 +16,6 @@ import {
 } from './dto/interfaces';
 import {
 	IOrderFindAndCountManyQuery,
-	IOrderFindFirstParams,
 	IOrderFindManyParams,
 	IOrderFindManyQuery,
 	IOrderFindOneParams,

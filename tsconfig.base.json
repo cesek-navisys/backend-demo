@@ -20,6 +20,9 @@
 			"@backend-demo/backend-libs/api-interfaces": [
 				"libs/backend-libs/api-interfaces/src/index.ts"
 			],
+			"@backend-demo/backend-libs/commands": [
+				"libs/backend-libs/commands/src/index.ts"
+			],
 			"@backend-demo/backend-libs/entities": [
 				"libs/backend-libs/entities/src/index.ts"
 			],
