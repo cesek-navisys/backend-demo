@@ -17,13 +17,15 @@ import {
 import { ProductReadService } from './entity-layer/product-read.service';
 import { ProductWasteService } from './entity-layer/product-waste.service';
 import { ProductWriteService } from './entity-layer/product-write.service';
+import { ProductBasketService } from './domain-layer/product-basket.service';
 
 @Injectable()
 export class ProductExternalService {
 	constructor(
 		private readonly productReadService: ProductReadService,
 		private readonly productWasteService: ProductWasteService,
-		private readonly productWriteService: ProductWriteService
+		private readonly productWriteService: ProductWriteService,
+		private readonly productBasketService: ProductBasketService
 	) {}
 
 	async findOne(params: IProductFindOneParams, query?: IProductQueryOne) {
@@ -47,6 +49,10 @@ export class ProductExternalService {
 
 	async update(params: IProductUpdateParams, updateOrder: IUpdateProduct) {
 		return this.productWriteService.updateOne(params, updateOrder);
+	}
+
+	async addToBasket(params: IProductUpdateParams) {
+		return this.productBasketService.addToBasket(params);
 	}
 
 	async delete(params: IProductDeleteParams) {

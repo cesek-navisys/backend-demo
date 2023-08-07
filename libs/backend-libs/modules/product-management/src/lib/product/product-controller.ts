@@ -108,6 +108,24 @@ export class ProductController {
 	}
 
 	@ApiOperation({
+		summary: 'Add Product to Basket',
+	})
+	@ApiResponse({ type: ViewProductMapperDto })
+	@Put(`basket/:${PRODUCT_CODE_API_PARAM}`)
+	async addToBasket(
+		@Param(ACCOUNT_CODE_API_PARAM) accountCode: string,
+		@Param(PRODUCT_CODE_API_PARAM) productCode: string
+	) {
+		const result = this.productExternalService.addToBasket({
+			accountCode,
+			productCode,
+		});
+		return plainToInstance(ViewProductMapperDto, result, {
+			excludeExtraneousValues: true,
+		});
+	}
+
+	@ApiOperation({
 		summary: 'Delete product',
 	})
 	@Delete(`:${PRODUCT_CODE_API_PARAM}`)
