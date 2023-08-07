@@ -65,7 +65,7 @@
         "@typescript-eslint/no-non-null-assertion": "off",
         "@typescript-eslint/no-floating-promises" : ["warn", { "ignoreVoid": true }],
         "import/no-unresolved": "error",
-        "prettier/prettier" : "warn",
+        "prettier/prettier" : "warn"
     },
     "settings": {
         "import/resolver": {

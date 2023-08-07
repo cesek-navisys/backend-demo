@@ -23,7 +23,7 @@ export class AccountWriteService {
 		private readonly accountRepository: typeof Account,
 		private readonly accountReadService: AccountReadService,
 		private readonly eventEmitter: EventEmitter2
-	) { }
+	) {}
 
 	async createOne(payload: IAccountCreatePayload): Promise<Account> {
 		const { address, email, name, phone, surname } = payload;
@@ -34,6 +34,7 @@ export class AccountWriteService {
 			name,
 			surname,
 			phone,
+			isActive: false,
 		};
 
 		return this.accountRepository.sequelize!.transaction(async () => {
@@ -44,7 +45,7 @@ export class AccountWriteService {
 				} as CreateAccountBeforeEvent
 			);
 			const account = await this.accountRepository.create(
-				accountToCreate,
+				accountToCreate
 			);
 
 			await this.eventEmitter.emitAsync(
@@ -62,7 +63,7 @@ export class AccountWriteService {
 		params: IAccountUpdateOneParams,
 		payload: IAccountUpdatePayload
 	) {
-		const { address, email, name, phone, surname } = payload;
+		const { address, email, name, phone, surname, isActive } = payload;
 		const { code } = params;
 
 		const account = await this.accountReadService.findOne({
@@ -76,6 +77,7 @@ export class AccountWriteService {
 				address,
 				email,
 				phone,
+				isActive,	
 			},
 			{ where: { code: account.code }, returning: true }
 		);
