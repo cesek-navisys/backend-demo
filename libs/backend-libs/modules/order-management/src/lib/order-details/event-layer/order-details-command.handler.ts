@@ -53,7 +53,7 @@ export class CommandCreateOrderDetailsHandler
 						orderDetailsCode: productsOrderDetails.code,
 					},
 					{
-						quantity: productsOrderDetails.quantity + quantity,
+						quantity: +productsOrderDetails.quantity + +quantity,
 					}
 				);
 			return updatedOrderDetails;
