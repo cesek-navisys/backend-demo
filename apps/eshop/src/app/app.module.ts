@@ -13,11 +13,10 @@ import { CqrsModule } from '@nestjs/cqrs';
 		DatabaseModule,
 		OrderManagementModule,
 		AccountManagementModule,
-		// OrderManagementModule,
 		ProductManagementModule,
 		EventEmitterModule.forRoot(),
 	],
 	controllers: [AppController],
 	providers: [AppService],
 })
-export class AppModule { }
+export class AppModule {}

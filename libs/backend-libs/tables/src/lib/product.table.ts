@@ -43,7 +43,7 @@ export class Product
 	price!: number;
 
 	@Column({
-		allowNull: false,
+		allowNull: true,
 		type: DataType.STRING,
 	})
 	color!: Color;
