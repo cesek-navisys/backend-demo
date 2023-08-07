@@ -1,10 +1,13 @@
-import { IAccountCreationAttributes, IAccountOwnAttributes } from '@backend-demo/backend-libs/entities';
+import {
+	IAccountCreationAttributes,
+	IAccountOwnAttributes,
+} from '@backend-demo/backend-libs/entities';
 
 export interface CreateAccountBeforeEvent {
-    accountBeforeCreation: IAccountCreationAttributes;
+	accountBeforeCreation: IAccountCreationAttributes;
 }
 
 export interface CreateAccountAfterEvent {
-    accountBeforeCreation: IAccountCreationAttributes;
-    account: IAccountOwnAttributes;
+	accountBeforeCreation: IAccountCreationAttributes;
+	account: IAccountOwnAttributes;
 }

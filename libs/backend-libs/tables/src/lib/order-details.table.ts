@@ -3,7 +3,6 @@ import {
 	IOrderDetailsCreationAttributes,
 } from '@backend-demo/backend-libs/entities';
 import {
-	OrderDetailsForeignKey,
 	OrderForeignKey,
 	ProductForeignKey,
 } from '@backend-demo/backend-libs/foreign-keys';
