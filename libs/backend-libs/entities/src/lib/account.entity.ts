@@ -13,6 +13,7 @@ export interface IAccountOwnAttributes {
 	email: string;
 	phone: string;
 	address: string;
+	isActive: boolean;
 }
 
 export interface IAccountReferenceAttributes {
@@ -24,7 +25,10 @@ export interface IAccountUniqueAttributes
 	extends Pick<IAccountOwnAttributes, 'code'> {}
 
 export interface IAccountCreationAttributes
-	extends Optional<Omit<IAccountOwnAttributes, 'code'>, 'phone'> {
+	extends Optional<
+		Omit<IAccountOwnAttributes, 'code'>,
+		'phone' | 'isActive'
+	> {
 	name: string;
 	surname: string;
 	email: string;
