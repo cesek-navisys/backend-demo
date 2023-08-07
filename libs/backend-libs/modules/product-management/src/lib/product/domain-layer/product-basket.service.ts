@@ -1,12 +1,17 @@
 import { Injectable } from '@nestjs/common';
-import { ProductReadService } from '../entity-layer/product-read.service';
-import { ProductWriteService } from '../entity-layer/product-write.service';
-import { IProductConfirmParams } from './interfaces/product-basket.interface';
+import { Product } from '@backend-demo/backend-libs/tables';
+import { CommandBus } from '@nestjs/cqrs';
 
 @Injectable()
 export class ProductBasketService {
 	constructor(
-		private readonly productReadService: ProductReadService,
-		private readonly productWriteService: ProductWriteService
+		private readonly productRepository: typeof Product,
+		private readonly commandBus: CommandBus,
 	) {}
+
+	async addToBasket(params: { accountCode: string, productCode: string }) {
+		return this.productRepository.sequelize!.transaction(async () => {
+			const orderDetails = this.commandBus.execute()
+		})
+	}
 }
