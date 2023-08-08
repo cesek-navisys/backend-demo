@@ -9,7 +9,7 @@ import {
 	IOrderDetailsQueryMany,
 	IOrderDetailsQueryOne,
 } from './dto/interfaces/query-order-details.interface';
-import { OrderDetailsManagementQueryService } from '../order-management-query.service';
+import { OrderManagementQueryService } from '../order-management-query.service';
 
 @Injectable()
 export class OrderDetailsExternalService {
@@ -17,7 +17,7 @@ export class OrderDetailsExternalService {
 		private readonly orderDetailsReadService: OrderDetailsReadService,
 		private readonly orderDetailsWasteService: OrderDetailsWasteService,
 		private readonly orderDetailsWriteService: OrderDetailsWriteService,
-		private readonly orderDetailsManagementQueryService: OrderDetailsManagementQueryService,
+		private readonly orderManagementQueryService: OrderManagementQueryService,
 		private readonly orderReadService: OrderReadService
 	) {}
 
@@ -83,7 +83,7 @@ export class OrderDetailsExternalService {
 			accountCode,
 		});
 		const product =
-			await this.orderDetailsManagementQueryService.queryProductByCode({
+			await this.orderManagementQueryService.queryProductByCode({
 				accountCode,
 				productCode,
 			});

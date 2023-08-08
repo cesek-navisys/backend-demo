@@ -6,7 +6,7 @@ import { Injectable } from '@nestjs/common';
 import { QueryBus } from '@nestjs/cqrs';
 
 @Injectable()
-export class OrderDetailsManagementQueryService {
+export class OrderManagementQueryService {
 	constructor(private readonly queryBus: QueryBus) {}
 
 	async queryProductByCode(params: IFindProductByCodeQuery) {

@@ -15,6 +15,7 @@ import { CqrsModule } from '@nestjs/cqrs';
 		AccountManagementModule,
 		ProductManagementModule,
 		EventEmitterModule.forRoot(),
+		CqrsModule,
 	],
 	controllers: [AppController],
 	providers: [AppService],
