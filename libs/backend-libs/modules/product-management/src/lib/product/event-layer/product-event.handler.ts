@@ -1,9 +1,9 @@
-import { OnEvent } from '@nestjs/event-emitter';
-import { Injectable } from '@nestjs/common';
 import {
 	CreateAccountAfterEvent,
 	EventName,
 } from '@backend-demo/backend-libs/events';
+import { Injectable } from '@nestjs/common';
+import { OnEvent } from '@nestjs/event-emitter';
 import { ProductWriteService } from '../entity-layer/product-write.service';
 
 @Injectable()
