@@ -37,4 +37,10 @@ export class OrderQueryDto implements IOrderQueryOne, IOrderQueryMany {
 	@IsNumber()
 	@IsOptional()
 	limit?: number;
+
+	@ApiPropertyOptional()
+	@IsBoolean()
+	@IsOptional()
+	@Type(() => Boolean)
+	filterWithOrderDetails?: boolean;
 }
