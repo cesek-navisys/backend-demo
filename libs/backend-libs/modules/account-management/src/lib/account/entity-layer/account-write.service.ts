@@ -23,7 +23,7 @@ export class AccountWriteService {
 		private readonly accountRepository: typeof Account,
 		private readonly accountReadService: AccountReadService,
 		private readonly eventEmitter: EventEmitter2
-	) { }
+	) {}
 
 	async createOne(payload: IAccountCreatePayload): Promise<Account> {
 		const { address, email, name, phone, surname } = payload;
@@ -44,7 +44,7 @@ export class AccountWriteService {
 				} as CreateAccountBeforeEvent
 			);
 			const account = await this.accountRepository.create(
-				accountToCreate,
+				accountToCreate
 			);
 
 			await this.eventEmitter.emitAsync(
