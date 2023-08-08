@@ -11,7 +11,9 @@ export interface IOrderDetailsFindOneParams {
 export interface IOrderDetailsFindOneQuery extends IOrderDetailsQueryOne {}
 
 export interface IOrderDetailsFindFirstParams
-	extends IOrderDetailsFindOneParams {}
+	extends Omit<IOrderDetailsFindOneParams, 'orderDetailsCode'> {
+	productCode?: string;
+}
 
 export interface IOrderDetailsFindFirstQuery
 	extends IOrderDetailsFindOneQuery {}

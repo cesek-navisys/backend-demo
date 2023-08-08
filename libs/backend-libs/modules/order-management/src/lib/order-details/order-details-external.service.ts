@@ -1,11 +1,11 @@
 import { IOrderDetailsCreate } from './dto/interfaces/create-order-details.interface';
 import { Injectable } from '@nestjs/common';
-import { OrderDetailsManagementQueryService } from '../order-details-management-query.service';
 import { OrderReadService } from '../order/entity-layer/order-read.service';
 import {
 	IOrderDetailsQueryMany,
 	IOrderDetailsQueryOne,
 } from './dto/interfaces/query-order-details.interface';
+import { OrderManagementQueryService } from '../order-management-query.service';
 import { IUpdateOrderDetails } from './entity-layer/interfaces/order-details-write.interfaces';
 import { OrderDetailsReadService } from './entity-layer/order-details-read.service';
 import { OrderDetailsWasteService } from './entity-layer/order-details-waste.service';
@@ -17,8 +17,8 @@ export class OrderDetailsExternalService {
 		private readonly orderDetailsReadService: OrderDetailsReadService,
 		private readonly orderDetailsWasteService: OrderDetailsWasteService,
 		private readonly orderDetailsWriteService: OrderDetailsWriteService,
-		private readonly orderReadService: OrderReadService,
-		private readonly orderDetailsManagementQueryService: OrderDetailsManagementQueryService
+		private readonly orderManagementQueryService: OrderManagementQueryService,
+		private readonly orderReadService: OrderReadService
 	) {}
 
 	async findOne(
@@ -83,9 +83,10 @@ export class OrderDetailsExternalService {
 			accountCode,
 		});
 		const product =
-			await this.orderDetailsManagementQueryService.queryFindOneAccountProduct(
-				{ productCode, accountCode }
-			);
+			await this.orderManagementQueryService.queryProductByCode({
+				accountCode,
+				productCode,
+			});
 		if (!product) {
 			throw new Error(`Product with code ${productCode} was not found`);
 		}
