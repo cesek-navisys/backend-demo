@@ -41,6 +41,14 @@ export class ProductReadService {
 		});
 	}
 
+	async findOneByCode(productCode: string): Promise<Product | null> {
+		return this.productRepository.findOne({
+			where: {
+				code: productCode,
+			},
+		});
+	}
+
 	async findAll(
 		params: IProductFindManyParams,
 		query?: IProductFindManyQuery

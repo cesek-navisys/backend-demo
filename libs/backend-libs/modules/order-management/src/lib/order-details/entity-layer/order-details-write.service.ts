@@ -9,24 +9,55 @@ import {
 	IUpsertOrderDetails,
 } from './interfaces/order-details-write.interfaces';
 import { IOrderDetailsUpdate } from '../dto/interfaces/update-order-details.interface';
+import { OrderDetailsManagementQueryService } from '../../order-details-management-query.service';
 
 @Injectable()
 export class OrderDetailsWriteService {
 	constructor(
 		@Inject('ORDER_DETAILS_REPOSITORY')
 		private orderDetailsRepository: typeof OrderDetails,
-		private orderDetailsReadService: OrderDetailsReadService
+		private orderDetailsReadService: OrderDetailsReadService,
+		private readonly orderDetailsManagementQueryService: OrderDetailsManagementQueryService
 	) {}
+
+	private async calculateTotalPrice(
+		productCode: string,
+		quantity: number
+	): Promise<number> {
+		const accountCode =
+			await this.orderDetailsManagementQueryService.queryFindAccountCodeByProduct(
+				productCode
+			);
+
+		const product =
+			await this.orderDetailsManagementQueryService.queryFindOneAccountProduct(
+				{
+					productCode: productCode,
+					accountCode: accountCode,
+				}
+			);
+
+		if (!product) {
+			throw new Error('Product not found.');
+		}
+
+		return product.price * quantity;
+	}
 
 	async createOne(
 		params: IOrderDetailsCreateParams,
 		createOrderDetails: ICreateOrderDetails
 	): Promise<OrderDetails> {
 		const { quantity, canBeDeliveredSeparately } = createOrderDetails;
+		const totalPrice = await this.calculateTotalPrice(
+			params.productCode,
+			quantity
+		);
 		const orderDetails = await this.orderDetailsRepository.create({
 			OrderCode: params.orderCode,
 			ProductCode: params.productCode,
 			quantity,
+			totalPrice,
 			canBeDeliveredSeparately,
 		});
 		return orderDetails.save();

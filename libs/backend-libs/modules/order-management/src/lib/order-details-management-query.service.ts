@@ -1,4 +1,5 @@
 import {
+	FindAccountCodeByProductCodeQuery,
 	FindProductByCodeQuery,
 	IFindProductByCodeQuery,
 } from '@backend-demo/backend-libs/queries';
@@ -11,5 +12,11 @@ export class OrderDetailsManagementQueryService {
 
 	async queryFindOneAccountProduct(params: IFindProductByCodeQuery) {
 		return this.queryBus.execute(new FindProductByCodeQuery(params));
+	}
+
+	async queryFindAccountCodeByProduct(productCode: string) {
+		return this.queryBus.execute(
+			new FindAccountCodeByProductCodeQuery(productCode)
+		);
 	}
 }

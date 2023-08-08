@@ -86,7 +86,6 @@ export class OrderDetailsExternalService {
 			await this.orderDetailsManagementQueryService.queryFindOneAccountProduct(
 				{ productCode, accountCode }
 			);
-		//console.log(product);
 		if (!product) {
 			throw new Error(`Product with code ${productCode} was not found`);
 		}
