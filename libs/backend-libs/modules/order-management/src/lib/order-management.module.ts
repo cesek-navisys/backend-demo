@@ -17,7 +17,6 @@ import { OrderWasteService } from './order/entity-layer/order-waste.service';
 import { OrderWriteService } from './order/entity-layer/order-write.service';
 import { orderProviders } from './order/entity-layer/order.provider';
 import { CommandCreateOrderDetailsHandler } from './order-details/event-layer/order-details-command.handler';
-import { OrderDetailsManagementQueryService } from './order-details-management-query.service';
 
 @Module({
 	imports: [DatabaseModule, CqrsModule],
@@ -30,7 +29,6 @@ import { OrderDetailsManagementQueryService } from './order-details-management-q
 		CommandCreateOrderDetailsHandler,
 		OrderManagementQueryService,
 		OrderDetailsExternalService,
-		OrderDetailsManagementQueryService,
 		OrderDetailsReadService,
 		OrderDetailsWasteService,
 		OrderDetailsWriteService,

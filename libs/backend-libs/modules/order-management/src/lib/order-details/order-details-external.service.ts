@@ -1,6 +1,5 @@
 import { IOrderDetailsCreate } from './dto/interfaces/create-order-details.interface';
 import { Injectable } from '@nestjs/common';
-import { OrderDetailsManagementQueryService } from '../order-details-management-query.service';
 import { OrderReadService } from '../order/entity-layer/order-read.service';
 import {
 	IOrderDetailsQueryMany,
