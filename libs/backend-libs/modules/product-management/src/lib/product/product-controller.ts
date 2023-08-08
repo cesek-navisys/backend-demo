@@ -2,6 +2,7 @@ import {
 	ACCOUNT_CODE_API_PARAM,
 	PRODUCTS_ALIAS,
 	PRODUCT_CODE_API_PARAM,
+	QUANTITY_PARAM,
 } from '@backend-demo/shared/constants';
 import {
 	Body,
@@ -105,6 +106,24 @@ export class ProductController {
 		return plainToInstance(ViewProductMapperDto, result, {
 			excludeExtraneousValues: true,
 		});
+	}
+
+	@ApiOperation({
+		summary: 'Add Product to Basket',
+	})
+	@Put(`basket/:${PRODUCT_CODE_API_PARAM}/:${QUANTITY_PARAM}`)
+	async addToBasket(
+		@Param(ACCOUNT_CODE_API_PARAM) accountCode: string,
+		@Param(PRODUCT_CODE_API_PARAM) productCode: string,
+		@Param(QUANTITY_PARAM) quantity: number
+	) {
+		return this.productExternalService.addToBasket(
+			{
+				accountCode,
+				productCode,
+			},
+			quantity
+		);
 	}
 
 	@ApiOperation({

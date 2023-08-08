@@ -6,3 +6,4 @@ export const PRODUCT_CODE_ALIAS = `${PRODUCT_ALIAS}${CODE_ALIAS}` as const;
 const PRODUCT_API_PARAM = 'product';
 export const PRODUCT_CODE_API_PARAM =
 	`${PRODUCT_API_PARAM}${CODE_ALIAS}` as const;
+export const QUANTITY_PARAM = 'quantity';

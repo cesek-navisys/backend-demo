@@ -5,12 +5,14 @@ import { ProductExternalService } from './product/product-external.service';
 import { ProductReadService } from './product/entity-layer/product-read.service';
 import { ProductWasteService } from './product/entity-layer/product-waste.service';
 import { ProductWriteService } from './product/entity-layer/product-write.service';
-import { productProviders } from './product/entity-layer/product.provider';
+import { productProvider } from './product/entity-layer/product.provider';
 import { ProductEventHandler } from './product/event-layer/product-event.handler';
 import {
 	QueryFindFirstProductHandler,
 	QueryFindProductByCodeHandler,
 } from './product/event-layer/product-query.handler';
+import { ProductBasketService } from './product/domain-layer/product-basket.service';
+import { CqrsModule } from '@nestjs/cqrs';
 
 const events = [
 	ProductEventHandler,
@@ -19,15 +21,16 @@ const events = [
 ];
 
 @Module({
-	imports: [DatabaseModule],
+	imports: [DatabaseModule, CqrsModule],
 	controllers: [ProductController],
 	providers: [
-		...productProviders,
-		...events,
 		ProductExternalService,
 		ProductReadService,
 		ProductWasteService,
 		ProductWriteService,
+		ProductBasketService,
+		...productProvider,
+		...events,
 	],
 })
 export class ProductManagementModule {}

@@ -12,11 +12,11 @@ import { OrderDetailsWasteService } from './order-details/entity-layer/order-det
 import { OrderDetailsWriteService } from './order-details/entity-layer/order-details-write.service';
 import { OrderExternalService } from './order/order-external.service';
 import { OrderManagementQueryService } from './order-management-query.service';
-import { orderProviders } from './order/entity-layer/order.provider';
 import { OrderReadService } from './order/entity-layer/order-read.service';
 import { OrderWasteService } from './order/entity-layer/order-waste.service';
 import { OrderWriteService } from './order/entity-layer/order-write.service';
-import { OrderDetailsManagementQueryService } from './order-details-management-query.service';
+import { orderProviders } from './order/entity-layer/order.provider';
+import { CommandCreateOrderDetailsHandler } from './order-details/event-layer/order-details-command.handler';
 
 @Module({
 	imports: [DatabaseModule, CqrsModule],
@@ -26,8 +26,9 @@ import { OrderDetailsManagementQueryService } from './order-details-management-q
 		...orderProviders,
 		OrderBasketService,
 		OrderConfirmedService,
+		CommandCreateOrderDetailsHandler,
+		OrderManagementQueryService,
 		OrderDetailsExternalService,
-		OrderDetailsManagementQueryService,
 		OrderDetailsReadService,
 		OrderDetailsWasteService,
 		OrderDetailsWriteService,
