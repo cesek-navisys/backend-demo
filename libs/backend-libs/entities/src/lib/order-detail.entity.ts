@@ -5,6 +5,7 @@ import { IOrderAttributes } from './order.entity';
 export interface IOrderDetailsOwnAttributes {
 	code: string;
 	quantity: number;
+	totalPrice: number;
 	canBeDeliveredSeparately: boolean;
 	OrderCode: string;
 	ProductCode: string;
@@ -21,7 +22,7 @@ export interface IOrderDetailsUniqueAttributes
 export interface IOrderDetailsCreationAttributes
 	extends Optional<
 		Omit<IOrderDetailsOwnAttributes, 'code'>,
-		'canBeDeliveredSeparately'
+		'canBeDeliveredSeparately' | 'totalPrice'
 	> {}
 
 export interface IOrderDetailsAttributes
