@@ -1,0 +1,26 @@
+{
+	"name": "backend-libs-commands",
+	"$schema": "../../../node_modules/nx/schemas/project-schema.json",
+	"sourceRoot": "libs/backend-libs/commands/src",
+	"projectType": "library",
+	"targets": {
+		"build": {
+			"executor": "@nx/js:tsc",
+			"outputs": ["{options.outputPath}"],
+			"options": {
+				"outputPath": "dist/libs/backend-libs/commands",
+				"main": "libs/backend-libs/commands/src/index.ts",
+				"tsConfig": "libs/backend-libs/commands/tsconfig.lib.json",
+				"assets": ["libs/backend-libs/commands/*.md"]
+			}
+		},
+		"lint": {
+			"executor": "@nx/linter:eslint",
+			"outputs": ["{options.outputFile}"],
+			"options": {
+				"lintFilePatterns": ["libs/backend-libs/commands/**/*.ts"]
+			}
+		}
+	},
+	"tags": []
+}

@@ -3,7 +3,9 @@ import { IAccountUpdate } from '../../dto/interfaces/update-account.interface';
 
 export interface IAccountCreatePayload extends IAccountCreate {}
 
-export interface IAccountUpdatePayload extends IAccountUpdate {}
+export interface IAccountUpdatePayload extends IAccountUpdate {
+	isActive?: boolean;
+}
 
 export interface IAccountUpsertPayload extends IAccountCreatePayload {
 	code: string;
