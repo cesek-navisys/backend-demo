@@ -15,6 +15,7 @@ export const databaseProviders = [
 				username: 'postgres',
 				password: 'postgres',
 				database: 'backend-demo',
+				sync: { force: false }
 			});
 			sequelize.addModels(databaseModels);
 			await sequelize.sync();

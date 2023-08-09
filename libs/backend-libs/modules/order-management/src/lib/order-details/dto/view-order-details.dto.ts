@@ -13,6 +13,10 @@ export class ViewOrderDetailsDto implements IOrderDetailsView {
 
 	@ApiProperty()
 	@Expose()
+	totalPrice!: number;
+
+	@ApiProperty()
+	@Expose()
 	canBeDeliveredSeparately!: boolean;
 
 	@ApiProperty()

@@ -41,9 +41,8 @@ export class OrderDetailsReadService {
 	): Promise<OrderDetails | null> {
 		return this.orderDetailsRepository.findOne({
 			where: {
-				code: params.orderDetailsCode,
 				OrderCode: params.orderCode,
-				...query,
+				ProductCode: params.productCode
 			},
 		});
 	}

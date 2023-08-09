@@ -5,15 +5,19 @@ export interface IOrderFindOneParams {
 	orderCode: string;
 }
 
-export interface IOrderFindOneQuery extends IOrderQueryOne {}
+export interface IOrderFindOneQuery extends IOrderQueryOne {
+	filterWithOrderDetails?: boolean;
+}
 
-export interface IOrderFindFirstParams extends IOrderFindOneParams {}
+export interface IOrderFindFirstParams extends Omit<IOrderFindOneParams, 'orderCode'> { }
 
-export interface IOrderFindFirstQuery extends IOrderFindOneQuery {}
+export interface IOrderFindFirstQuery extends IOrderFindOneQuery {
+	confirmed?: boolean
+}
 
 export interface IOrderFindManyParams
-	extends Omit<IOrderFindFirstParams, 'orderCode'> {}
+	extends Omit<IOrderFindFirstParams, 'orderCode'> { }
 
-export interface IOrderFindManyQuery extends IOrderQueryMany {}
+export interface IOrderFindManyQuery extends IOrderQueryMany { }
 
-export interface IOrderFindAndCountManyQuery extends IOrderFindManyQuery {}
+export interface IOrderFindAndCountManyQuery extends IOrderFindManyQuery { }
