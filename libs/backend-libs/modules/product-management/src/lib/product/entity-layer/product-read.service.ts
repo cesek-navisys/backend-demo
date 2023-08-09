@@ -22,23 +22,45 @@ export class ProductReadService {
 	) {}
 
 	private queries(query: IProductQueryOne | undefined) {
-		const queries = [];
-		if (query?.includeAccount) queries.push({ model: Account });
-		if (query?.includeOrderDetails) queries.push({ model: OrderDetails });
-		return queries;
+		const includes = [];
+		if (query?.includeAccount) includes.push({ model: Account });
+		if (query?.includeOrderDetails) includes.push({ model: OrderDetails });
+		return includes;
 	}
 
 	async findOne(
 		params: IProductFindOneParams,
 		query?: IProductFindOneQuery
 	): Promise<Product | null> {
-		return this.productRepository.findOne({
+		if (query?.includeAccount) {
+			const product = await this.productRepository.findOne({
+				where: {
+					code: params.productCode,
+					AccountCode: params.accountCode,
+				},
+			});
+			return product;
+		}
+		if (query?.includeOrderDetails) {
+			const product = await this.productRepository
+				.scope('WITH_ORDER_DETAILS')
+				.findOne({
+					where: {
+						code: params.productCode,
+						AccountCode: params.accountCode,
+					},
+				});
+			return product;
+		}
+		const product = this.productRepository.findOne({
 			where: {
 				code: params.productCode,
 				AccountCode: params.accountCode,
 			},
 			include: this.queries(query),
+			logging: console.debug,
 		});
+		return product;
 	}
 
 	async findOneByCode(productCode: string): Promise<Product | null> {
@@ -53,12 +75,43 @@ export class ProductReadService {
 		params: IProductFindManyParams,
 		query?: IProductFindManyQuery
 	): Promise<Product[] | null> {
-		return this.productRepository.findAll({
+		if (query?.includeAccount) {
+			const products = this.productRepository.findAll({
+				where: {
+					AccountCode: params.accountCode,
+				},
+			});
+			return products;
+		}
+		if (query?.includeOrderDetails) {
+			const products = this.productRepository
+				.scope('ONLY_WHERE_ORDER_DETAILS_EXIST')
+				.findAll({
+					where: {
+						AccountCode: params.accountCode,
+					},
+				});
+			return products;
+		}
+		if (query?.filteredByPrice) {
+			console.log('yes');
+			const products = this.productRepository
+				.scope({ method: ['priceRange', 100, 1000] })
+				.findAll({
+					where: {
+						AccountCode: params.accountCode,
+					},
+					logging: console.debug,
+				});
+			return products;
+		}
+		const products = this.productRepository.findAll({
 			where: {
 				AccountCode: params.accountCode,
 			},
 			include: this.queries(query),
 		});
+		return products;
 	}
 
 	async findFirst(

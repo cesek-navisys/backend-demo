@@ -14,12 +14,53 @@ import {
 	BelongsTo,
 	Column,
 	DataType,
+	DefaultScope,
 	ForeignKey,
 	HasMany,
 	Model,
+	Scopes,
+	Sequelize,
 	Table,
 } from 'sequelize-typescript';
+import {
+	ACCOUNT_ALIAS,
+	ORDER_DETAILS_ALIAS,
+} from '@backend-demo/shared/constants';
+import { Op } from 'sequelize';
 
+@DefaultScope(() => ({
+	include: [
+		{
+			model: Account,
+			as: ACCOUNT_ALIAS,
+			required: true,
+		},
+	],
+}))
+@Scopes(() => ({
+	WITH_ORDER_DETAILS: {
+		include: [
+			{
+				model: OrderDetails,
+				as: ORDER_DETAILS_ALIAS,
+			},
+		],
+	},
+	ONLY_WHERE_ORDER_DETAILS_EXIST: {
+		where: {
+			[Op.and]: Sequelize.literal(
+				'EXISTS (SELECT od.code FROM public."OrderDetails" AS od WHERE od."ProductCode" = "Product".code LIMIT 1)'
+			),
+		},
+	},
+	priceRange: (minPrice: number, maxPrice: number) => ({
+		where: {
+			price: {
+				[Op.between]: [minPrice, maxPrice],
+			},
+		},
+	}),
+}))
 @Table({ paranoid: true })
 export class Product
 	extends Model<IProductAttributes, IProductCreationAttributes>

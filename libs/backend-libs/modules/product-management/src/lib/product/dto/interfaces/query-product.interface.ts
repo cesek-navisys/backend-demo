@@ -5,4 +5,6 @@ export interface IProductQueryOne extends IQueryManyBase {
 	includeAccount?: boolean;
 }
 
-export interface IProductQueryMany extends IProductQueryOne {}
+export interface IProductQueryMany extends IProductQueryOne {
+	filteredByPrice?: boolean;
+}
