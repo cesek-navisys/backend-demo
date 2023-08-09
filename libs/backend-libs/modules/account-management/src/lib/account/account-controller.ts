@@ -1,3 +1,9 @@
+import { AccountExternalService } from './account-external.service';
+import { accountManagementRoutes } from '../account-management.routes';
+import { CreateAccountDto } from './dto/create-account.dto';
+import { plainToClass } from '@nestjs/class-transformer';
+import { UpdateAccountDto } from './dto/update-account.dto';
+import { ViewAccountDto } from './dto/view-account.dto';
 import {
 	Body,
 	Controller,
@@ -8,9 +14,6 @@ import {
 	Patch,
 	Post,
 } from '@nestjs/common';
-import { AccountExternalService } from './account-external.service';
-import { CreateAccountDto } from './dto/create-account.dto';
-import { UpdateAccountDto } from './dto/update-account.dto';
 
 import {
 	ACCOUNTS_ALIAS,
@@ -23,9 +26,6 @@ import {
 	ApiOperation,
 	ApiTags,
 } from '@nestjs/swagger';
-import { accountManagementRoutes } from '../account-management.routes';
-import { ViewAccountDto } from './dto/view-account.dto';
-import { plainToClass } from '@nestjs/class-transformer';
 
 @ApiTags(ACCOUNTS_ALIAS)
 @Controller(accountManagementRoutes.account)
@@ -59,7 +59,7 @@ export class AccountController {
 			})
 		);
 
-		return { rows: transformedRows, count };
+		return transformedRows;
 	}
 
 	@Delete(`:${ACCOUNT_CODE_API_PARAM}`)
