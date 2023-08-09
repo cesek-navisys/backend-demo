@@ -17,3 +17,9 @@ export class FindFirstAccountProductQuery extends Query<Product> {
 		super();
 	}
 }
+
+export class FindAccountCodeByProductCodeQuery extends Query<string> {
+	constructor(public readonly productCode: string) {
+		super();
+	}
+}

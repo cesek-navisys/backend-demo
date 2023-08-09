@@ -6,7 +6,6 @@ import { OrderConfirmedService } from './order/domain-layer/order-confirmed.serv
 import { OrderController } from './order/order-controller';
 import { OrderDetailsController } from './order-details/order-details-controller';
 import { OrderDetailsExternalService } from './order-details/order-details-external.service';
-import { orderDetailsProviders } from './order-details/entity-layer/order-details.provider';
 import { OrderDetailsReadService } from './order-details/entity-layer/order-details-read.service';
 import { OrderDetailsWasteService } from './order-details/entity-layer/order-details-waste.service';
 import { OrderDetailsWriteService } from './order-details/entity-layer/order-details-write.service';
@@ -17,6 +16,7 @@ import { OrderWasteService } from './order/entity-layer/order-waste.service';
 import { OrderWriteService } from './order/entity-layer/order-write.service';
 import { orderProviders } from './order/entity-layer/order.provider';
 import { CommandCreateOrderDetailsHandler } from './order-details/event-layer/order-details-command.handler';
+import { orderDetailsProviders } from './order-details/entity-layer/order-details.provider';
 
 @Module({
 	imports: [DatabaseModule, CqrsModule],

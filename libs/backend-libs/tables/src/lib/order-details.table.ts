@@ -37,6 +37,12 @@ export class OrderDetails
 	quantity!: number;
 
 	@Column({
+		type: DataType.DECIMAL,
+		allowNull: false,
+	})
+	totalPrice!: number;
+
+	@Column({
 		type: DataType.BOOLEAN,
 		allowNull: false,
 	})

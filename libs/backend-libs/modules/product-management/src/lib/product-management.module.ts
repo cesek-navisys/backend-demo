@@ -8,6 +8,7 @@ import { ProductWriteService } from './product/entity-layer/product-write.servic
 import { productProvider } from './product/entity-layer/product.provider';
 import { ProductEventHandler } from './product/event-layer/product-event.handler';
 import {
+	QueryFindAccountCodeByProductCodeHandler,
 	QueryFindFirstProductHandler,
 	QueryFindProductByCodeHandler,
 } from './product/event-layer/product-query.handler';
@@ -18,6 +19,7 @@ const events = [
 	ProductEventHandler,
 	QueryFindProductByCodeHandler,
 	QueryFindFirstProductHandler,
+	QueryFindAccountCodeByProductCodeHandler,
 ];
 
 @Module({

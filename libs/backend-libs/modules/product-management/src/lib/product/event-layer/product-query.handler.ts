@@ -1,4 +1,5 @@
 import {
+	FindAccountCodeByProductCodeQuery,
 	FindFirstAccountProductQuery,
 	FindProductByCodeQuery,
 } from '@backend-demo/backend-libs/queries';
@@ -25,5 +26,21 @@ export class QueryFindFirstProductHandler
 	async execute(query: FindFirstAccountProductQuery) {
 		const { accountCode } = query;
 		return this.productReadService.findFirst({ accountCode });
+	}
+}
+
+@QueryHandler(FindAccountCodeByProductCodeQuery)
+export class QueryFindAccountCodeByProductCodeHandler
+	implements IQueryHandler<FindAccountCodeByProductCodeQuery>
+{
+	constructor(private readonly productREadService: ProductReadService) {}
+
+	async execute(query: FindAccountCodeByProductCodeQuery) {
+		const { productCode } = query;
+
+		const product = await this.productREadService.findOneByCode(
+			productCode
+		);
+		return product!.AccountCode;
 	}
 }

@@ -29,22 +29,37 @@ import { IOrderQueryOne } from '../dto/interfaces';
 export class OrderReadService {
 	constructor(
 		@Inject('ORDER_REPOSITORY') private orderRepository: typeof Order
-	) {}
+	) { }
 
 	private queries(query: IOrderQueryOne | undefined) {
-		const queries = [];
-		if (query?.includeAccount) queries.push(Account);
-		if (query?.includeOrderDetails) queries.push(OrderDetails);
-		return queries;
+		const includes = [];
+		if (query?.includeAccount) includes.push(Account);
+		if (query?.includeOrderDetails) includes.push(OrderDetails);
+		return includes;
 	}
 
 	async findOne(
 		params: IOrderFindOneParams,
 		query?: IOrderFindOneQuery
 	): Promise<Order | null> {
+		if (query?.filterWithOrderDetails) {
+			const order = await this.orderRepository
+				.scope(['ONLY_WHERE_ORDER_DETAILS_EXIST', 'WITH_ORDER_DETAILS'])
+				.findOne({
+					where: {
+						code: params.orderCode,
+						AccountCode: params.accountCode,
+					},
+					//logging: console.debug,
+				});
+			console.log(order);
+			console.log(order?.toJSON());
+			return order;
+		}
 		const order = await this.orderRepository.findOne<Order>({
 			where: { code: params.orderCode, AccountCode: params.accountCode },
 			include: this.queries(query),
+			logging: console.debug,
 		});
 		return order;
 	}
