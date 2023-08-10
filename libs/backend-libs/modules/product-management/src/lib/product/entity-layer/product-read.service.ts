@@ -49,7 +49,6 @@ export class ProductReadService {
 				AccountCode: params.accountCode,
 			},
 			include: this.queries(query),
-			logging: console.debug,
 		});
 		return product;
 	}
@@ -84,7 +83,6 @@ export class ProductReadService {
 					where: {
 						AccountCode: params.accountCode,
 					},
-					logging: console.debug,
 				});
 			return products;
 		}
@@ -101,6 +99,16 @@ export class ProductReadService {
 		params: IProductFindFirstParams,
 		query?: IProductFindFirstQuery
 	): Promise<Product | null> {
+		if (query?.includeOrderDetails) {
+			const product = this.productRepository
+				.scope('WITH_ORDER_DETAILS')
+				.findOne({
+					where: {
+						AccountCode: params.accountCode,
+					},
+				});
+			return product;
+		}
 		return this.productRepository.findOne({
 			where: {
 				AccountCode: params.accountCode,
@@ -113,6 +121,26 @@ export class ProductReadService {
 		params: IProductFindManyParams,
 		query?: IProductFindManyQuery
 	): Promise<{ rows: Product[]; count: number }> {
+		if (query?.includeOrderDetails) {
+			const products = this.productRepository
+				.scope('ONLY_WHERE_ORDER_DETAILS_EXIST')
+				.findAndCountAll({
+					where: {
+						AccountCode: params.accountCode,
+					},
+				});
+			return products;
+		}
+		if (query?.filteredByPrice) {
+			const products = this.productRepository
+				.scope({ method: ['priceRange', 1000, 10000] })
+				.findAndCountAll({
+					where: {
+						AccountCode: params.accountCode,
+					},
+				});
+			return products;
+		}
 		return this.productRepository.findAndCountAll({
 			where: { AccountCode: params.accountCode },
 			limit: query?.limit,

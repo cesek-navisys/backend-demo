@@ -43,6 +43,7 @@ import { Op } from 'sequelize';
 			{
 				model: OrderDetails,
 				as: ORDER_DETAILS_ALIAS,
+				required: true,
 			},
 		],
 	},
