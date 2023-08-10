@@ -32,15 +32,6 @@ export class ProductReadService {
 		params: IProductFindOneParams,
 		query?: IProductFindOneQuery
 	): Promise<Product | null> {
-		if (query?.includeAccount) {
-			const product = await this.productRepository.findOne({
-				where: {
-					code: params.productCode,
-					AccountCode: params.accountCode,
-				},
-			});
-			return product;
-		}
 		if (query?.includeOrderDetails) {
 			const product = await this.productRepository
 				.scope('WITH_ORDER_DETAILS')
@@ -75,14 +66,6 @@ export class ProductReadService {
 		params: IProductFindManyParams,
 		query?: IProductFindManyQuery
 	): Promise<Product[] | null> {
-		if (query?.includeAccount) {
-			const products = this.productRepository.findAll({
-				where: {
-					AccountCode: params.accountCode,
-				},
-			});
-			return products;
-		}
 		if (query?.includeOrderDetails) {
 			const products = this.productRepository
 				.scope('ONLY_WHERE_ORDER_DETAILS_EXIST')
