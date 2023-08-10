@@ -1,5 +1,3 @@
-import { Account } from './account.table';
-import { OrderDetails } from './order-details.table';
 import {
 	IOrderAttributes,
 	IOrderCreationAttributes,
@@ -10,8 +8,11 @@ import {
 	OrderDetailsForeignKey,
 	OrderForeignKey,
 } from '@backend-demo/backend-libs/foreign-keys';
-import { ORDER_DETAILS_ALIAS } from '@backend-demo/shared/constants';
-import { FindAttributeOptions, FindOptions, Op, WhereOperators, WhereOptions } from 'sequelize';
+import {
+	ACCOUNT_ALIAS,
+	ORDER_DETAILS_ALIAS,
+} from '@backend-demo/shared/constants';
+import { Op, WhereOptions } from 'sequelize';
 import {
 	BelongsTo,
 	Column,
@@ -24,29 +25,49 @@ import {
 	Sequelize,
 	Table,
 } from 'sequelize-typescript';
+import { Account } from './account.table';
+import { OrderDetails } from './order-details.table';
 
-// @DefaultScope(() => ({where: {}}))
-@Scopes(() => ({
-	ONLY_WHERE_ORDER_DETAILS_EXIST: {
-		where: {
-			[Op.and]: Sequelize.literal('EXISTS (select od.code from public."OrderDetails" as od where od."OrderCode" = "Order".code limit 1)'),
-		}
-	},
-	WITH_ORDER_DETAILS: {
-		include: [{
+@DefaultScope(() => ({
+	include: [
+		{
 			model: OrderDetails,
 			as: ORDER_DETAILS_ALIAS,
-			where: {
-				quantity: { [Op.gt]: 2 }
-			} as WhereOptions<IOrderDetailsAttributes>,
 			required: false,
-		}]
-	}
+		},
+	],
+}))
+@Scopes(() => ({
+	WITH_ACCOUNT: {
+		include: [
+			{
+				model: Account,
+				as: ACCOUNT_ALIAS,
+			},
+		],
+	},
+	ONLY_WHERE_ORDER_DETAILS_EXIST: {
+		where: {
+			[Op.and]: Sequelize.literal(
+				'EXISTS (SELECT od.code FROM public."OrderDetails" AS od WHERE od."OrderCode" = "Order".code LIMIT 1)'
+			),
+		},
+	},
+	onlyWhenProductPriceHigherThan: (price: number) => {
+		return {
+			where: {
+				[Op.and]: Sequelize.literal(
+					`(SELECT SUM(od."totalPrice") FROM public."OrderDetails" AS od WHERE od."OrderCode" = "Order".code) > ${price}`
+				),
+			},
+		};
+	},
 }))
 @Table({ paranoid: true })
 export class Order
 	extends Model<IOrderAttributes, IOrderCreationAttributes>
-	implements IOrderAttributes {
+	implements IOrderAttributes
+{
 	@Column({
 		allowNull: true,
 		type: DataType.UUID,
@@ -80,6 +101,4 @@ export class Order
 
 	@BelongsTo(() => Account, AccountForeignKey.belongsTo())
 	Account?: Account;
-
-	// TODO: ne víc než 2 košíky na account. Pomocí unique indexes (sequelize)
 }

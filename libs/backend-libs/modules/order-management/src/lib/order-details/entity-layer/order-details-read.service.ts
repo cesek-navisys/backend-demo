@@ -21,18 +21,27 @@ export class OrderDetailsReadService {
 		params: IOrderDetailsFindOneParams,
 		query?: IOrderDetailsFindOneQuery
 	): Promise<OrderDetails | null> {
-		const include = [];
 		if (query?.includeProduct) {
-			include.push({ model: Product });
+			return this.orderDetailsRepository.scope(['WITH_PRODUCT']).findOne({
+				where: {
+					code: params.orderDetailsCode,
+					OrderCode: params.orderCode,
+				},
+			});
 		}
-		const orderDetails = await this.orderDetailsRepository.findOne({
+		if (query?.includeOrder)
+			return this.orderDetailsRepository.scope(['WITH_ORDER']).findOne({
+				where: {
+					code: params.orderDetailsCode,
+					OrderCode: params.orderCode,
+				},
+			});
+		return this.orderDetailsRepository.findOne({
 			where: {
 				code: params.orderDetailsCode,
 				OrderCode: params.orderCode,
 			},
-			include: include,
 		});
-		return orderDetails;
 	}
 
 	async findFirst(
@@ -42,7 +51,7 @@ export class OrderDetailsReadService {
 		return this.orderDetailsRepository.findOne({
 			where: {
 				OrderCode: params.orderCode,
-				ProductCode: params.productCode
+				ProductCode: params.productCode,
 			},
 		});
 	}

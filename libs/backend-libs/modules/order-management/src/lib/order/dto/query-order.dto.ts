@@ -43,4 +43,10 @@ export class OrderQueryDto implements IOrderQueryOne, IOrderQueryMany {
 	@IsOptional()
 	@Type(() => Boolean)
 	filterWithOrderDetails?: boolean;
+
+	@ApiPropertyOptional()
+	@IsNumber()
+	@IsOptional()
+	@Type(() => Number)
+	totalPrice?: number;
 }

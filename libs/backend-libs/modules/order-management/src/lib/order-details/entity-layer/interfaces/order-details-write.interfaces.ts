@@ -5,6 +5,7 @@ export interface ICreateOrderDetails extends IOrderDetailsCreate {}
 
 export interface IOrderDetailsCreateParams
 	extends Pick<IOrderDetailsFindOneParams, 'orderCode'> {
+	accountCode: string;
 	productCode: string;
 }
 

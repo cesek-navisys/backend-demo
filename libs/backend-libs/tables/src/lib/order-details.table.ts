@@ -12,11 +12,31 @@ import {
 	DataType,
 	ForeignKey,
 	Model,
+	Scopes,
 	Table,
 } from 'sequelize-typescript';
 import { Order } from './order.table';
 import { Product } from './product.table';
+import { ORDER_ALIAS, PRODUCT_ALIAS } from '@backend-demo/shared/constants';
 
+@Scopes(() => ({
+	WITH_PRODUCT: {
+		include: [
+			{
+				model: Product,
+				as: PRODUCT_ALIAS,
+			},
+		],
+	},
+	WITH_ORDER: {
+		include: [
+			{
+				model: Order,
+				as: ORDER_ALIAS,
+			},
+		],
+	},
+}))
 @Table
 export class OrderDetails
 	extends Model<IOrderDetailsAttributes, IOrderDetailsCreationAttributes>

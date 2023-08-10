@@ -8,11 +8,7 @@
  * count
  */
 
-import {
-	Account,
-	Order,
-	OrderDetails,
-} from '@backend-demo/backend-libs/tables';
+import { Order } from '@backend-demo/backend-libs/tables';
 import { Inject, Injectable } from '@nestjs/common';
 import {
 	IOrderFindAndCountManyQuery,
@@ -23,20 +19,12 @@ import {
 	IOrderFindOneParams,
 	IOrderFindOneQuery,
 } from './interfaces/order-read.interfaces';
-import { IOrderQueryOne } from '../dto/interfaces';
 
 @Injectable()
 export class OrderReadService {
 	constructor(
 		@Inject('ORDER_REPOSITORY') private orderRepository: typeof Order
-	) { }
-
-	private queries(query: IOrderQueryOne | undefined) {
-		const includes = [];
-		if (query?.includeAccount) includes.push(Account);
-		if (query?.includeOrderDetails) includes.push(OrderDetails);
-		return includes;
-	}
+	) {}
 
 	async findOne(
 		params: IOrderFindOneParams,
@@ -56,9 +44,36 @@ export class OrderReadService {
 			console.log(order?.toJSON());
 			return order;
 		}
+		if (query?.totalPrice) {
+			const order = await this.orderRepository
+				.scope({
+					method: [
+						'onlyWhenProductPriceHigherThan',
+						query.totalPrice,
+					],
+				})
+				.findOne<Order>({
+					where: {
+						code: params.orderCode,
+						AccountCode: params.accountCode,
+					},
+					logging: console.debug,
+				});
+			return order;
+		}
+		if (query?.includeAccount) {
+			const order = await this.orderRepository
+				.scope('WITH_ACCOUNT')
+				.findOne({
+					where: {
+						code: params.orderCode,
+						AccountCode: params.accountCode,
+					},
+				});
+			return order;
+		}
 		const order = await this.orderRepository.findOne<Order>({
 			where: { code: params.orderCode, AccountCode: params.accountCode },
-			include: this.queries(query),
 			logging: console.debug,
 		});
 		return order;
@@ -73,7 +88,6 @@ export class OrderReadService {
 				AccountCode: params.accountCode,
 				confirmed: query?.confirmed,
 			},
-			include: this.queries(query),
 		});
 		return order;
 	}
@@ -82,9 +96,7 @@ export class OrderReadService {
 		params: IOrderFindManyParams,
 		query?: IOrderFindManyQuery
 	): Promise<Order[] | null> {
-		return this.orderRepository.findAll<Order>({
-			include: this.queries(query),
-		});
+		return this.orderRepository.findAll<Order>({});
 	}
 
 	async count(params: IOrderFindManyParams): Promise<number> {
@@ -101,7 +113,6 @@ export class OrderReadService {
 	): Promise<{ rows: Order[] | null; count: number } | Order[]> {
 		const allOrders = await this.orderRepository.findAndCountAll<Order>({
 			where: { AccountCode: params.accountCode },
-			include: this.queries(query),
 			limit: query?.limit ?? 10,
 			offset: query?.page ? (query.page - 1) * (query.limit ?? 10) : 0,
 		});

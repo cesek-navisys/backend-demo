@@ -6,7 +6,6 @@ import { OrderConfirmedService } from './order/domain-layer/order-confirmed.serv
 import { OrderController } from './order/order-controller';
 import { OrderDetailsController } from './order-details/order-details-controller';
 import { OrderDetailsExternalService } from './order-details/order-details-external.service';
-import { OrderDetailsManagementQueryService } from './order-details-management-query.service';
 import { OrderDetailsReadService } from './order-details/entity-layer/order-details-read.service';
 import { OrderDetailsWasteService } from './order-details/entity-layer/order-details-waste.service';
 import { OrderDetailsWriteService } from './order-details/entity-layer/order-details-write.service';
@@ -30,7 +29,6 @@ import { orderDetailsProviders } from './order-details/entity-layer/order-detail
 		CommandCreateOrderDetailsHandler,
 		OrderManagementQueryService,
 		OrderDetailsExternalService,
-		OrderDetailsManagementQueryService,
 		OrderDetailsReadService,
 		OrderDetailsWasteService,
 		OrderDetailsWriteService,
