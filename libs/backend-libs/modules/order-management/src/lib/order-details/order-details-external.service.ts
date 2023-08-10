@@ -97,6 +97,7 @@ export class OrderDetailsExternalService {
 
 		return this.orderDetailsWriteService.createOne(
 			{
+				accountCode,
 				orderCode: order.code,
 				productCode: product.code,
 			},

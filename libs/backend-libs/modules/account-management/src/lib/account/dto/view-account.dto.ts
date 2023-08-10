@@ -1,6 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IAccountView } from './interfaces/view-account.interface';
-import { Expose } from '@nestjs/class-transformer';
+import { Expose } from 'class-transformer';
 
 export class ViewAccountDto implements IAccountView {
 	@Expose()

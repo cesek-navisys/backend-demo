@@ -7,7 +7,7 @@ export const databaseProviders = [
 		provide: 'SEQUELIZE',
 		useFactory: async () => {
 			const myNamespace = createNamespace('my-namespace');
-			Sequelize.useCLS(myNamespace)
+			Sequelize.useCLS(myNamespace);
 			const sequelize = new Sequelize({
 				dialect: 'postgres',
 				host: 'localhost',
@@ -15,7 +15,7 @@ export const databaseProviders = [
 				username: 'postgres',
 				password: 'postgres',
 				database: 'backend-demo',
-				sync: { force: false }
+				sync: { force: false },
 			});
 			sequelize.addModels(databaseModels);
 			await sequelize.sync();

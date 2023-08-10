@@ -1,6 +1,6 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { IAccountUpdate } from './interfaces/update-account.interface';
-import { IsEmail, IsOptional, IsPhoneNumber } from '@nestjs/class-validator';
+import { IsEmail, IsOptional, IsPhoneNumber } from 'class-validator';
 
 export class UpdateAccountDto implements IAccountUpdate {
 	@ApiPropertyOptional({ example: 'Karel' })
