@@ -1,9 +1,4 @@
-import {
-	IsEmail,
-	IsNotEmpty,
-	IsOptional,
-	IsPhoneNumber,
-} from '@nestjs/class-validator';
+import { IsEmail, IsNotEmpty, IsPhoneNumber } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IAccountCreate } from './interfaces/create-account.interface';
 

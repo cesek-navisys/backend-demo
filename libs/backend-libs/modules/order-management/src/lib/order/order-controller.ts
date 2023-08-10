@@ -18,6 +18,7 @@ import {
 	OrderQueryDto,
 	UpdateOrderDto,
 	ViewOrderDto,
+	ViewOrderMapperDto,
 } from './dto';
 import {
 	ACCOUNT_CODE_API_PARAM,
@@ -41,7 +42,7 @@ export class OrderController {
 	@ApiOperation({
 		summary: 'Get order by code',
 	})
-	@ApiResponse({ type: ViewOrderDto })
+	@ApiResponse({ type: ViewOrderMapperDto })
 	@Get(`:${ORDER_CODE_API_PARAM}`)
 	findOne(
 		@Param(ACCOUNT_CODE_API_PARAM) accountCode: string,
@@ -52,7 +53,7 @@ export class OrderController {
 			{ accountCode, orderCode },
 			query
 		);
-		return plainToClass(ViewOrderDto, result, {
+		return plainToClass(ViewOrderMapperDto, result, {
 			excludeExtraneousValues: true,
 		});
 	}

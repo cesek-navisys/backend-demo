@@ -7,6 +7,6 @@
 export interface IOrderView {
 	code: string;
 	messageForOwner: string;
-	accountCode: string;
+	AccountCode: string;
 	confirmed: boolean;
 }

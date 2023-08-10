@@ -17,7 +17,7 @@ export class ViewOrderDto implements IOrderView {
 
 	@ApiProperty()
 	@Expose()
-	accountCode!: string;
+	AccountCode!: string;
 
 	@ApiProperty()
 	@Type(() => Boolean)

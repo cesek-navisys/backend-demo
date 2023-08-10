@@ -25,7 +25,7 @@ import {
 } from '@nestjs/swagger';
 import { accountManagementRoutes } from '../account-management.routes';
 import { ViewAccountDto } from './dto/view-account.dto';
-import { plainToClass } from '@nestjs/class-transformer';
+import { plainToClass } from 'class-transformer';
 
 @ApiTags(ACCOUNTS_ALIAS)
 @Controller(accountManagementRoutes.account)

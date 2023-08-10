@@ -61,6 +61,7 @@ export class CommandCreateOrderDetailsHandler
 			const newOrderDetails =
 				await this.orderDetailsWriteService.createOne(
 					{
+						accountCode,
 						orderCode: order.code,
 						productCode,
 					},

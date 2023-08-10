@@ -4,6 +4,7 @@ export interface IOrderQueryOne extends IQueryManyBase {
 	includeAccount?: boolean;
 	includeOrderDetails?: boolean;
 	filterWithOrderDetails?: boolean;
+	totalPrice?: number;
 }
 
 export interface IOrderQueryMany extends IOrderQueryOne {
