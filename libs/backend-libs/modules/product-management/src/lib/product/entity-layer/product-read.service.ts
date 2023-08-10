@@ -1,8 +1,4 @@
-import {
-	Account,
-	OrderDetails,
-	Product,
-} from '@backend-demo/backend-libs/tables';
+import { Product } from '@backend-demo/backend-libs/tables';
 import { Inject, Injectable } from '@nestjs/common';
 import {
 	IProductFindFirstParams,
@@ -12,7 +8,6 @@ import {
 	IProductFindOneParams,
 	IProductFindOneQuery,
 } from './interfaces/product-read.interfaces';
-import { IProductQueryOne } from '../dto/interfaces/query-product.interface';
 
 @Injectable()
 export class ProductReadService {
@@ -20,13 +15,6 @@ export class ProductReadService {
 		@Inject('PRODUCTS_REPOSITORY')
 		private productRepository: typeof Product
 	) {}
-
-	private queries(query: IProductQueryOne | undefined) {
-		const includes = [];
-		if (query?.includeAccount) includes.push({ model: Account });
-		if (query?.includeOrderDetails) includes.push({ model: OrderDetails });
-		return includes;
-	}
 
 	async findOne(
 		params: IProductFindOneParams,
@@ -48,7 +36,6 @@ export class ProductReadService {
 				code: params.productCode,
 				AccountCode: params.accountCode,
 			},
-			include: this.queries(query),
 		});
 		return product;
 	}
@@ -90,7 +77,6 @@ export class ProductReadService {
 			where: {
 				AccountCode: params.accountCode,
 			},
-			include: this.queries(query),
 		});
 		return products;
 	}
@@ -113,7 +99,6 @@ export class ProductReadService {
 			where: {
 				AccountCode: params.accountCode,
 			},
-			include: this.queries(query),
 		});
 	}
 
