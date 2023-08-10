@@ -52,33 +52,29 @@ export class ProductReadService {
 		params: IProductFindManyParams,
 		query?: IProductFindManyQuery
 	): Promise<Product[] | null> {
+		let scopesToApply = [];
+
 		if (query?.includeOrderDetails) {
-			const products = this.productRepository
-				.scope('ONLY_WHERE_ORDER_DETAILS_EXIST')
-				.findAll({
-					where: {
-						AccountCode: params.accountCode,
-					},
-				});
-			return products;
+			scopesToApply.push('ONLY_WHERE_ORDER_DETAILS_EXIST');
 		}
+
 		if (query?.filteredByPrice) {
-			console.log('yes');
-			const products = this.productRepository
-				.scope({ method: ['priceRange', 100, 1000] })
-				.findAll({
-					where: {
-						AccountCode: params.accountCode,
-					},
-				});
-			return products;
+			scopesToApply.push({ method: ['priceRange', 100, 1000] });
 		}
-		const products = this.productRepository.findAll({
+
+		if (scopesToApply.length === 0) {
+			return this.productRepository.findAll({
+				where: {
+					AccountCode: params.accountCode,
+				},
+			});
+		}
+
+		return this.productRepository.scope(...scopesToApply).findAll({
 			where: {
 				AccountCode: params.accountCode,
 			},
 		});
-		return products;
 	}
 
 	async findFirst(
