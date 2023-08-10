@@ -9,7 +9,6 @@ import { Transform } from 'class-transformer';
 export class ProductQueryDto implements IProductQueryOne, IProductQueryMany {
 	@ApiPropertyOptional({
 		type: Boolean,
-		default: false,
 	})
 	@IsBoolean()
 	@IsOptional()
@@ -18,12 +17,19 @@ export class ProductQueryDto implements IProductQueryOne, IProductQueryMany {
 
 	@ApiPropertyOptional({
 		type: Boolean,
-		default: false,
 	})
 	@IsBoolean()
 	@IsOptional()
 	@Transform(({ value }) => Boolean(value))
 	includeAccount?: boolean;
+
+	@ApiPropertyOptional({
+		type: Boolean,
+	})
+	@IsBoolean()
+	@IsOptional()
+	@Transform(({ value }) => Boolean(value))
+	filteredByPrice?: boolean;
 
 	@ApiPropertyOptional({
 		default: 10,
