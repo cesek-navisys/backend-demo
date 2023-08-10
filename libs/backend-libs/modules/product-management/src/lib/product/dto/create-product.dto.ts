@@ -5,12 +5,6 @@ import { IsNotEmpty, Length } from 'class-validator';
 
 export class CreateProductDto implements IProductCreate {
 	@ApiProperty({
-		example: 'abf50445-9e57-4805-9a54-b923ec67b572',
-		required: true,
-	})
-	AccountCode!: string;
-
-	@ApiProperty({
 		required: true,
 		example: 'The best thing ever',
 	})

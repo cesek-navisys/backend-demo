@@ -1,8 +1,4 @@
-import {
-	Account,
-	OrderDetails,
-	Product,
-} from '@backend-demo/backend-libs/tables';
+import { Product } from '@backend-demo/backend-libs/tables';
 import { Inject, Injectable } from '@nestjs/common';
 import {
 	IProductFindFirstParams,
@@ -12,7 +8,6 @@ import {
 	IProductFindOneParams,
 	IProductFindOneQuery,
 } from './interfaces/product-read.interfaces';
-import { IProductQueryOne } from '../dto/interfaces/query-product.interface';
 
 @Injectable()
 export class ProductReadService {
@@ -21,24 +16,28 @@ export class ProductReadService {
 		private productRepository: typeof Product
 	) {}
 
-	private queries(query: IProductQueryOne | undefined) {
-		const queries = [];
-		if (query?.includeAccount) queries.push({ model: Account });
-		if (query?.includeOrderDetails) queries.push({ model: OrderDetails });
-		return queries;
-	}
-
 	async findOne(
 		params: IProductFindOneParams,
 		query?: IProductFindOneQuery
 	): Promise<Product | null> {
-		return this.productRepository.findOne({
+		if (query?.includeOrderDetails) {
+			const product = await this.productRepository
+				.scope('WITH_ORDER_DETAILS')
+				.findOne({
+					where: {
+						code: params.productCode,
+						AccountCode: params.accountCode,
+					},
+				});
+			return product;
+		}
+		const product = this.productRepository.findOne({
 			where: {
 				code: params.productCode,
 				AccountCode: params.accountCode,
 			},
-			include: this.queries(query),
 		});
+		return product;
 	}
 
 	async findOneByCode(productCode: string): Promise<Product | null> {
@@ -53,11 +52,28 @@ export class ProductReadService {
 		params: IProductFindManyParams,
 		query?: IProductFindManyQuery
 	): Promise<Product[] | null> {
-		return this.productRepository.findAll({
+		let scopesToApply = [];
+
+		if (query?.includeOrderDetails) {
+			scopesToApply.push('ONLY_WHERE_ORDER_DETAILS_EXIST');
+		}
+
+		if (query?.filteredByPrice) {
+			scopesToApply.push({ method: ['priceRange', 100, 1000] });
+		}
+
+		if (scopesToApply.length === 0) {
+			return this.productRepository.findAll({
+				where: {
+					AccountCode: params.accountCode,
+				},
+			});
+		}
+
+		return this.productRepository.scope(...scopesToApply).findAll({
 			where: {
 				AccountCode: params.accountCode,
 			},
-			include: this.queries(query),
 		});
 	}
 
@@ -65,11 +81,20 @@ export class ProductReadService {
 		params: IProductFindFirstParams,
 		query?: IProductFindFirstQuery
 	): Promise<Product | null> {
+		if (query?.includeOrderDetails) {
+			const product = this.productRepository
+				.scope('WITH_ORDER_DETAILS')
+				.findOne({
+					where: {
+						AccountCode: params.accountCode,
+					},
+				});
+			return product;
+		}
 		return this.productRepository.findOne({
 			where: {
 				AccountCode: params.accountCode,
 			},
-			include: this.queries(query),
 		});
 	}
 
@@ -77,6 +102,26 @@ export class ProductReadService {
 		params: IProductFindManyParams,
 		query?: IProductFindManyQuery
 	): Promise<{ rows: Product[]; count: number }> {
+		if (query?.includeOrderDetails) {
+			const products = this.productRepository
+				.scope('ONLY_WHERE_ORDER_DETAILS_EXIST')
+				.findAndCountAll({
+					where: {
+						AccountCode: params.accountCode,
+					},
+				});
+			return products;
+		}
+		if (query?.filteredByPrice) {
+			const products = this.productRepository
+				.scope({ method: ['priceRange', 1000, 10000] })
+				.findAndCountAll({
+					where: {
+						AccountCode: params.accountCode,
+					},
+				});
+			return products;
+		}
 		return this.productRepository.findAndCountAll({
 			where: { AccountCode: params.accountCode },
 			limit: query?.limit,
