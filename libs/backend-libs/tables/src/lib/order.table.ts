@@ -1,7 +1,6 @@
 import {
 	IOrderAttributes,
 	IOrderCreationAttributes,
-	IOrderDetailsAttributes,
 } from '@backend-demo/backend-libs/entities';
 import {
 	AccountForeignKey,
@@ -12,7 +11,7 @@ import {
 	ACCOUNT_ALIAS,
 	ORDER_DETAILS_ALIAS,
 } from '@backend-demo/shared/constants';
-import { Op, WhereOptions } from 'sequelize';
+import { Op } from 'sequelize';
 import {
 	BelongsTo,
 	Column,

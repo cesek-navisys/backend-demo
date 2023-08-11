@@ -1,5 +1,6 @@
 import { Account } from '@backend-demo/backend-libs/tables';
 import { Query } from '@nestjs-architects/typed-cqrs';
+
 export interface IFindAccountByCodeQuery {
 	accountCode: string;
 }

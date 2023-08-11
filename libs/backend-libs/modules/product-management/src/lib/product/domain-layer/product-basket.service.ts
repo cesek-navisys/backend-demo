@@ -1,6 +1,6 @@
+import { CommandBus } from '@nestjs/cqrs';
 import { Inject, Injectable } from '@nestjs/common';
 import { Product } from '@backend-demo/backend-libs/tables';
-import { CommandBus } from '@nestjs/cqrs';
 import {
 	CreateOrderDetailsCommand,
 	ICreateOrderDetailsCommand,

@@ -1,4 +1,4 @@
 export interface IYourselfView {
-    name: string;
-    surname: string;
+	name: string;
+	surname: string;
 }

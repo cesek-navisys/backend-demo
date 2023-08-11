@@ -1,5 +1,5 @@
 export interface IIntroduceYourself {
-    firstName: string;
-    lastName: string;
-    birthday: Date;
+	firstName: string;
+	lastName: string;
+	birthday: Date;
 }

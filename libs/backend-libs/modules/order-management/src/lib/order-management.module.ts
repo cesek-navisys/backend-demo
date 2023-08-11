@@ -1,3 +1,4 @@
+import { CommandCreateOrderDetailsHandler } from './order-details/event-layer/order-details-command.handler';
 import { CqrsModule } from '@nestjs/cqrs';
 import { DatabaseModule } from '@backend-demo/backend-libs/modules/database-module';
 import { Module } from '@nestjs/common';
@@ -14,9 +15,8 @@ import { OrderManagementQueryService } from './order-management-query.service';
 import { OrderReadService } from './order/entity-layer/order-read.service';
 import { OrderWasteService } from './order/entity-layer/order-waste.service';
 import { OrderWriteService } from './order/entity-layer/order-write.service';
-import { orderProviders } from './order/entity-layer/order.provider';
-import { CommandCreateOrderDetailsHandler } from './order-details/event-layer/order-details-command.handler';
 import { orderDetailsProviders } from './order-details/entity-layer/order-details.provider';
+import { orderProviders } from './order/entity-layer/order.provider';
 
 @Module({
 	imports: [DatabaseModule, CqrsModule],
@@ -24,15 +24,15 @@ import { orderDetailsProviders } from './order-details/entity-layer/order-detail
 	providers: [
 		...orderDetailsProviders,
 		...orderProviders,
+		CommandCreateOrderDetailsHandler,
 		OrderBasketService,
 		OrderConfirmedService,
-		CommandCreateOrderDetailsHandler,
-		OrderManagementQueryService,
 		OrderDetailsExternalService,
 		OrderDetailsReadService,
 		OrderDetailsWasteService,
 		OrderDetailsWriteService,
 		OrderExternalService,
+		OrderManagementQueryService,
 		OrderManagementQueryService,
 		OrderReadService,
 		OrderWasteService,

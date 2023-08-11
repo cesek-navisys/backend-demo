@@ -1,18 +1,17 @@
-import { Injectable } from '@nestjs/common';
 import { IIntroduceYourself } from './dto/interfaces/introduce-yourself.interface';
+import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class AppService {
-  getData(): { message: string } {
-    return ({ message: 'Hello API' });
-  }
+	getData(): { message: string } {
+		return { message: 'Hello API' };
+	}
 
-  introduceYourself(yourself: IIntroduceYourself): IIntroduceYourself {
-    return {
-      firstName: yourself.firstName,
-      lastName: yourself.lastName,
-      birthday: yourself.birthday,
-    }
-  }
-
+	introduceYourself(yourself: IIntroduceYourself): IIntroduceYourself {
+		return {
+			firstName: yourself.firstName,
+			lastName: yourself.lastName,
+			birthday: yourself.birthday,
+		};
+	}
 }
