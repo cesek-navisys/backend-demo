@@ -5,8 +5,8 @@
  */
 
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { IOrderViewMapper } from './interfaces';
 import { Expose, Type } from 'class-transformer';
+import { IOrderViewMapper } from './interfaces';
 import { ViewAccountDto } from '@backend-demo/backend-libs/modules/account-management';
 import { ViewOrderDetailsDto } from '../../order-details/dto/view-order-details.dto';
 import { ViewOrderDto } from './view-order.dto';

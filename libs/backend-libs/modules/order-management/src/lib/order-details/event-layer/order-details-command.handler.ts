@@ -1,10 +1,10 @@
 import { CommandHandler, ICommandHandler, QueryBus } from '@nestjs/cqrs';
 import { CreateOrderDetailsCommand } from '@backend-demo/backend-libs/commands';
+import { Order } from '@backend-demo/backend-libs/tables';
+import { OrderDetailsReadService } from '../entity-layer/order-details-read.service';
 import { OrderDetailsWriteService } from '../entity-layer/order-details-write.service';
 import { OrderReadService } from '../../order/entity-layer/order-read.service';
 import { OrderWriteService } from '../../order/entity-layer/order-write.service';
-import { Order } from '@backend-demo/backend-libs/tables';
-import { OrderDetailsReadService } from '../entity-layer/order-details-read.service';
 
 @CommandHandler(CreateOrderDetailsCommand)
 export class CommandCreateOrderDetailsHandler

@@ -14,22 +14,20 @@ import { Inject, Injectable } from '@nestjs/common';
 import {
 	ICreateOrder,
 	IOrderCreateParams,
+	IOrderUpdateManyParams,
+	IOrderUpdateParams,
 	IOrderUpsertParams,
+	IUpdateManyOrder,
 	IUpdateOrder,
 	IUpsertOrder,
-	IOrderUpdateParams,
-	IOrderUpdateManyParams,
-	IUpdateManyOrder,
 } from './interfaces/order-write.interfaces';
 import { OrderReadService } from './order-read.service';
-import { OrderWasteService } from './order-waste.service';
 
 @Injectable()
 export class OrderWriteService {
 	constructor(
 		@Inject('ORDER_REPOSITORY') private orderRepository: typeof Order,
-		private readonly orderReadService: OrderReadService,
-		private readonly orderWasteService: OrderWasteService
+		private readonly orderReadService: OrderReadService
 	) {}
 
 	async createOne(
