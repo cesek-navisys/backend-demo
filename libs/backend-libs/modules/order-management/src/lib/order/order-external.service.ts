@@ -6,33 +6,28 @@
  *
  */
 
-import { OrderReadService } from './entity-layer/order-read.service';
-import { OrderWriteService } from './entity-layer/order-write.service';
-import { OrderWasteService } from './entity-layer/order-waste.service';
-import {
-	IOrderCreate,
-	IOrderQueryMany,
-	IOrderQueryOne,
-} from './dto/interfaces';
+import { IOrderConfirmParams } from './domain-layer/interfaces/order-basket.interface';
+import { IOrderCreate, IOrderQueryOne } from './dto/interfaces';
+import { Injectable } from '@nestjs/common';
+import { OrderBasketService } from './domain-layer/order-basket.service';
+import { OrderConfirmedService } from './domain-layer/order-confirmed.service';
 import {
 	IOrderFindAndCountManyQuery,
 	IOrderFindManyParams,
-	IOrderFindManyQuery,
 	IOrderFindOneParams,
 } from './entity-layer/interfaces/order-read.interfaces';
+import {
+	IOrderDeleteParams,
+	IOrderRestoreParams,
+} from './entity-layer/interfaces/order-waste.interfaces';
 import {
 	IOrderCreateParams,
 	IOrderUpdateParams,
 	IUpdateOrder,
 } from './entity-layer/interfaces/order-write.interfaces';
-import {
-	IOrderDeleteParams,
-	IOrderRestoreParams,
-} from './entity-layer/interfaces/order-waste.interfaces';
-import { Injectable } from '@nestjs/common';
-import { OrderBasketService } from './domain-layer/order-basket.service';
-import { OrderConfirmedService } from './domain-layer/order-confirmed.service';
-import { IOrderConfirmParams } from './domain-layer/interfaces/order-basket.interface';
+import { OrderReadService } from './entity-layer/order-read.service';
+import { OrderWasteService } from './entity-layer/order-waste.service';
+import { OrderWriteService } from './entity-layer/order-write.service';
 
 @Injectable()
 export class OrderExternalService {

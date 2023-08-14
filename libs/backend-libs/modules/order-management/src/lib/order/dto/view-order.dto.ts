@@ -3,8 +3,8 @@
  */
 
 import { ApiProperty } from '@nestjs/swagger';
-import { IOrderView } from './interfaces';
 import { Expose, Type } from 'class-transformer';
+import { IOrderView } from './interfaces';
 
 export class ViewOrderDto implements IOrderView {
 	@ApiProperty()
@@ -17,7 +17,7 @@ export class ViewOrderDto implements IOrderView {
 
 	@ApiProperty()
 	@Expose()
-	accountCode!: string;
+	AccountCode!: string;
 
 	@ApiProperty()
 	@Type(() => Boolean)

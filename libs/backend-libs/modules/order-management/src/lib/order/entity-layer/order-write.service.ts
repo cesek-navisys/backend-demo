@@ -1,3 +1,4 @@
+import { Decimal } from 'decimal.js';
 /**
  * inject OrderReadService v constructoru
  *
@@ -9,28 +10,43 @@
  * updateMany
  */
 
+export interface MyAnalysisResult {
+	analysisName: string,
+	summary: {
+		total: number,
+		max: number,
+	}
+}
+
 import { Order } from '@backend-demo/backend-libs/tables';
 import { Inject, Injectable } from '@nestjs/common';
 import {
 	ICreateOrder,
 	IOrderCreateParams,
+	IOrderUpdateManyParams,
+	IOrderUpdateParams,
 	IOrderUpsertParams,
+	IUpdateManyOrder,
 	IUpdateOrder,
 	IUpsertOrder,
-	IOrderUpdateParams,
-	IOrderUpdateManyParams,
-	IUpdateManyOrder,
 } from './interfaces/order-write.interfaces';
 import { OrderReadService } from './order-read.service';
-import { OrderWasteService } from './order-waste.service';
+import {
+	ICurrencyAttributes,
+	currencies,
+} from '@backend-demo/backend-libs/entities';
+import {
+	DivisionByZeroError,
+	InputNumberIsNegativeError,
+	MissingCurrenciesError,
+} from './order-write.errors';
 
 @Injectable()
 export class OrderWriteService {
 	constructor(
 		@Inject('ORDER_REPOSITORY') private orderRepository: typeof Order,
-		private readonly orderReadService: OrderReadService,
-		private readonly orderWasteService: OrderWasteService
-	) {}
+		private readonly orderReadService: OrderReadService
+	) { }
 
 	async createOne(
 		params: IOrderCreateParams,
@@ -131,5 +147,42 @@ export class OrderWriteService {
 				);
 		});
 		return orders;
+	}
+
+	convertTotalPriceToACurrencyAndRound(
+		orderTotalPrice: number,
+		sourceCurrency: ICurrencyAttributes,
+		targetCurrency: ICurrencyAttributes
+	) {
+		if (!sourceCurrency || !targetCurrency)
+			throw new MissingCurrenciesError();
+
+		if (orderTotalPrice < 0)
+			throw new InputNumberIsNegativeError(orderTotalPrice);
+		const calculation =
+			(orderTotalPrice / sourceCurrency.exchangeRate) *
+			targetCurrency.exchangeRate;
+		if (
+			calculation === Infinity ||
+			calculation === -Infinity ||
+			Number.isNaN(calculation)
+		)
+			throw new DivisionByZeroError();
+
+		return Number(calculation.toFixed(targetCurrency.decimals));
+	}
+
+	doSomeAnalysis(price1: number, price2: number, currency1: ICurrencyAttributes, from: Date, to: Date): MyAnalysisResult {
+		let result = {
+			analysisName: 'ABC',
+			summary: {
+				max: 1,
+				total: 10,
+			}
+		}
+
+
+		return result;
+
 	}
 }

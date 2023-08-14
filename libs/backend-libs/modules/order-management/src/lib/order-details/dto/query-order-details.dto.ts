@@ -18,6 +18,15 @@ export class OrderDetailsQueryDto
 	@IsOptional()
 	includeProduct?: boolean;
 
+	@ApiPropertyOptional({
+		type: Boolean,
+		default: false,
+	})
+	@Type(() => Boolean)
+	@IsBoolean()
+	@IsOptional()
+	includeOrder?: boolean;
+
 	@ApiPropertyOptional({ example: 1 })
 	@Type(() => Number)
 	@IsNumber()

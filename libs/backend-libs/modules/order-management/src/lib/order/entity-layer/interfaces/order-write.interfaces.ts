@@ -1,6 +1,6 @@
-import { Optional } from 'sequelize';
 import { IOrderCreate } from '../../dto/interfaces';
 import { IOrderFindOneParams } from './order-read.interfaces';
+import { Optional } from 'sequelize';
 
 export interface ICreateOrder extends IOrderCreate {}
 export interface IOrderCreateParams

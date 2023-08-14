@@ -25,10 +25,11 @@ export class OrderWasteService {
 		const order = await this.orderReadService.findOne({
 			accountCode,
 			orderCode,
-		})
-		if (!order) throw new Error(
-			`Provided code: ${orderCode} is not associated with any records in the database`
-		);
+		});
+		if (!order)
+			throw new Error(
+				`Provided code: ${orderCode} is not associated with any records in the database`
+			);
 		await this.orderRepository.destroy({
 			where: {
 				code: order.code,
@@ -40,10 +41,7 @@ export class OrderWasteService {
 		});
 		const deletedOrder = orders?.some((order) => order.code === orderCode);
 		if (!deletedOrder) return orders;
-		else
-			throw new Error(
-				`Removal of the order was not successful`
-			);
+		else throw new Error(`Removal of the order was not successful`);
 	}
 
 	async restore(params: IOrderRestoreParams): Promise<Order> {

@@ -1,3 +1,3 @@
 export const appRoutes = {
-    app: `accounts`,
+	app: `accounts`,
 } as const;

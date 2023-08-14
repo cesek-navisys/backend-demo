@@ -1,4 +1,3 @@
-import { Optional } from 'sequelize';
 import {
 	IProductQueryMany,
 	IProductQueryOne,
@@ -9,13 +8,14 @@ export interface IProductFindOneParams {
 	accountCode: string;
 }
 
-export interface IProductFindOneQuery extends IProductQueryOne { }
+export interface IProductFindOneQuery extends IProductQueryOne {}
 
 export interface IProductFindManyParams
-	extends Pick<IProductFindFirstParams, 'accountCode'> { }
+	extends Pick<IProductFindFirstParams, 'accountCode'> {}
 
-export interface IProductFindManyQuery extends IProductQueryMany { }
+export interface IProductFindManyQuery extends IProductQueryMany {}
 
-export interface IProductFindFirstParams extends Pick<IProductFindOneParams, 'accountCode'> { }
+export interface IProductFindFirstParams
+	extends Pick<IProductFindOneParams, 'accountCode'> {}
 
-export interface IProductFindFirstQuery extends IProductFindOneQuery { }
+export interface IProductFindFirstQuery extends IProductFindOneQuery {}

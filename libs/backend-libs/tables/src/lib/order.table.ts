@@ -3,6 +3,7 @@ import {
 	BelongsTo,
 	Column,
 	DataType,
+	DefaultScope,
 	ForeignKey,
 	HasMany,
 	Model,
@@ -11,12 +12,11 @@ import {
 	Table
 	} from 'sequelize-typescript';
 import { Op, WhereOptions } from 'sequelize';
-import { ORDER_DETAILS_ALIAS } from '@backend-demo/shared/constants';
+import { ACCOUNT_ALIAS, ORDER_DETAILS_ALIAS } from '@backend-demo/shared/constants';
 import { OrderDetails } from './order-details.table';
 import {
 	IOrderAttributes,
 	IOrderCreationAttributes,
-	IOrderDetailsAttributes,
 } from '@backend-demo/backend-libs/entities';
 import {
 	AccountForeignKey,
@@ -24,26 +24,39 @@ import {
 	OrderForeignKey,
 } from '@backend-demo/backend-libs/foreign-keys';
 
-// @DefaultScope(() => ({where: {}}))
+@DefaultScope(() => ({
+	include: [
+		{
+			model: OrderDetails,
+			as: ORDER_DETAILS_ALIAS,
+			required: false,
+		},
+	],
+}))
 @Scopes(() => ({
+	WITH_ACCOUNT: {
+		include: [
+			{
+				model: Account,
+				as: ACCOUNT_ALIAS,
+			},
+		],
+	},
 	ONLY_WHERE_ORDER_DETAILS_EXIST: {
 		where: {
 			[Op.and]: Sequelize.literal(
-				'EXISTS (select od.code from public."OrderDetails" as od where od."OrderCode" = "Order".code limit 1)'
+				'EXISTS (SELECT od.code FROM public."OrderDetails" AS od WHERE od."OrderCode" = "Order".code LIMIT 1)'
 			),
 		},
 	},
-	WITH_ORDER_DETAILS: {
-		include: [
-			{
-				model: OrderDetails,
-				as: ORDER_DETAILS_ALIAS,
-				where: {
-					quantity: { [Op.gt]: 2 },
-				} as WhereOptions<IOrderDetailsAttributes>,
-				required: false,
+	onlyWhenProductPriceHigherThan: (price: number) => {
+		return {
+			where: {
+				[Op.and]: Sequelize.literal(
+					`(SELECT SUM(od."totalPrice") FROM public."OrderDetails" AS od WHERE od."OrderCode" = "Order".code) > ${price}`
+				),
 			},
-		],
+		};
 	},
 }))
 @Table({ paranoid: true })
@@ -84,6 +97,4 @@ export class Order
 
 	@BelongsTo(() => Account, AccountForeignKey.belongsTo())
 	Account?: Account;
-
-	// TODO: ne víc než 2 košíky na account. Pomocí unique indexes (sequelize)
 }
