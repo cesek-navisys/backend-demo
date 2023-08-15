@@ -20,7 +20,7 @@ export class ProductReadService {
 		params: IProductFindOneParams,
 		query?: IProductFindOneQuery
 	): Promise<Product | null> {
-		if (query?.includeOrderDetails) {
+		if (query?.includeOrderDetails === true) {
 			const product = await this.productRepository
 				.scope('WITH_ORDER_DETAILS')
 				.findOne({
@@ -54,11 +54,16 @@ export class ProductReadService {
 	): Promise<Product[] | null> {
 		let scopesToApply = [];
 
-		if (query?.includeOrderDetails) {
+		if (query?.includeOrderDetails === true) {
+			console.log(
+				typeof query?.includeOrderDetails,
+				query?.includeOrderDetails
+			);
 			scopesToApply.push('ONLY_WHERE_ORDER_DETAILS_EXIST');
 		}
 
-		if (query?.filteredByPrice) {
+		if (query?.filteredByPrice === true) {
+			console.log(typeof query?.filteredByPrice, query?.filteredByPrice);
 			scopesToApply.push({ method: ['priceRange', 100, 1000] });
 		}
 
@@ -81,7 +86,7 @@ export class ProductReadService {
 		params: IProductFindFirstParams,
 		query?: IProductFindFirstQuery
 	): Promise<Product | null> {
-		if (query?.includeOrderDetails) {
+		if (query?.includeOrderDetails === true) {
 			const product = this.productRepository
 				.scope('WITH_ORDER_DETAILS')
 				.findOne({
@@ -102,7 +107,7 @@ export class ProductReadService {
 		params: IProductFindManyParams,
 		query?: IProductFindManyQuery
 	): Promise<{ rows: Product[]; count: number }> {
-		if (query?.includeOrderDetails) {
+		if (query?.includeOrderDetails === true) {
 			const products = this.productRepository
 				.scope('ONLY_WHERE_ORDER_DETAILS_EXIST')
 				.findAndCountAll({
@@ -112,7 +117,7 @@ export class ProductReadService {
 				});
 			return products;
 		}
-		if (query?.filteredByPrice) {
+		if (query?.filteredByPrice === true) {
 			const products = this.productRepository
 				.scope({ method: ['priceRange', 1000, 10000] })
 				.findAndCountAll({

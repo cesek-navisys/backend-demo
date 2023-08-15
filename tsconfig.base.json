@@ -57,6 +57,9 @@
 				"libs/shared/constants/src/index.ts"
 			],
 			"@backend-demo/shared/enums": ["libs/shared/enums/src/index.ts"],
+			"@backend-demo/shared/transformers": [
+				"libs/shared/transformers/src/index.ts"
+			],
 			"@backend-demo/shared/type-helpers": [
 				"libs/shared/type-helpers/src/index.ts"
 			]

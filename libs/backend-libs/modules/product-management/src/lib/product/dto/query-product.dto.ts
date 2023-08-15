@@ -12,7 +12,7 @@ export class ProductQueryDto implements IProductQueryOne, IProductQueryMany {
 	})
 	@IsBoolean()
 	@IsOptional()
-	@Transform(({ value }) => Boolean(value))
+	@Transform(({ value }) => String(value) === String(true))
 	includeOrderDetails?: boolean;
 
 	@ApiPropertyOptional({
@@ -20,7 +20,7 @@ export class ProductQueryDto implements IProductQueryOne, IProductQueryMany {
 	})
 	@IsBoolean()
 	@IsOptional()
-	@Transform(({ value }) => Boolean(value))
+	@Transform(({ value }) => String(value) === String(true))
 	includeAccount?: boolean;
 
 	@ApiPropertyOptional({
@@ -28,7 +28,7 @@ export class ProductQueryDto implements IProductQueryOne, IProductQueryMany {
 	})
 	@IsBoolean()
 	@IsOptional()
-	@Transform(({ value }) => Boolean(value))
+	@Transform(({ value }) => String(value) === String(true))
 	filteredByPrice?: boolean;
 
 	@ApiPropertyOptional({

@@ -2,7 +2,11 @@ import { AccountReadService } from './entity-layer/account-read.service';
 import { AccountWasteService } from './entity-layer/account-waste.service';
 import { AccountWriteService } from './entity-layer/account-write.service';
 import { IAccountDeleteOneParams } from './entity-layer/interfaces/account-waste.interfaces';
-import { IAccountFindOneParams, IAccountFindOneQuery } from './entity-layer/interfaces/account-read.interfaces';
+import {
+	IAccountFindManyQuery,
+	IAccountFindOneParams,
+	IAccountFindOneQuery,
+} from './entity-layer/interfaces/account-read.interfaces';
 import { Injectable } from '@nestjs/common';
 import {
 	IAccountCreatePayload,
@@ -22,8 +26,8 @@ export class AccountExternalService {
 		return this.accountReadService.findOne(params, query);
 	}
 
-	async findAndCountAll() {
-		return this.accountReadService.findAndCountAll();
+	async findAndCountAll(query?: IAccountFindManyQuery) {
+		return this.accountReadService.findAndCountAll(query);
 	}
 	async create(payload: IAccountCreatePayload) {
 		return this.accountWriteService.createOne(payload);

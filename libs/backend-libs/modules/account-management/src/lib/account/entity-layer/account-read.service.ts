@@ -67,19 +67,17 @@ export class AccountReadService {
 	}
 
 	async findAndCountAll(query?: IAccountFindManyQuery) {
-		let where: any = {};
+		let selectedScopes = [];
 
-		if (query?.email) {
-			where.email = query.email;
+		if (query?.isActive === true) {
+			selectedScopes.push('showActiveOnly');
 		}
 
-		if (query?.address) {
-			where.address = {
-				[Op.iLike]: `%${query.address}%`,
-			};
+		if (query?.isActive === false) {
+			selectedScopes.push('showInactiveOnly');
 		}
 
-		return this.accountRepository.findAndCountAll({ where });
+		return this.accountRepository.scope(selectedScopes).findAndCountAll();
 	}
 
 	async count(

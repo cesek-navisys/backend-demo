@@ -1,4 +1,3 @@
-import { Decimal } from 'decimal.js';
 /**
  * inject OrderReadService v constructoru
  *
@@ -11,13 +10,14 @@ import { Decimal } from 'decimal.js';
  */
 
 export interface MyAnalysisResult {
-	analysisName: string,
+	analysisName: string;
 	summary: {
-		total: number,
-		max: number,
-	}
+		total: number;
+		max: number;
+	};
 }
 
+import { ICurrencyAttributes } from '@backend-demo/backend-libs/entities';
 import { Order } from '@backend-demo/backend-libs/tables';
 import { Inject, Injectable } from '@nestjs/common';
 import {
@@ -32,10 +32,6 @@ import {
 } from './interfaces/order-write.interfaces';
 import { OrderReadService } from './order-read.service';
 import {
-	ICurrencyAttributes,
-	currencies,
-} from '@backend-demo/backend-libs/entities';
-import {
 	DivisionByZeroError,
 	InputNumberIsNegativeError,
 	MissingCurrenciesError,
@@ -46,7 +42,7 @@ export class OrderWriteService {
 	constructor(
 		@Inject('ORDER_REPOSITORY') private orderRepository: typeof Order,
 		private readonly orderReadService: OrderReadService
-	) { }
+	) {}
 
 	async createOne(
 		params: IOrderCreateParams,
@@ -172,17 +168,21 @@ export class OrderWriteService {
 		return Number(calculation.toFixed(targetCurrency.decimals));
 	}
 
-	doSomeAnalysis(price1: number, price2: number, currency1: ICurrencyAttributes, from: Date, to: Date): MyAnalysisResult {
+	doSomeAnalysis(
+		price1: number,
+		price2: number,
+		currency1: ICurrencyAttributes,
+		from: Date,
+		to: Date
+	): MyAnalysisResult {
 		let result = {
 			analysisName: 'ABC',
 			summary: {
 				max: 1,
 				total: 10,
-			}
-		}
-
+			},
+		};
 
 		return result;
-
 	}
 }

@@ -1,7 +1,8 @@
 import { AccountExternalService } from './account-external.service';
 import { accountManagementRoutes } from '../account-management.routes';
 import { CreateAccountDto } from './dto/create-account.dto';
-import { plainToClass } from '@nestjs/class-transformer';
+import { plainToClass } from 'class-transformer';
+import { QueryManyAccountDto } from './dto';
 import { UpdateAccountDto } from './dto/update-account.dto';
 import { ViewAccountDto } from './dto/view-account.dto';
 import {
@@ -13,6 +14,7 @@ import {
 	Param,
 	Patch,
 	Post,
+	Query,
 } from '@nestjs/common';
 
 import {
@@ -49,12 +51,12 @@ export class AccountController {
 	@Get()
 	@ApiOperation({ summary: 'Find accounts' })
 	@ApiOkResponse({ type: [ViewAccountDto] })
-	async findAll() {
-		const { rows, count } =
-			await this.accountExternalService.findAndCountAll();
+	async findAll(@Query() query?: QueryManyAccountDto) {
+		const { rows: accounts, count } =
+			await this.accountExternalService.findAndCountAll(query);
 
-		const transformedRows = rows.map((entity) =>
-			plainToClass(ViewAccountDto, entity, {
+		const transformedRows = accounts.map((account) =>
+			plainToClass(ViewAccountDto, account, {
 				excludeExtraneousValues: true,
 			})
 		);
