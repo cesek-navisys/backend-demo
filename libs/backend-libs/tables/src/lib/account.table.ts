@@ -1,6 +1,3 @@
-import { Column, DataType, HasMany, Model, Table } from 'sequelize-typescript';
-import { Order } from './order.table';
-import { Product } from './product.table';
 import {
 	IAccountAttributes,
 	IAccountCreationAttributes,
@@ -10,7 +7,38 @@ import {
 	OrderForeignKey,
 	ProductForeignKey,
 } from '@backend-demo/backend-libs/foreign-keys';
+import { ORDERS_ALIAS, PRODUCTS_ALIAS } from '@backend-demo/shared/constants';
+import {
+	Column,
+	DataType,
+	HasMany,
+	Model,
+	Scopes,
+	Table,
+} from 'sequelize-typescript';
+import { Order } from './order.table';
+import { Product } from './product.table';
 
+@Scopes(() => ({
+	WITH_ORDERS: {
+		include: [
+			{
+				model: Order,
+				as: ORDERS_ALIAS,
+				required: true,
+			},
+		],
+	},
+	WITH_PRODUCTS: {
+		include: [
+			{
+				model: Product,
+				as: PRODUCTS_ALIAS,
+				required: true,
+			},
+		],
+	},
+}))
 @Table({ paranoid: true })
 export class Account
 	extends Model<IAccountAttributes, IAccountCreationAttributes>
@@ -30,10 +58,10 @@ export class Account
 	@Column({ type: DataType.STRING })
 	surname!: string;
 
-	@Column({ type: DataType.STRING })
+	@Column({ type: DataType.STRING, unique: true })
 	email!: string;
 
-	@Column({ allowNull: true, type: DataType.STRING })
+	@Column({ allowNull: true, type: DataType.STRING, unique: true })
 	phone!: string;
 
 	@Column({ type: DataType.STRING })

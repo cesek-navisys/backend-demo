@@ -1,4 +1,8 @@
-import { Account, Order, Product } from '@backend-demo/backend-libs/tables';
+import { Account } from '@backend-demo/backend-libs/tables';
+import { AccountManagementQueryService } from '../../account-management-query.service';
+import { IAccountQueryOne } from '../dto/interfaces/query-account.interface';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { Op } from 'sequelize';
 import {
 	IAccountFindFirstParams,
 	IAccountFindFirstQuery,
@@ -7,37 +11,30 @@ import {
 	IAccountFindOneParams,
 	IAccountFindOneQuery,
 } from './interfaces/account-read.interfaces';
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
-import { Op } from 'sequelize';
-import { IAccountQueryOne } from '../dto/interfaces/query-account.interface';
-import { AccountManagementQueryService } from '../../account-management-query.service';
 
 @Injectable()
 export class AccountReadService {
 	constructor(
 		@Inject('ACCOUNT_REPOSITORY') private accountRepository: typeof Account,
-		private readonly accountManagementQueryService: AccountManagementQueryService,
-	) { }
+		private readonly accountManagementQueryService: AccountManagementQueryService
+	) {}
 
 	async findOne(
 		params: IAccountFindOneParams,
 		query?: IAccountFindOneQuery
 	): Promise<Account> {
-		const account = await this.accountRepository.findOne({
-			where: { code: params.code },
-			include: query?.includeOrders ? Order : undefined,
-		});
-
-		if (account) {
-			const product = await this.accountManagementQueryService.queryFirstAccountProduct(account.code)
-			console.log(product.name)
-		}
+		const account = await this.accountRepository
+			.scope(this.getScopes(query))
+			.findOne({
+				where: { code: params.code },
+			});
 
 		if (!account) {
 			throw new NotFoundException(
 				`Account with code: ${params.code} not found`
 			);
 		}
+
 		return account;
 	}
 
@@ -45,14 +42,13 @@ export class AccountReadService {
 		params?: IAccountFindFirstParams,
 		query?: IAccountFindFirstQuery
 	): Promise<Account | null> {
-		return this.accountRepository.findOne({
+		return this.accountRepository.scope(this.getScopes(query)).findOne({
 			where: {
 				email: query?.email,
 				address: {
 					[Op.iLike]: `%${query?.address}%`,
 				},
 			},
-			include: this.getIncludeList(query),
 		});
 	}
 
@@ -108,19 +104,10 @@ export class AccountReadService {
 		return this.findFirst({ address });
 	}
 
-	private getIncludeList(query: IAccountQueryOne | undefined) {
-		const includes = [];
-		if (query?.includeOrders) includes.push(Order);
-		if (query?.includeProducts) includes.push(Product);
-		return includes;
+	private getScopes(query: IAccountQueryOne | undefined) {
+		const scopes = [];
+		if (query?.includeOrders) scopes.push('WITH_ORDERS');
+		if (query?.includeProducts) scopes.push('WITH_PRODUCTS');
+		return scopes;
 	}
-}
-function InjectRepository(
-	arg0: string
-): (
-	target: typeof AccountReadService,
-	propertyKey: undefined,
-	parameterIndex: 0
-) => void {
-	throw new Error('Function not implemented.');
 }
