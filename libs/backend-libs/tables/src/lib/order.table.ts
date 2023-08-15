@@ -1,17 +1,4 @@
-import {
-	IOrderAttributes,
-	IOrderCreationAttributes,
-} from '@backend-demo/backend-libs/entities';
-import {
-	AccountForeignKey,
-	OrderDetailsForeignKey,
-	OrderForeignKey,
-} from '@backend-demo/backend-libs/foreign-keys';
-import {
-	ACCOUNT_ALIAS,
-	ORDER_DETAILS_ALIAS,
-} from '@backend-demo/shared/constants';
-import { Op } from 'sequelize';
+import { Account } from './account.table';
 import {
 	BelongsTo,
 	Column,
@@ -22,10 +9,20 @@ import {
 	Model,
 	Scopes,
 	Sequelize,
-	Table,
-} from 'sequelize-typescript';
-import { Account } from './account.table';
+	Table
+	} from 'sequelize-typescript';
+import { Op, WhereOptions } from 'sequelize';
+import { ACCOUNT_ALIAS, ORDER_DETAILS_ALIAS } from '@backend-demo/shared/constants';
 import { OrderDetails } from './order-details.table';
+import {
+	IOrderAttributes,
+	IOrderCreationAttributes,
+} from '@backend-demo/backend-libs/entities';
+import {
+	AccountForeignKey,
+	OrderDetailsForeignKey,
+	OrderForeignKey,
+} from '@backend-demo/backend-libs/foreign-keys';
 
 @DefaultScope(() => ({
 	include: [

@@ -1,13 +1,6 @@
 import { Account } from '@backend-demo/backend-libs/tables';
-import { Inject, Injectable } from '@nestjs/common';
 import { AccountReadService } from './account-read.service';
-import type {
-	IAccountCreateManyParams,
-	IAccountCreatePayload,
-	IAccountUpdateOneParams,
-	IAccountUpdatePayload,
-	IAccountUpsertPayload,
-} from './interfaces/account-write.interfaces';
+import { ConflictException, Inject, Injectable } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { IAccountCreationAttributes } from '@backend-demo/backend-libs/entities';
 import {
@@ -15,6 +8,13 @@ import {
 	CreateAccountBeforeEvent,
 	EventName,
 } from '@backend-demo/backend-libs/events';
+import type {
+	IAccountCreateManyParams,
+	IAccountCreatePayload,
+	IAccountUpdateOneParams,
+	IAccountUpdatePayload,
+	IAccountUpsertPayload,
+} from './interfaces/account-write.interfaces';
 
 @Injectable()
 export class AccountWriteService {
@@ -44,18 +44,25 @@ export class AccountWriteService {
 					accountBeforeCreation: accountToCreate,
 				} as CreateAccountBeforeEvent
 			);
-			const account = await this.accountRepository.create(
-				accountToCreate
-			);
 
-			await this.eventEmitter.emitAsync(
-				'create.account:after' as EventName,
-				{
-					account,
-					accountBeforeCreation: accountToCreate,
-				} as CreateAccountAfterEvent
-			);
-			return account;
+			let account = null;
+			try {
+				account = await this.accountRepository.create(accountToCreate);
+
+				await this.eventEmitter.emitAsync(
+					'create.account:after' as EventName,
+					{
+						account,
+						accountBeforeCreation: accountToCreate,
+					} as CreateAccountAfterEvent
+				);
+				return account;
+			} catch (error) {
+				console.log(error);
+				throw new ConflictException(
+					`User with email: ${accountToCreate?.email} or phone: ${accountToCreate?.phone} already exists`
+				);
+			}
 		});
 	}
 
@@ -77,7 +84,7 @@ export class AccountWriteService {
 				address,
 				email,
 				phone,
-				isActive,	
+				isActive,
 			},
 			{ where: { code: account.code }, returning: true }
 		);
