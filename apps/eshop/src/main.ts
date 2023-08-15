@@ -23,7 +23,7 @@ async function bootstrap() {
 
 	const globalPrefix = '';
 	app.setGlobalPrefix(globalPrefix);
-	app.useGlobalPipes(new ValidationPipe());
+	app.useGlobalPipes(new ValidationPipe({ transform: true }));
 	const port = process.env.PORT || 3000;
 
 	await app.listen(port);
