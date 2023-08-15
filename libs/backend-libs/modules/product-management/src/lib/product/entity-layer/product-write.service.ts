@@ -11,6 +11,14 @@ import {
 	IUpsertProduct,
 } from './interfaces/product-write.interfaces';
 import { ProductReadService } from './product-read.service';
+import {
+	EmptyNameError,
+	FirstWordMustStartWithCapitalLetterError,
+	NameIsEmptyOrUndefinedError,
+	NameLengthError,
+	WordCanNotStartWithNumber,
+	WordContainsInvalidCharacters,
+} from './product-write.errors';
 
 @Injectable()
 export class ProductWriteService {
@@ -25,6 +33,12 @@ export class ProductWriteService {
 		createProduct: ICreateProduct
 	): Promise<Product> {
 		const { name, description, price, color } = createProduct;
+
+		const nameValidationResult = this.isValidProductName(name);
+		if (nameValidationResult) {
+			throw new Error(nameValidationResult);
+		}
+
 		const product = await this.productRepository.create({
 			AccountCode: params.accountCode,
 			color,
@@ -121,5 +135,31 @@ export class ProductWriteService {
 		}
 
 		return updatedProducts;
+	}
+
+	isValidProductName(name: string): string | null {
+		if (!name) throw new NameIsEmptyOrUndefinedError();
+
+		name = name.trim();
+
+		if (name.length < 5 || name.length > 50) throw new NameLengthError();
+
+		const words = name.match(/[^\s-]+/g);
+		if (!words) throw new EmptyNameError();
+
+		if (!/^[A-Z]/.test(words[0])) {
+			throw new FirstWordMustStartWithCapitalLetterError();
+		}
+
+		for (const word of words) {
+			if (/^[0-9]/.test(word)) {
+				throw new WordCanNotStartWithNumber();
+			}
+			if (!/^[A-Za-z0-9\-_(),.]+$/.test(word)) {
+				throw new WordContainsInvalidCharacters(word);
+			}
+		}
+
+		return null;
 	}
 }
