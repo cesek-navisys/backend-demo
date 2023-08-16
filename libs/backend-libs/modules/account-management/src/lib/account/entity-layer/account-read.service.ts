@@ -1,8 +1,16 @@
 import { Account } from '@backend-demo/backend-libs/tables';
 import { AccountManagementQueryService } from '../../account-management-query.service';
-import { IAccountQueryOne } from '../dto/interfaces/query-account.interface';
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { Op } from 'sequelize';
+import {
+	IAccountQueryMany,
+	IAccountQueryOne,
+} from '../dto/interfaces/query-account.interface';
+import {
+	EmptyDateStringListError,
+	InvalidDateError,
+	WrongDateStringFormatError,
+} from './account-read.errors';
 import {
 	IAccountFindFirstParams,
 	IAccountFindFirstQuery,
@@ -24,7 +32,7 @@ export class AccountReadService {
 		query?: IAccountFindOneQuery
 	): Promise<Account> {
 		const account = await this.accountRepository
-			.scope(this.getScopes(query))
+			.scope(this.getQueryOneScopes(query))
 			.findOne({
 				where: { code: params.code },
 			});
@@ -42,40 +50,26 @@ export class AccountReadService {
 		params?: IAccountFindFirstParams,
 		query?: IAccountFindFirstQuery
 	): Promise<Account | null> {
-		return this.accountRepository.scope(this.getScopes(query)).findOne({
-			where: {
-				email: query?.email,
-				address: {
-					[Op.iLike]: `%${query?.address}%`,
+		return this.accountRepository
+			.scope(this.getQueryOneScopes(query))
+			.findOne({
+				where: {
+					email: query?.email,
+					address: {
+						[Op.iLike]: `%${query?.address}%`,
+					},
 				},
-			},
-		});
+			});
 	}
 
-	async findAll(
-		params?: IAccountFindManyParams,
-		query?: IAccountFindManyQuery
-	) {
-		return this.accountRepository.findAll({
-			where: {
-				email: query?.email,
-				address: {
-					[Op.iLike]: `%${query?.address}%`,
-				},
-			},
-		});
+	async findAll(query?: IAccountFindManyQuery) {
+		let selectedScopes = this.getQueryManyScopes(query);
+
+		return this.accountRepository.scope(selectedScopes).findAll();
 	}
 
 	async findAndCountAll(query?: IAccountFindManyQuery) {
-		let selectedScopes = [];
-
-		if (query?.isActive === true) {
-			selectedScopes.push('showActiveOnly');
-		}
-
-		if (query?.isActive === false) {
-			selectedScopes.push('showInactiveOnly');
-		}
+		let selectedScopes = this.getQueryManyScopes(query);
 
 		return this.accountRepository.scope(selectedScopes).findAndCountAll();
 	}
@@ -102,10 +96,52 @@ export class AccountReadService {
 		return this.findFirst({ address });
 	}
 
-	private getScopes(query: IAccountQueryOne | undefined) {
+	getHourFrequencyFromDateStrings(dateStrings: string[]) {
+		const hoursInDay = Array.from(Array(24).keys());
+		let validatedDates: Date[] = [];
+
+		if (dateStrings.length === 0) throw new EmptyDateStringListError();
+
+		for (const dateString of dateStrings) {
+			if (isNaN(Date.parse(dateString)))
+				throw new InvalidDateError(dateString);
+
+			if (!dateString.includes('T'))
+				throw new WrongDateStringFormatError(dateString);
+
+			validatedDates.push(new Date(dateString));
+		}
+
+		return hoursInDay.reduce((result, current) => {
+			const currentResult = result[current] || 0;
+			const frequency =
+				validatedDates.filter((date) => date.getHours() == current)
+					.length / validatedDates.length;
+			const frequencyRounded = Math.floor(frequency * 100) / 100;
+			return (
+				(result[current] = +(currentResult + frequencyRounded)), result
+			);
+		}, {} as Record<string, number>);
+	}
+
+	private getQueryOneScopes(query: IAccountQueryOne | undefined) {
 		const scopes = [];
 		if (query?.includeOrders) scopes.push('WITH_ORDERS');
 		if (query?.includeProducts) scopes.push('WITH_PRODUCTS');
+		return scopes;
+	}
+
+	private getQueryManyScopes(query: IAccountQueryMany | undefined) {
+		let scopes = [];
+
+		if (query?.isActive === true) {
+			scopes.push('showActiveOnly');
+		}
+
+		if (query?.isActive === false) {
+			scopes.push('showInactiveOnly');
+		}
+
 		return scopes;
 	}
 }
