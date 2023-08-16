@@ -1,18 +1,24 @@
-export class NameIsEmptyOrUndefinedError extends Error {
+export class NameIsEmptyError extends Error {
 	constructor() {
-		super(`Name is empty or undefined.`);
+		super(`Name is empty.`);
+	}
+}
+
+export class NameIsUndefinedError extends Error {
+	constructor() {
+		super(`Name is undefined.`);
+	}
+}
+
+export class NameIsWhitespaceError extends Error {
+	constructor() {
+		super(`Name consists only of whitespace.`);
 	}
 }
 
 export class NameLengthError extends Error {
 	constructor() {
 		super(`Name length must be between 5 and 50 characters.`);
-	}
-}
-
-export class EmptyNameError extends Error {
-	constructor() {
-		super('Name does not contain any words.');
 	}
 }
 
