@@ -116,4 +116,42 @@ describe('account read service testing suite', () => {
 			expect(output).toStrictEqual(expectedOutput);
 		});
 	});
+
+	it('should correctly calculate frequency of hours of one item', () => {
+		//Arrange
+		const inputArray = ['2019-01-01T10:27:34'];
+
+		const expectedOutput = {
+			'0': 0,
+			'1': 0,
+			'2': 0,
+			'3': 0,
+			'4': 0,
+			'5': 0,
+			'6': 0,
+			'7': 0,
+			'8': 0,
+			'9': 0,
+			'10': 1,
+			'11': 0,
+			'12': 0,
+			'13': 0,
+			'14': 0,
+			'15': 0,
+			'16': 0,
+			'17': 0,
+			'18': 0,
+			'19': 0,
+			'20': 0,
+			'21': 0,
+			'22': 0,
+			'23': 0,
+		};
+		//Act
+		const output =
+			accountReadService.getHourFrequencyFromDateStrings(inputArray);
+
+		//Assert
+		expect(output).toStrictEqual(expectedOutput);
+	});
 });
