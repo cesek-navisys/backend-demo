@@ -38,6 +38,16 @@ import { Product } from './product.table';
 			},
 		],
 	},
+	showActiveOnly: () => ({
+		where: {
+			isActive: true,
+		},
+	}),
+	showInactiveOnly: () => ({
+		where: {
+			isActive: false,
+		},
+	}),
 }))
 @Table({ paranoid: true })
 export class Account
