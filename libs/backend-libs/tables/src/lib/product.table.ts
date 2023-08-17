@@ -25,6 +25,8 @@ import {
 import {
 	ACCOUNT_ALIAS,
 	ORDER_DETAILS_ALIAS,
+	PRODUCTS_ALIAS,
+	PRODUCT_TABLE_NAME_PLURAL,
 } from '@backend-demo/shared/constants';
 import { Op } from 'sequelize';
 
@@ -62,11 +64,10 @@ import { Op } from 'sequelize';
 		},
 	}),
 }))
-@Table({ paranoid: true })
+@Table({ name: { plural: PRODUCT_TABLE_NAME_PLURAL } })
 export class Product
 	extends Model<IProductAttributes, IProductCreationAttributes>
-	implements IProductAttributes
-{
+	implements IProductAttributes {
 	@Column({
 		allowNull: true,
 		defaultValue: DataType.UUIDV4,
