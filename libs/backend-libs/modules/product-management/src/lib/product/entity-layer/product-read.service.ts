@@ -16,10 +16,7 @@ export class ProductReadService {
 		private productRepository: typeof Product
 	) {}
 
-	async findOne(
-		params: IProductFindOneParams,
-		query?: IProductFindOneQuery
-	): Promise<Product | null> {
+	async findOne(params: IProductFindOneParams, query?: IProductFindOneQuery) {
 		if (query?.includeOrderDetails === true) {
 			const product = await this.productRepository
 				.scope('WITH_ORDER_DETAILS')
@@ -40,7 +37,7 @@ export class ProductReadService {
 		return product;
 	}
 
-	async findOneByCode(productCode: string): Promise<Product | null> {
+	async findOneByCode(productCode: string) {
 		return this.productRepository.findOne({
 			where: {
 				code: productCode,
@@ -51,7 +48,7 @@ export class ProductReadService {
 	async findAll(
 		params: IProductFindManyParams,
 		query?: IProductFindManyQuery
-	): Promise<Product[] | null> {
+	) {
 		let scopesToApply = [];
 
 		if (query?.includeOrderDetails === true) {
@@ -85,7 +82,7 @@ export class ProductReadService {
 	async findFirst(
 		params: IProductFindFirstParams,
 		query?: IProductFindFirstQuery
-	): Promise<Product | null> {
+	) {
 		if (query?.includeOrderDetails === true) {
 			const product = this.productRepository
 				.scope('WITH_ORDER_DETAILS')
@@ -106,7 +103,7 @@ export class ProductReadService {
 	async findAndCountAll(
 		params: IProductFindManyParams,
 		query?: IProductFindManyQuery
-	): Promise<{ rows: Product[]; count: number }> {
+	) {
 		if (query?.includeOrderDetails === true) {
 			const products = this.productRepository
 				.scope('ONLY_WHERE_ORDER_DETAILS_EXIST')
@@ -133,7 +130,7 @@ export class ProductReadService {
 		});
 	}
 
-	async count(params: IProductFindManyParams): Promise<number> {
+	async count(params: IProductFindManyParams) {
 		return this.productRepository.count({
 			where: { AccountCode: params.accountCode },
 		});

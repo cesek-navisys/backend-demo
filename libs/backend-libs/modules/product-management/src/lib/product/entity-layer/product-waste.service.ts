@@ -14,7 +14,7 @@ export class ProductWasteService {
 		private productReadService: ProductReadService
 	) {}
 
-	async delete(params: IProductDeleteParams): Promise<void> {
+	async delete(params: IProductDeleteParams) {
 		const { accountCode, productCode } = params;
 		const product = this.productReadService.findOne({
 			productCode,
@@ -30,7 +30,7 @@ export class ProductWasteService {
 		});
 	}
 
-	async restore(params: IProductRestoreParams): Promise<Product> {
+	async restore(params: IProductRestoreParams) {
 		const { accountCode, productCode } = params;
 		this.productRepository.restore({
 			where: {
