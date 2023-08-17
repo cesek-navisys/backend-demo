@@ -1,5 +1,5 @@
-import { Inject, Injectable } from '@nestjs/common';
 import { Product } from '@backend-demo/backend-libs/tables';
+import { Inject, Injectable } from '@nestjs/common';
 import {
 	ICreateProduct,
 	IProductCreateParams,
@@ -11,6 +11,15 @@ import {
 	IUpsertProduct,
 } from './interfaces/product-write.interfaces';
 import { ProductReadService } from './product-read.service';
+import {
+	FirstWordMustStartWithCapitalLetterError,
+	NameIsEmptyError,
+	NameIsUndefinedError,
+	NameIsWhitespaceError,
+	NameLengthError,
+	WordCanNotStartWithNumber,
+	WordContainsInvalidCharacters,
+} from './product-write.errors';
 
 @Injectable()
 export class ProductWriteService {
@@ -23,8 +32,14 @@ export class ProductWriteService {
 	async createOne(
 		params: IProductCreateParams,
 		createProduct: ICreateProduct
-	): Promise<Product> {
+	) {
 		const { name, description, price, color } = createProduct;
+
+		const nameValidationResult = this.isValidProductName(name);
+		if (nameValidationResult) {
+			throw new Error(nameValidationResult);
+		}
+
 		const product = await this.productRepository.create({
 			AccountCode: params.accountCode,
 			color,
@@ -38,7 +53,7 @@ export class ProductWriteService {
 	async createMany(
 		params: IProductCreateParams,
 		createProduct: ICreateProduct[]
-	): Promise<Product[]> {
+	) {
 		const products = await Promise.all(
 			createProduct.map(async (productParams) => {
 				const product = await this.productRepository.create({
@@ -57,7 +72,7 @@ export class ProductWriteService {
 	async upsertOne(
 		params: IProductUpsertParams,
 		upsertProduct: IUpsertProduct
-	): Promise<Product> {
+	) {
 		const { accountCode } = params;
 		const { color, description, name, price } = upsertProduct;
 
@@ -78,7 +93,7 @@ export class ProductWriteService {
 	async updateOne(
 		params: IProductUpdateParams,
 		updateProduct: IUpdateProduct
-	): Promise<Product> {
+	) {
 		const { accountCode, productCode } = params;
 		const existingProduct = await this.productReadService.findOne({
 			productCode,
@@ -96,7 +111,7 @@ export class ProductWriteService {
 	async updateMany(
 		params: IProductUpdateManyParams,
 		updateProducts: IUpdateManyProduct[]
-	): Promise<Product[]> {
+	) {
 		const { accountCode } = params;
 		const updatedProducts: Product[] = [];
 
@@ -121,5 +136,31 @@ export class ProductWriteService {
 		}
 
 		return updatedProducts;
+	}
+
+	isValidProductName(name: string) {
+		if (name === '') throw new NameIsEmptyError();
+
+		if (!name) throw new NameIsUndefinedError();
+
+		const words = name.match(/[^\s-]+/g);
+		if (!words) throw new NameIsWhitespaceError();
+
+		if (name.length < 5 || name.length > 50) throw new NameLengthError();
+
+		if (!/^[A-Z]/.test(words[0])) {
+			throw new FirstWordMustStartWithCapitalLetterError();
+		}
+
+		for (const word of words) {
+			if (/^[0-9]/.test(word)) {
+				throw new WordCanNotStartWithNumber();
+			}
+			if (!/^[A-Za-z0-9\-_(),.]+$/.test(word)) {
+				throw new WordContainsInvalidCharacters(word);
+			}
+		}
+
+		return null;
 	}
 }
