@@ -58,7 +58,6 @@ export class AccountWriteService {
 				);
 				return account;
 			} catch (error) {
-				console.log(error);
 				throw new ConflictException(
 					`User with email: ${accountToCreate?.email} or phone: ${accountToCreate?.phone} already exists`
 				);
