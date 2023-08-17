@@ -1,10 +1,14 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
+import { IsBoolean, IsNumber, IsOptional } from 'class-validator';
+import { Transform } from 'class-transformer';
 import {
 	IProductQueryMany,
 	IProductQueryOne,
 } from './interfaces/query-product.interface';
-import { IsBoolean, IsNumber, IsOptional } from 'class-validator';
-import { Transform } from 'class-transformer';
+import {
+	transformStringToBoolean,
+	transformStringToNumber,
+} from '@backend-demo/shared/transformers';
 
 export class ProductQueryDto implements IProductQueryOne, IProductQueryMany {
 	@ApiPropertyOptional({
@@ -12,7 +16,7 @@ export class ProductQueryDto implements IProductQueryOne, IProductQueryMany {
 	})
 	@IsBoolean()
 	@IsOptional()
-	@Transform(({ value }) => String(value) === String(true))
+	@Transform(transformStringToBoolean)
 	includeOrderDetails?: boolean;
 
 	@ApiPropertyOptional({
@@ -20,7 +24,7 @@ export class ProductQueryDto implements IProductQueryOne, IProductQueryMany {
 	})
 	@IsBoolean()
 	@IsOptional()
-	@Transform(({ value }) => String(value) === String(true))
+	@Transform(transformStringToBoolean)
 	includeAccount?: boolean;
 
 	@ApiPropertyOptional({
@@ -28,7 +32,7 @@ export class ProductQueryDto implements IProductQueryOne, IProductQueryMany {
 	})
 	@IsBoolean()
 	@IsOptional()
-	@Transform(({ value }) => String(value) === String(true))
+	@Transform(transformStringToBoolean)
 	filteredByPrice?: boolean;
 
 	@ApiPropertyOptional({
@@ -37,7 +41,7 @@ export class ProductQueryDto implements IProductQueryOne, IProductQueryMany {
 	})
 	@IsNumber()
 	@IsOptional()
-	@Transform(({ value }) => Number(value))
+	@Transform(transformStringToNumber)
 	limit?: number;
 
 	@ApiPropertyOptional({
@@ -46,6 +50,6 @@ export class ProductQueryDto implements IProductQueryOne, IProductQueryMany {
 	})
 	@IsNumber()
 	@IsOptional()
-	@Transform(({ value }) => Number(value))
+	@Transform(transformStringToNumber)
 	page?: number;
 }

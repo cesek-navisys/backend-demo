@@ -1,10 +1,14 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
+import { IsBoolean, IsNumber, IsOptional } from 'class-validator';
+import { Transform } from 'class-transformer';
+import {
+	transformStringToBoolean,
+	transformStringToNumber,
+} from '@backend-demo/shared/transformers';
 import {
 	IOrderDetailsQueryMany,
 	IOrderDetailsQueryOne,
 } from './interfaces/query-order-details.interface';
-import { IsBoolean, IsNumber, IsOptional } from 'class-validator';
-import { Type } from 'class-transformer';
 
 export class OrderDetailsQueryDto
 	implements IOrderDetailsQueryOne, IOrderDetailsQueryMany
@@ -13,29 +17,29 @@ export class OrderDetailsQueryDto
 		type: Boolean,
 		default: false,
 	})
-	@Type(() => Boolean)
 	@IsBoolean()
 	@IsOptional()
+	@Transform(transformStringToBoolean)
 	includeProduct?: boolean;
 
 	@ApiPropertyOptional({
 		type: Boolean,
 		default: false,
 	})
-	@Type(() => Boolean)
 	@IsBoolean()
 	@IsOptional()
+	@Transform(transformStringToBoolean)
 	includeOrder?: boolean;
 
 	@ApiPropertyOptional({ example: 1 })
-	@Type(() => Number)
 	@IsNumber()
 	@IsOptional()
+	@Transform(transformStringToNumber)
 	page?: number;
 
 	@ApiPropertyOptional({ example: 10 })
-	@Type(() => Number)
 	@IsNumber()
 	@IsOptional()
+	@Transform(transformStringToNumber)
 	limit?: number;
 }

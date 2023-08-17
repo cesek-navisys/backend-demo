@@ -1,52 +1,53 @@
-/**
- * classes implementing IOrderQueryOne and IOrderQueryMany
- */
-
-import { Type } from 'class-transformer';
-import { IOrderQueryMany, IOrderQueryOne } from './interfaces';
 import { ApiPropertyOptional } from '@nestjs/swagger';
+import { IOrderQueryMany, IOrderQueryOne } from './interfaces';
 import { IsBoolean, IsNumber, IsOptional } from 'class-validator';
+import { Transform } from 'class-transformer';
+
+import {
+	transformStringToBoolean,
+	transformStringToNumber,
+} from '@backend-demo/shared/transformers';
 
 export class OrderQueryDto implements IOrderQueryOne, IOrderQueryMany {
 	@ApiPropertyOptional()
-	@Type(() => Boolean)
 	@IsBoolean()
 	@IsOptional()
+	@Transform(transformStringToBoolean)
 	includeAccount?: boolean;
 
 	@ApiPropertyOptional()
-	@Type(() => Boolean)
 	@IsBoolean()
 	@IsOptional()
+	@Transform(transformStringToBoolean)
 	includeOrderDetails?: boolean;
 
 	@ApiPropertyOptional()
-	@Type(() => Boolean)
 	@IsBoolean()
 	@IsOptional()
+	@Transform(transformStringToBoolean)
 	includeCount?: boolean;
 
 	@ApiPropertyOptional({ example: 1 })
-	@Type(() => Number)
 	@IsNumber()
 	@IsOptional()
+	@Transform(transformStringToNumber)
 	page?: number;
 
 	@ApiPropertyOptional({ example: 10 })
-	@Type(() => Number)
 	@IsNumber()
 	@IsOptional()
+	@Transform(transformStringToNumber)
 	limit?: number;
 
 	@ApiPropertyOptional()
 	@IsBoolean()
 	@IsOptional()
-	@Type(() => Boolean)
+	@Transform(transformStringToBoolean)
 	filterWithOrderDetails?: boolean;
 
 	@ApiPropertyOptional()
 	@IsNumber()
 	@IsOptional()
-	@Type(() => Number)
+	@Transform(transformStringToNumber)
 	totalPrice?: number;
 }
