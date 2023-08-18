@@ -1,3 +1,5 @@
+import { Order } from './order.table';
+import { Product } from './product.table';
 import {
 	IAccountAttributes,
 	IAccountCreationAttributes,
@@ -7,7 +9,12 @@ import {
 	OrderForeignKey,
 	ProductForeignKey,
 } from '@backend-demo/backend-libs/foreign-keys';
-import { ORDERS_ALIAS, PRODUCTS_ALIAS } from '@backend-demo/shared/constants';
+import {
+	ACCOUNT_TABLE_NAME_PLURAL,
+	ACCOUNT_TABLE_NAME_SINGULAR,
+	ORDERS_ALIAS,
+	PRODUCTS_ALIAS,
+} from '@backend-demo/shared/constants';
 import {
 	Column,
 	DataType,
@@ -16,8 +23,6 @@ import {
 	Scopes,
 	Table,
 } from 'sequelize-typescript';
-import { Order } from './order.table';
-import { Product } from './product.table';
 
 @Scopes(() => ({
 	WITH_ORDERS: {
@@ -49,13 +54,18 @@ import { Product } from './product.table';
 		},
 	}),
 }))
-@Table({ paranoid: true })
+@Table({
+	name: {
+		plural: ACCOUNT_TABLE_NAME_PLURAL,
+		singular: ACCOUNT_TABLE_NAME_SINGULAR,
+	},
+})
 export class Account
 	extends Model<IAccountAttributes, IAccountCreationAttributes>
 	implements IAccountAttributes
 {
 	@Column({
-		allowNull: true,
+		allowNull: false,
 		type: DataType.UUID,
 		primaryKey: true,
 		defaultValue: DataType.UUIDV4,

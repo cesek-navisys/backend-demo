@@ -1,6 +1,7 @@
-import { Optional } from 'sequelize';
-import { IProductAttributes } from './product.entity';
+import { ICreationAttributesBase } from '@backend-demo/backend-libs/api-interfaces';
 import { IOrderAttributes } from './order.entity';
+import { IProductAttributes } from './product.entity';
+import { Optional } from 'sequelize';
 
 export interface IAccount {
 	code: string;
@@ -25,10 +26,8 @@ export interface IAccountUniqueAttributes
 	extends Pick<IAccountOwnAttributes, 'code'> {}
 
 export interface IAccountCreationAttributes
-	extends Optional<
-		Omit<IAccountOwnAttributes, 'code'>,
-		'phone' | 'isActive'
-	> {
+	extends Optional<IAccountOwnAttributes, 'code' | 'phone' | 'isActive'>,
+		ICreationAttributesBase {
 	name: string;
 	surname: string;
 	email: string;

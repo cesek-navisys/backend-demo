@@ -1,6 +1,6 @@
+import { createNamespace } from 'cls-hooked';
 import { databaseModels } from '@backend-demo/backend-libs/tables';
 import { Sequelize } from 'sequelize-typescript';
-import { createNamespace } from 'cls-hooked';
 
 export const databaseProviders = [
 	{
@@ -15,6 +15,9 @@ export const databaseProviders = [
 				username: 'postgres',
 				password: 'postgres',
 				database: 'backend-demo',
+				define: {
+					paranoid: true,
+				},
 			});
 			sequelize.addModels(databaseModels);
 			return sequelize;
