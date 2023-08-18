@@ -35,6 +35,18 @@ export const up: Migration = async ({ context: sequelize }) => {
 				type: DataType.UUID,
 				allowNull: false,
 			},
+			createdAt: {
+				type: DataType.DATE,
+				allowNull: false,
+			},
+			updatedAt: {
+				type: DataType.DATE,
+				allowNull: true,
+			},
+			deletedAt: {
+				type: DataType.DATE,
+				allowNull: true,
+			},
 		});
 	await sequelize
 		.getQueryInterface()
