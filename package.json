@@ -2,7 +2,10 @@
 	"name": "@backend-demo/source",
 	"version": "0.0.0",
 	"license": "MIT",
-	"scripts": {},
+	"scripts": {
+		"umzug:up": "TS_NODE_PROJECT=./apps/eshop/src/database/tsconfig.json node -r tsconfig-paths/register -r ts-node/register ./apps/eshop/src/database/migrate-up.ts",
+		"umzug:down": "TS_NODE_PROJECT=./apps/eshop/src/database/tsconfig.json node -r tsconfig-paths/register -r ts-node/register ./apps/eshop/src/database/migrate-down.ts"
+	},
 	"private": true,
 	"dependencies": {
 		"@nestjs-architects/typed-cqrs": "^1.1.2-alpha.0",
@@ -22,7 +25,8 @@
 		"rxjs": "^7.8.0",
 		"sequelize": "^6.32.1",
 		"sequelize-typescript": "^2.1.5",
-		"tslib": "^2.3.0"
+		"tslib": "^2.3.0",
+		"umzug": "^3.3.1"
 	},
 	"devDependencies": {
 		"@nestjs/schematics": "^10.0.1",
