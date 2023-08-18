@@ -21,8 +21,8 @@ export interface IOrderDetailsUniqueAttributes
 
 export interface IOrderDetailsCreationAttributes
 	extends Optional<
-		Omit<IOrderDetailsOwnAttributes, 'code'>,
-		'canBeDeliveredSeparately' | 'totalPrice'
+		IOrderDetailsOwnAttributes,
+		'code' | 'canBeDeliveredSeparately' | 'totalPrice'
 	> {}
 
 export interface IOrderDetailsAttributes

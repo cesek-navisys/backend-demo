@@ -21,7 +21,7 @@ export interface IProductUniqueAttributes
 
 // Mandatory data for a Product creation
 export interface IProductCreationAttributes
-	extends Optional<Omit<IProductOwnAttributes, 'code'>, 'color'> {}
+	extends Optional<IProductOwnAttributes, 'code' | 'color'> {}
 
 export interface IProductAttributes
 	extends IProductOwnAttributes,

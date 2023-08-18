@@ -8,3 +8,7 @@ export const ORDERS_ALIAS = `${ORDER_ALIAS}${S_ALIAS}` as const;
 export const ORDER_CODE_ALIAS = `${ORDER_ALIAS}${CODE_ALIAS}` as const;
 
 export const ORDER_CODE_API_PARAM = `${ORDER_API_PARAM}${CODE_ALIAS}` as const;
+
+export const ORDER_TABLE_NAME_SINGULAR = `${ORDER_ALIAS}` as const;
+
+export const ORDER_TABLE_NAME_PLURAL = `${ORDERS_ALIAS}` as const;

@@ -67,9 +67,10 @@ import { Op } from 'sequelize';
 @Table({ name: { plural: PRODUCT_TABLE_NAME_PLURAL } })
 export class Product
 	extends Model<IProductAttributes, IProductCreationAttributes>
-	implements IProductAttributes {
+	implements IProductAttributes
+{
 	@Column({
-		allowNull: true,
+		allowNull: false,
 		defaultValue: DataType.UUIDV4,
 		primaryKey: true,
 		type: DataType.UUID,
