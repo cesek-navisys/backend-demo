@@ -1,18 +1,5 @@
 import { Account } from './account.table';
-import {
-	BelongsTo,
-	Column,
-	DataType,
-	DefaultScope,
-	ForeignKey,
-	HasMany,
-	Model,
-	Scopes,
-	Sequelize,
-	Table
-	} from 'sequelize-typescript';
-import { Op, WhereOptions } from 'sequelize';
-import { ACCOUNT_ALIAS, ORDER_DETAILS_ALIAS } from '@backend-demo/shared/constants';
+import { Op } from 'sequelize';
 import { OrderDetails } from './order-details.table';
 import {
 	IOrderAttributes,
@@ -23,6 +10,24 @@ import {
 	OrderDetailsForeignKey,
 	OrderForeignKey,
 } from '@backend-demo/backend-libs/foreign-keys';
+import {
+	ACCOUNT_ALIAS,
+	ORDER_DETAILS_ALIAS,
+	ORDER_TABLE_NAME_PLURAL,
+	ORDER_TABLE_NAME_SINGULAR,
+} from '@backend-demo/shared/constants';
+import {
+	BelongsTo,
+	Column,
+	DataType,
+	DefaultScope,
+	ForeignKey,
+	HasMany,
+	Model,
+	Scopes,
+	Sequelize,
+	Table,
+} from 'sequelize-typescript';
 
 @DefaultScope(() => ({
 	include: [
@@ -59,13 +64,18 @@ import {
 		};
 	},
 }))
-@Table({ paranoid: true })
+@Table({
+	name: {
+		plural: ORDER_TABLE_NAME_PLURAL,
+		singular: ORDER_TABLE_NAME_SINGULAR,
+	},
+})
 export class Order
 	extends Model<IOrderAttributes, IOrderCreationAttributes>
 	implements IOrderAttributes
 {
 	@Column({
-		allowNull: true,
+		allowNull: false,
 		type: DataType.UUID,
 		primaryKey: true,
 		defaultValue: DataType.UUIDV4,
