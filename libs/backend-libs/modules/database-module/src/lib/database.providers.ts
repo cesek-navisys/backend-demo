@@ -10,11 +10,11 @@ export const databaseProviders = [
 			Sequelize.useCLS(myNamespace);
 			const sequelize = new Sequelize({
 				dialect: 'postgres',
-				host: 'localhost',
-				port: Number(process?.env?.['DB_PORT']) ?? 5432,
-				username: 'postgres',
-				password: 'postgres',
-				database: 'backend-demo',
+				host: process?.env?.['DB_HOST'],
+				port: Number(process?.env?.['DB_PORT']) ?? 5433,
+				username: process?.env?.['DB_USERNAME'],
+				password: process?.env?.['DB_PASSWORD'],
+				database: process?.env?.['DB_NAME'],
 			});
 			sequelize.addModels(databaseModels);
 			return sequelize;
