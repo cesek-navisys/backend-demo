@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { Umzug, SequelizeStorage } from 'umzug';
 import { Sequelize } from 'sequelize';
 import { config } from 'dotenv';

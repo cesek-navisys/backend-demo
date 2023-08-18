@@ -1,6 +1,6 @@
+import { createNamespace } from 'cls-hooked';
 import { databaseModels } from '@backend-demo/backend-libs/tables';
 import { Sequelize } from 'sequelize-typescript';
-import { createNamespace } from 'cls-hooked';
 import { config } from 'dotenv';
 config();
 

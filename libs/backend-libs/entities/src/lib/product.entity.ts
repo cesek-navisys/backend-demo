@@ -1,6 +1,7 @@
-import { Optional } from 'sequelize';
 import { Color } from '@backend-demo/shared/enums';
 import { IAccountAttributes } from './account.entity';
+import { ICreationAttributesBase } from '@backend-demo/backend-libs/api-interfaces';
+import { Optional } from 'sequelize';
 
 export interface IProductOwnAttributes {
 	code: string;
@@ -21,7 +22,8 @@ export interface IProductUniqueAttributes
 
 // Mandatory data for a Product creation
 export interface IProductCreationAttributes
-	extends Optional<IProductOwnAttributes, 'code' | 'color'> {}
+	extends Optional<IProductOwnAttributes, 'code' | 'color'>,
+		ICreationAttributesBase {}
 
 export interface IProductAttributes
 	extends IProductOwnAttributes,

@@ -1,6 +1,7 @@
-import { Optional } from 'sequelize';
-import { IProductAttributes } from './product.entity';
+import { ICreationAttributesBase } from '@backend-demo/backend-libs/api-interfaces';
 import { IOrderAttributes } from './order.entity';
+import { IProductAttributes } from './product.entity';
+import { Optional } from 'sequelize';
 
 export interface IOrderDetailsOwnAttributes {
 	code: string;
@@ -21,9 +22,10 @@ export interface IOrderDetailsUniqueAttributes
 
 export interface IOrderDetailsCreationAttributes
 	extends Optional<
-		IOrderDetailsOwnAttributes,
-		'code' | 'canBeDeliveredSeparately' | 'totalPrice'
-	> {}
+			IOrderDetailsOwnAttributes,
+			'code' | 'canBeDeliveredSeparately' | 'totalPrice'
+		>,
+		ICreationAttributesBase {}
 
 export interface IOrderDetailsAttributes
 	extends IOrderDetailsOwnAttributes,

@@ -1,3 +1,6 @@
+import { Order } from './order.table';
+import { ORDER_ALIAS, PRODUCT_ALIAS } from '@backend-demo/shared/constants';
+import { Product } from './product.table';
 import {
 	IOrderDetailsAttributes,
 	IOrderDetailsCreationAttributes,
@@ -15,9 +18,6 @@ import {
 	Scopes,
 	Table,
 } from 'sequelize-typescript';
-import { Order } from './order.table';
-import { Product } from './product.table';
-import { ORDER_ALIAS, PRODUCT_ALIAS } from '@backend-demo/shared/constants';
 
 @Scopes(() => ({
 	WITH_PRODUCT: {
@@ -44,7 +44,7 @@ export class OrderDetails
 {
 	@Column({
 		type: DataType.UUID,
-		allowNull: true,
+		allowNull: false,
 		primaryKey: true,
 		defaultValue: DataType.UUIDV4,
 	})

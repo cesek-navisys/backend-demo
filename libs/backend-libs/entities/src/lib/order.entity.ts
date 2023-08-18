@@ -1,6 +1,7 @@
-import { Optional } from 'sequelize';
-import { IOrderDetailsUniqueAttributes } from './order-detail.entity';
 import { IAccountAttributes } from './account.entity';
+import { ICreationAttributesBase } from '@backend-demo/backend-libs/api-interfaces';
+import { IOrderDetailsUniqueAttributes } from './order-detail.entity';
+import { Optional } from 'sequelize';
 
 export interface IOrderOwnAttributes {
 	code: string;
@@ -18,9 +19,10 @@ export interface IOrderUniqueAttributes
 
 export interface IOrderCreationAttributes
 	extends Optional<
-		Omit<IOrderOwnAttributes, 'code'>,
-		'messageForOwner' | 'confirmed' | 'AccountCode'
-	> {}
+			IOrderOwnAttributes,
+			'code' | 'messageForOwner' | 'confirmed' | 'AccountCode'
+		>,
+		ICreationAttributesBase {}
 
 export interface IOrderAttributes
 	extends IOrderOwnAttributes,

@@ -1,5 +1,11 @@
 import { Account } from './account.table';
+import {
+	ACCOUNT_ALIAS,
+	ORDER_DETAILS_ALIAS,
+	PRODUCT_TABLE_NAME_PLURAL,
+} from '@backend-demo/shared/constants';
 import { Color } from '@backend-demo/shared/enums';
+import { Op } from 'sequelize';
 import { OrderDetails } from './order-details.table';
 import {
 	IProductAttributes,
@@ -22,13 +28,6 @@ import {
 	Sequelize,
 	Table,
 } from 'sequelize-typescript';
-import {
-	ACCOUNT_ALIAS,
-	ORDER_DETAILS_ALIAS,
-	PRODUCTS_ALIAS,
-	PRODUCT_TABLE_NAME_PLURAL,
-} from '@backend-demo/shared/constants';
-import { Op } from 'sequelize';
 
 @DefaultScope(() => ({
 	include: [
@@ -64,7 +63,7 @@ import { Op } from 'sequelize';
 		},
 	}),
 }))
-@Table({ name: { plural: PRODUCT_TABLE_NAME_PLURAL } })
+@Table({ name: { plural: PRODUCT_TABLE_NAME_PLURAL }, paranoid: true })
 export class Product
 	extends Model<IProductAttributes, IProductCreationAttributes>
 	implements IProductAttributes
